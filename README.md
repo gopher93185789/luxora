@@ -12,16 +12,11 @@ tailwind + laraverl + go(at)
 4. other people items page + bidding on each
 
 # backend
-
-## user profiles
-
-## bidding service
-
-## cart
-
-## add/remove items to sell
-
-## filter search
+- user profiles
+- bidding service
+- cart
+- add/remove items to sell
+- filter search
 
 # hosting
 
@@ -77,6 +72,7 @@ CREATE TABLE IF NOT EXISTS luxora_product (
     item_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     sold BOOLEAN DEFAULT false,
+    category VARCHAR(255),
     sold_to_user_id UUID DEFAULT NULL, 
     currency CHAR(3) DEFAULT 'EUR',
     description TEXT
