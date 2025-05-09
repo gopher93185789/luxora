@@ -1,4 +1,4 @@
-name: Deploy backend
+name: Deploy backend to vps
 
 on:
     push:
@@ -29,7 +29,7 @@ jobs:
     #     registry: ghcr.io
     #     username: ${{ github.actor }}
     #     password: ${{ secrets.ACCESS_TOKEN }}
-    
+
     # - name: SSH into VPS and Deploy
     #   run: |
     #     mkdir -p ~/.ssh
