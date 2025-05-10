@@ -33,7 +33,7 @@ jobs:
 
     - name: Test, Build, and Push All Services
       run: |
-        BASE_DIR=$(pwd)
+        cd server
         go test ./...
 
         echo "=========================="
