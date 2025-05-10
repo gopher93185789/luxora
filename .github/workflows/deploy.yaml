@@ -5,7 +5,8 @@ on:
         branches:
         - main
         paths:
-        - 'server/**'
+          - 'server/**/*.go'
+          - 'server/**/*.sh'
 
 jobs:
   test-build-push:
