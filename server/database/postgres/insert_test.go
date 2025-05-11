@@ -30,3 +30,25 @@ func TestInsertUser(t *testing.T) {
 	}
 
 }
+func TestInsertOauthUser(t *testing.T) {
+	pool, clean, err := testutils.SetupTestPostgresDB("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer clean()
+
+	db := Postgres{Pool: pool}
+	id, err := db.InsertOauthUser(t.Context(), "diddy", "email@gmail.diddy.com", "github", "hwllo")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if id == uuid.Nil {
+		t.Fatal("invalid uuid")
+	}
+
+	_, err = db.InsertOauthUser(t.Context(), "dixddy", "email@gmaixl.diddy.com", "github", "hwllo")
+	if err == nil {
+		t.Fatal("failed to raise error on duplicate user")
+	}
+}

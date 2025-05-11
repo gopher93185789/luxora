@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS luxora_user (
     email VARCHAR(255) UNIQUE,
     refresh_token TEXT,
     last_login TIMESTAMP,
+    provider VARCHAR(50) CHECK (signup_type IN ('github', 'google', 'plain')),
+    provider_user_id TEXT UNIQUE,
     signup_type VARCHAR(50) CHECK (signup_type IN ('github', 'google', 'plain')),
     password_hash TEXT
 );
