@@ -6,7 +6,7 @@ import (
 	"golang.org/x/oauth2"
 )
 
-type CoreAppContext struct {
+type CoreAuthContext struct {
 	GoogleConfig *oauth2.Config
 	GithubConfig *oauth2.Config
 	Database database.Database
@@ -16,4 +16,5 @@ type CoreAppContext struct {
 type GithubUserDetails struct {
 	Email string `json:"email"`
 	Login string `json:"login"`
+	ProviderID int `json:"id"`
 }
