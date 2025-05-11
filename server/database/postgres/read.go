@@ -17,3 +17,8 @@ func (p *Postgres) GetLastLogin(ctx context.Context, userID uuid.UUID) (LastLogi
 	err = p.Pool.QueryRow(ctx, "SELECT last_login FROM luxora_user WHERE id = $1", userID).Scan(&LastLogin)
 	return 
 }
+
+func (p *Postgres) GetRefreshToken(ctx context.Context, userId uuid.UUID) ( refreshToken string, err error) {
+	err = p.Pool.QueryRow(ctx, "SELECT refresh_token FROM luxora_user WHERE id=$1", userId).Scan(&refreshToken)
+	return
+}

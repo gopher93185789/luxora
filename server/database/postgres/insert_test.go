@@ -30,6 +30,7 @@ func TestInsertUser(t *testing.T) {
 	}
 
 }
+
 func TestInsertOauthUser(t *testing.T) {
 	pool, clean, err := testutils.SetupTestPostgresDB("")
 	if err != nil {
