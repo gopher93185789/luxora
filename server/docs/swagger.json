@@ -4,6 +4,77 @@
         "contact": {}
     },
     "paths": {
+        "/auth/github": {
+            "get": {
+                "description": "redirect to Github for Oauth authentication.",
+                "consumes": [
+                    "*/*"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Github Oauth redirect",
+                "responses": {}
+            }
+        },
+        "/auth/github/exchange": {
+            "get": {
+                "description": "Send a request to this endpoint to exchange the Github code you got from Github for an access token.",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Github Oauth exchange",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "code",
+                        "description": "code",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Access token response",
+                        "schema": {
+                            "$ref": "#/definitions/transport.AccessTokenResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/google": {
+            "get": {
+                "description": "redirect to Google for Oauth authentication.",
+                "consumes": [
+                    "*/*"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Google Oauth redirect",
+                "responses": {}
+            }
+        },
         "/ping": {
             "get": {
                 "description": "Endpoint to check if the server is running",
@@ -24,6 +95,27 @@
                             "type": "string"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "error.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "transport.AccessTokenResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
                 }
             }
         }

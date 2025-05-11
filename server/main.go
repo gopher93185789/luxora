@@ -41,10 +41,10 @@ func main() {
 	tx := &auth.TransportConfig{
 		CoreAuth: &coreAuth.CoreAuthContext{
 			GithubConfig: &oauth2.Config{
-				ClientID:     "Ov23liW6P1CMiQ7QYheo",
-				ClientSecret: "e893637b7c600bd9570183f5d7dc282d6cf4f8bd",
+				ClientID:     config.GithubClient,
+				ClientSecret: config.GithubSecret,
 				Endpoint:     github.Endpoint,
-				RedirectURL:  "http://localhost:8080/auth/github/exchange",
+				RedirectURL:  config.GithubRedirect,
 				Scopes:       []string{"read:user"},
 			},
 			TokenConfig: token.BstConfig{
