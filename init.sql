@@ -1,34 +1,3 @@
-# luxora
-
-homo rapist (Nick Dima)
-
-tailwind + laraverl + go(at)
-
-# frontend
-
-1. landing
-2. auth
-3. dashboard with own items items of the day with navbar on side + profile settings
-4. other people items page + bidding on each
-
-# backend
-- user profiles
-- bidding service
-- cart
-- add/remove items to sell
-- filter search
-
-# hosting
-
-- databse: neon postgres
-- backend: azure vps + ci/cd
-- laraver: azure vps + ci/cd
-- cache: redis on azure
-- images: base64 in (maybe seperate) db
-
-# Tables
-
-```sql
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE TABLE IF NOT EXISTS luxora_user (
@@ -94,7 +63,3 @@ CREATE TABLE IF NOT EXISTS product_bid (
     currency CHAR(3) DEFAULT 'EUR',
     bid_time TIMESTAMP DEFAULT NOW()
 );
-```
-
-
-dev: docker compose -f compose.dev.yml up

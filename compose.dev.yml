@@ -1,0 +1,44 @@
+services:
+  test_database:
+    image: postgres:latest
+    container_name: test_database
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: luxora
+      PGPORT: 5433
+    ports:
+      - "3100:5433"
+    restart: unless-stopped
+    volumes:
+      - test_database-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d luxora -h localhost -p 5433"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1'
+  server:
+    build:
+      context: ./server
+      target: final
+      dockerfile: Dockerfile
+    container_name: server
+    environment:
+      - PORT=80
+    ports:
+      - "80:80"
+    restart: on-failure:10
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "2"
+
+volumes:
+    test_database-data:

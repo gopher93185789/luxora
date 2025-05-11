@@ -1,0 +1,23 @@
+services:
+  server:
+    image: ghcr.io/gopher93185789/server:latest
+    volumes:
+      - certs:/etc/certs:ro
+    environment:
+      - PORT=443
+    ports:
+      - "443:443"
+    restart: on-failure:10
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "2"
+
+volumes:
+  certs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./certificates/server
