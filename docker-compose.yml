@@ -4,9 +4,9 @@ services:
     volumes:
       - certs:/etc/certs:ro
     environment:
-      - PORT=443
+      - PORT=80
     ports:
-      - "443:443"
+      - "80:80"
     restart: on-failure:10
     deploy:
       resources:
