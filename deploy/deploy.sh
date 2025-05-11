@@ -4,7 +4,7 @@ if [ -d "$HOME/luxora" ]; then
   cd "$HOME/luxora"
 else
   echo "Directory ~/luxora does not exist. Cloning."
-  git clone https://github.com/gopher93185789i/luxora.git || { echo "Git clone failed."; exit 1; }
+  git clone https://github.com/gopher93185789/luxora.git || { echo "Git clone failed."; exit 1; }
   cd "$HOME/luxora"
 fi
 
