@@ -8,6 +8,9 @@ else
   cd "$HOME/luxora"
 fi
 
+sudo cp /etc/letsencrypt/live/api.luxoras.nl/fullchain.pem /certificates/server/fullchain.pem
+sudo cp /etc/letsencrypt/live/api.luxoras.nl/privkey.pem /certificates/server/privkey.pem
+
 git fetch
 git pull
 
