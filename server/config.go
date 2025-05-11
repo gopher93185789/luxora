@@ -19,6 +19,9 @@ type Config struct {
 	GithubClient string
 	GithubSecret string
 	GithubRedirect string
+	GoogleClient string
+	GoogleSecret string
+	GoogleRedirect string
 }
 
 func GetServerConfig() (config *Config, err error) {
@@ -45,6 +48,14 @@ func GetServerConfig() (config *Config, err error) {
 	config.GithubRedirect = os.Getenv("GITHUB_REDIRECT_URL")
 
 	if config.GithubRedirect == "" || config.GithubClient == "" || config.GithubSecret == "" {
+		return nil, fmt.Errorf("missing or invalid github oauth env variables (GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GITHUB_REDIRECT_URL)")
+	}
+
+	config.GoogleClient = os.Getenv("GOOGLE_CLIENT_ID")
+	config.GoogleSecret = os.Getenv("GOOGLE_CLIENT_SECRET")
+	config.GoogleRedirect = os.Getenv("GOOGLE_REDIRECT_URL")
+
+	if config.GoogleRedirect == "" || config.GoogleClient == "" || config.GoogleSecret == "" {
 		return nil, fmt.Errorf("missing or invalid github oauth env variables (GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GITHUB_REDIRECT_URL)")
 	}
 

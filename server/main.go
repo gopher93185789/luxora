@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/arbol-labs/bst"
@@ -12,6 +13,7 @@ import (
 	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/github"
+	"golang.org/x/oauth2/google"
 )
 
 // @Summary      Healthcheck
@@ -47,22 +49,34 @@ func main() {
 				RedirectURL:  config.GithubRedirect,
 				Scopes:       []string{"read:user"},
 			},
+			GoogleConfig: &oauth2.Config{
+				ClientID:     config.GoogleClient,
+				ClientSecret: config.GoogleSecret,
+				Endpoint:     google.Endpoint,
+				RedirectURL:  config.GoogleRedirect,
+				Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
+			},
 			TokenConfig: token.BstConfig{
 				Config: bst.New([]byte("2345613455555555"), []byte(";iadufkvdfhkbvhkbfjv")),
 			},
 			Database: &postgres.Postgres{
 				Pool: p,
 			},
+			OauthState: "w;iudfiuweiuvhw;hriujwiriwhre",
 		},
 	}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /ping", Ping)
 
+	// auth
 	mux.HandleFunc("GET /auth/github", tx.GithubRedirect)
 	mux.HandleFunc("GET /auth/github/exchange", tx.GithubExchange)
+	mux.HandleFunc("GET /auth/google", tx.GoogleRedirect)
+	mux.HandleFunc("GET /auth/google/exchange", tx.GoogleExchange)
 
-	
+
+	log.Println("listening on port "+config.Port)
 	if config.Env == DEV {
 		panic(http.ListenAndServe(config.Port, mux))
 	} else {

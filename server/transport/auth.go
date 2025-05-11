@@ -19,9 +19,50 @@ import (
 // @Failure      500  {object}  errs.ErrorResponse "Internal server error"
 // @Router       /auth/github/exchange [get]
 // @Param        code  query  string  true  "code"  Format(code)
+// @Param        state  query  string  true  "state"  Format(state)
 func (t *TransportConfig) GithubExchange(w http.ResponseWriter, r *http.Request) {
 	code := r.URL.Query().Get("code")
 	at, rt, err := t.CoreAuth.HandleGithubOauth(r.Context(), code)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusUnauthorized, err.Error())
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:  "LUXORA_REFRESH_TOKEN",
+		Value: rt,
+		Path:  "/",
+		// Domain: "app-omain",
+		Expires:  time.Now().Add(720 * time.Hour),
+		HttpOnly: true,
+	})
+
+	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode access token")
+		return
+	}
+}
+
+// @Summary      Google Oauth exchange
+// @Description  Send a request to this endpoint to exchange the Google code you got from Google for an access token.
+// @Tags         auth
+// @Accept       */*
+// @Produce      json
+// @Success      200  {object}  AccessTokenResponse  "Access token response"
+// @Failure      401  {object}  errs.ErrorResponse "Unauthorized error"
+// @Failure      500  {object}  errs.ErrorResponse "Internal server error"
+// @Router       /auth/github/exchange [get]
+// @Param        code  query  string  true  "code"  Format(code)
+// @Param        state  query  string  true  "state"  Format(state)
+func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request) {
+	code := r.URL.Query().Get("code")
+	state := r.URL.Query().Get("state")
+	if state != t.CoreAuth.OauthState {
+		errs.ErrorWithJson(w, http.StatusUnauthorized, "Mismatched state")
+		return
+	}
+
+	at, rt, err := t.CoreAuth.HandleGoogleOauth(r.Context(), code)
 	if err != nil {
 		errs.ErrorWithJson(w, http.StatusUnauthorized, err.Error())
 		return

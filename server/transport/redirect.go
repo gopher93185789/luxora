@@ -12,7 +12,7 @@ import (
 // @Accept       */*
 // @Router       /auth/github [get]
 func (t *TransportConfig) GithubRedirect(w http.ResponseWriter, r *http.Request) {
-	a := t.CoreAuth.GithubConfig.AuthCodeURL("", oauth2.AccessTypeOffline)
+	a := t.CoreAuth.GithubConfig.AuthCodeURL(t.CoreAuth.OauthState, oauth2.AccessTypeOffline)
 	http.Redirect(w, r, a, http.StatusPermanentRedirect)
 }
 
@@ -22,6 +22,6 @@ func (t *TransportConfig) GithubRedirect(w http.ResponseWriter, r *http.Request)
 // @Accept       */*
 // @Router       /auth/google [get]
 func (t *TransportConfig) GoogleRedirect(w http.ResponseWriter, r *http.Request) {
-	a := t.CoreAuth.GoogleConfig.AuthCodeURL("", oauth2.AccessTypeOffline)
+	a := t.CoreAuth.GoogleConfig.AuthCodeURL(t.CoreAuth.OauthState, oauth2.AccessTypeOffline)
 	http.Redirect(w, r, a, http.StatusPermanentRedirect)
 }
