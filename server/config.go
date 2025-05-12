@@ -11,55 +11,62 @@ const (
 )
 
 type Config struct {
-	Env             uint
-	Port            string
-	DSN             string
-	TlsCertFilePath string
-	TlsKeyFilePath  string
-	GithubClient    string
-	GithubSecret    string
-	GithubRedirect  string
-	GoogleClient    string
-	GoogleSecret    string
-	GoogleRedirect  string
+	Env                uint
+	Port               string
+	DSN                string
+	TlsCertFilePath    string
+	TlsKeyFilePath     string
+	GithubClient       string
+	GithubSecret       string
+	GithubRedirect     string
+	GoogleClient       string
+	GoogleSecret       string
+	GoogleRedirect     string
+	TokenEncryptionKey string
+	TokenSigningKey    string
 }
 
-func GetServerConfig() (config *Config, err error) {
-	config = &Config{}
-	portEnv := os.Getenv("PORT")
-	if portEnv == "" {
-		return nil, fmt.Errorf("missing 'PORT' env variable")
-	}
-	config.Port = ":" + portEnv
+func GetServerConfig() (*Config, error) {
+	config := &Config{}
 
-	if portEnv == "443" {
+	envVars := map[string]*string{
+		"PORT":                 &config.Port,
+		"TLS_CERT_FILE_PATH":   &config.TlsCertFilePath,
+		"TLS_KEY_FILE_PATH":    &config.TlsKeyFilePath,
+		"DSN":                  &config.DSN,
+		"GITHUB_CLIENT_ID":     &config.GithubClient,
+		"GITHUB_CLIENT_SECRET": &config.GithubSecret,
+		"GITHUB_REDIRECT_URL":  &config.GithubRedirect,
+		"GOOGLE_CLIENT_ID":     &config.GoogleClient,
+		"GOOGLE_CLIENT_SECRET": &config.GoogleSecret,
+		"GOOGLE_REDIRECT_URL":  &config.GoogleRedirect,
+		"TOKEN_ENCRYPTION_KEY": &config.TokenEncryptionKey,
+		"TOKEN_SIGNING_KEY":    &config.TokenSigningKey,
+	}
+
+	missingVars := []string{}
+
+	for key, ref := range envVars {
+		val := os.Getenv(key)
+		if val == "" {
+			missingVars = append(missingVars, key)
+		} else {
+			if key == "PORT" {
+				*ref = ":" + val
+			} else {
+				*ref = val
+			}
+		}
+	}
+
+	if len(missingVars) > 0 {
+		return nil, fmt.Errorf("missing environment variables: %v", missingVars)
+	}
+
+	if config.Port == ":443" {
 		config.Env = PROD
 	} else {
 		config.Env = DEV
-	}
-
-	config.TlsCertFilePath = os.Getenv("TLS_CERT_FILE_PATH")
-	config.TlsKeyFilePath = os.Getenv("TLS_KEY_FILE_PATH")
-	config.DSN = os.Getenv("DSN")
-
-	config.GithubClient = os.Getenv("GITHUB_CLIENT_ID")
-	config.GithubSecret = os.Getenv("GITHUB_CLIENT_SECRET")
-	config.GithubRedirect = os.Getenv("GITHUB_REDIRECT_URL")
-
-	if config.GithubRedirect == "" || config.GithubClient == "" || config.GithubSecret == "" {
-		return nil, fmt.Errorf("missing or invalid github oauth env variables (GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GITHUB_REDIRECT_URL)")
-	}
-
-	config.GoogleClient = os.Getenv("GOOGLE_CLIENT_ID")
-	config.GoogleSecret = os.Getenv("GOOGLE_CLIENT_SECRET")
-	config.GoogleRedirect = os.Getenv("GOOGLE_REDIRECT_URL")
-
-	if config.GoogleRedirect == "" || config.GoogleClient == "" || config.GoogleSecret == "" {
-		return nil, fmt.Errorf("missing or invalid github oauth env variables (GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GITHUB_REDIRECT_URL)")
-	}
-
-	if config.TlsCertFilePath == "" || config.TlsKeyFilePath == "" {
-		return nil, fmt.Errorf("invalid tls file paths")
 	}
 
 	return config, nil

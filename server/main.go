@@ -8,10 +8,8 @@ import (
 	coreAuth "github.com/gopher93185789/luxora/server/core/auth"
 	"github.com/gopher93185789/luxora/server/database/postgres"
 	"github.com/gopher93185789/luxora/server/pkg/middleware"
-	"github.com/gopher93185789/luxora/server/pkg/testutils"
 	"github.com/gopher93185789/luxora/server/pkg/token"
 	auth "github.com/gopher93185789/luxora/server/transport"
-	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/github"
 	"golang.org/x/oauth2/google"
@@ -29,19 +27,17 @@ func Ping(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	godotenv.Load(".env")
 	config, err := GetServerConfig()
 	if err != nil {
-		panic("error in config: " + err.Error())
+		log.Fatalln("error in config: " + err.Error())
 	}
 
-	p, clean, err := testutils.SetupTestPostgresDB("")
+	pool, err := postgres.New(config.DSN)
 	if err != nil {
-		panic(err)
+		log.Fatalln("Failed to connect to database: " + err.Error())
 	}
-	defer clean()
 
-	tokenConf := bst.New([]byte("2345613455555555"), []byte(";iadufkvdfhkbvhkbfjv"))
+	tokenConf := bst.New([]byte(config.TokenEncryptionKey), []byte(config.TokenSigningKey))
 
 	tx := &auth.TransportConfig{
 		CoreAuth: &coreAuth.CoreAuthContext{
@@ -62,9 +58,7 @@ func main() {
 			TokenConfig: token.BstConfig{
 				Config: tokenConf,
 			},
-			Database: &postgres.Postgres{
-				Pool: p,
-			},
+			Database:   pool,
 			OauthState: "w;iudfiuweiuvhw;hriujwiriwhre",
 		},
 	}
@@ -87,8 +81,8 @@ func main() {
 
 	log.Println("listening on port " + config.Port)
 	if config.Env == DEV {
-		panic(http.ListenAndServe(config.Port, mux))
+		log.Fatalln(http.ListenAndServe(config.Port, mux))
 	} else {
-		panic(http.ListenAndServeTLS(config.Port, config.TlsCertFilePath, config.TlsKeyFilePath, mux))
+		log.Fatalln(http.ListenAndServeTLS(config.Port, config.TlsCertFilePath, config.TlsKeyFilePath, mux))
 	}
 }
