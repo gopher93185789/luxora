@@ -20,8 +20,8 @@ func New(dsn string) (pool *Postgres, err error) {
 	conf.MaxConns = 30
 	conf.MaxConnLifetime = 30 * time.Minute
 	conf.MaxConnIdleTime = 5 * time.Minute
-	
-	p, err :=  pgxpool.NewWithConfig(context.Background(), conf)
+
+	p, err := pgxpool.NewWithConfig(context.Background(), conf)
 	if err != nil {
 		return nil, err
 	}
@@ -30,7 +30,6 @@ func New(dsn string) (pool *Postgres, err error) {
 	if err != nil {
 		return nil, err
 	}
-
 
 	return &Postgres{Pool: p}, nil
 }

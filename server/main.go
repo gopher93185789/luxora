@@ -34,7 +34,7 @@ func main() {
 
 	pool, err := postgres.New(config.DSN)
 	if err != nil {
-		log.Fatalln("Failed to connect to database: "+err.Error())
+		log.Fatalln("Failed to connect to database: " + err.Error())
 	}
 
 	tokenConf := bst.New([]byte(config.TokenEncryptionKey), []byte(config.TokenSigningKey))
@@ -58,7 +58,7 @@ func main() {
 			TokenConfig: token.BstConfig{
 				Config: tokenConf,
 			},
-			Database: pool,
+			Database:   pool,
 			OauthState: "w;iudfiuweiuvhw;hriujwiriwhre",
 		},
 	}

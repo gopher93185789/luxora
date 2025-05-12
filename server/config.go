@@ -11,19 +11,19 @@ const (
 )
 
 type Config struct {
-	Env             uint
-	Port            string
-	DSN             string
-	TlsCertFilePath string
-	TlsKeyFilePath  string
-	GithubClient    string
-	GithubSecret    string
-	GithubRedirect  string
-	GoogleClient    string
-	GoogleSecret    string
-	GoogleRedirect  string
+	Env                uint
+	Port               string
+	DSN                string
+	TlsCertFilePath    string
+	TlsKeyFilePath     string
+	GithubClient       string
+	GithubSecret       string
+	GithubRedirect     string
+	GoogleClient       string
+	GoogleSecret       string
+	GoogleRedirect     string
 	TokenEncryptionKey string
-	TokenSigningKey string
+	TokenSigningKey    string
 }
 
 func GetServerConfig() (*Config, error) {
@@ -71,4 +71,3 @@ func GetServerConfig() (*Config, error) {
 
 	return config, nil
 }
-
