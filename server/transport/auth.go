@@ -91,7 +91,7 @@ func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request)
 // @Accept       */*
 // @Produce      json
 // @Success      200  {object}  AccessTokenResponse  "Access token response"
-// @Failure      404  {object}  errs.ErrorResponse "Missing cookie error"
+// @Failure      400  {object}  errs.ErrorResponse "Missing cookie error"
 // @Failure      401  {object}  errs.ErrorResponse "Unauthorized error"
 // @Failure      500  {object}  errs.ErrorResponse "Internal server error"
 // @Router       /auth/refresh [post]
@@ -100,7 +100,7 @@ func (t *TransportConfig) RefreshToken(w http.ResponseWriter, r *http.Request) {
 
 	cookie, err := r.Cookie("LUXORA_REFRESH_TOKEN")
 	if err != nil {
-		errs.ErrorWithJson(w, http.StatusNotFound, "missing cookie")
+		errs.ErrorWithJson(w, http.StatusBadRequest, "missing cookie")
 		return
 	}
 

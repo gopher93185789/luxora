@@ -30,6 +30,10 @@ func (s *CoreAuthContext) handleGoogleOauthSignup(ctx context.Context, email, pr
 }
 
 func (s *CoreAuthContext) HandleGoogleOauth(ctx context.Context, code string) (accessToken, refreshToken string, err error) {
+	if code == ""{
+		return "", "", fmt.Errorf("invalid exchange code")
+	}	
+	
 	token, err := s.GoogleConfig.Exchange(ctx, code)
 	if err != nil {
 		return "", "", err
