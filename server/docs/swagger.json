@@ -19,7 +19,7 @@
         },
         "/auth/github/exchange": {
             "get": {
-                "description": "Send a request to this endpoint to exchange the Github code you got from Github for an access token.",
+                "description": "Send a request to this endpoint to exchange the Google code you got from Google for an access token.",
                 "consumes": [
                     "*/*"
                 ],
@@ -29,13 +29,21 @@
                 "tags": [
                     "auth"
                 ],
-                "summary": "Github Oauth exchange",
+                "summary": "Google Oauth exchange",
                 "parameters": [
                     {
                         "type": "string",
                         "format": "code",
                         "description": "code",
                         "name": "code",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "state",
+                        "description": "state",
+                        "name": "state",
                         "in": "query",
                         "required": true
                     }
@@ -75,6 +83,52 @@
                 "responses": {}
             }
         },
+        "/listings/": {
+            "post": {
+                "description": "This endpoint allows users to create new product listings.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "listings"
+                ],
+                "summary": "Create new listing",
+                "parameters": [
+                    {
+                        "description": "Product details",
+                        "name": "product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Product"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Create listing response containing the product ID",
+                        "schema": {
+                            "$ref": "#/definitions/transport.CreateListingResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable entity - invalid JSON payload",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/ping": {
             "get": {
                 "description": "Endpoint to check if the server is running",
@@ -111,10 +165,61 @@
                 }
             }
         },
+        "models.Product": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "product_images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ProductImage"
+                    }
+                }
+            }
+        },
+        "models.ProductImage": {
+            "type": "object",
+            "properties": {
+                "base_64_image": {
+                    "type": "string"
+                },
+                "checksum": {
+                    "type": "string"
+                },
+                "compressedImage": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "order": {
+                    "type": "integer"
+                }
+            }
+        },
         "transport.AccessTokenResponse": {
             "type": "object",
             "properties": {
                 "access_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "transport.CreateListingResponse": {
+            "type": "object",
+            "properties": {
+                "product_id": {
                     "type": "string"
                 }
             }

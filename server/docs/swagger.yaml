@@ -6,9 +6,42 @@ definitions:
       message:
         type: string
     type: object
+  models.Product:
+    properties:
+      category:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      product_images:
+        items:
+          $ref: '#/definitions/models.ProductImage'
+        type: array
+    type: object
+  models.ProductImage:
+    properties:
+      base_64_image:
+        type: string
+      checksum:
+        type: string
+      compressedImage:
+        items:
+          type: integer
+        type: array
+      order:
+        type: integer
+    type: object
   transport.AccessTokenResponse:
     properties:
       access_token:
+        type: string
+    type: object
+  transport.CreateListingResponse:
+    properties:
+      product_id:
         type: string
     type: object
 info:
@@ -27,13 +60,19 @@ paths:
     get:
       consumes:
       - '*/*'
-      description: Send a request to this endpoint to exchange the Github code you
-        got from Github for an access token.
+      description: Send a request to this endpoint to exchange the Google code you
+        got from Google for an access token.
       parameters:
       - description: code
         format: code
         in: query
         name: code
+        required: true
+        type: string
+      - description: state
+        format: state
+        in: query
+        name: state
         required: true
         type: string
       produces:
@@ -51,7 +90,7 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/error.ErrorResponse'
-      summary: Github Oauth exchange
+      summary: Google Oauth exchange
       tags:
       - auth
   /auth/google:
@@ -63,6 +102,36 @@ paths:
       summary: Google Oauth redirect
       tags:
       - auth
+  /listings/:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows users to create new product listings.
+      parameters:
+      - description: Product details
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/models.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Create listing response containing the product ID
+          schema:
+            $ref: '#/definitions/transport.CreateListingResponse'
+        "422":
+          description: Unprocessable entity - invalid JSON payload
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      summary: Create new listing
+      tags:
+      - listings
   /ping:
     get:
       consumes:

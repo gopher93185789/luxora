@@ -21,6 +21,7 @@ import (
 // @Param        code  query  string  true  "code"  Format(code)
 // @Param        state  query  string  true  "state"  Format(state)
 func (t *TransportConfig) GithubExchange(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	code := r.URL.Query().Get("code")
 	at, rt, err := t.CoreAuth.HandleGithubOauth(r.Context(), code)
 	if err != nil {
@@ -55,6 +56,7 @@ func (t *TransportConfig) GithubExchange(w http.ResponseWriter, r *http.Request)
 // @Param        code  query  string  true  "code"  Format(code)
 // @Param        state  query  string  true  "state"  Format(state)
 func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	code := r.URL.Query().Get("code")
 	state := r.URL.Query().Get("state")
 	if state != t.CoreAuth.OauthState {

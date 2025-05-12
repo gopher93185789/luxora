@@ -15,6 +15,24 @@ func (b *BstConfig) GenerateToken(userID uuid.UUID, exp time.Time, tokenType uin
 	})
 }
 
+func (b *BstConfig) VerifyTokenAndGetFields(token string, tokenType uint8) (tokenFields *Token, err error) {
+	var info Token
+	err = b.Config.ParseToken(token, &info)
+	if err != nil {
+		return nil, err
+	}
+
+	if info.TokenType != tokenType {
+		return nil, fmt.Errorf("invalid token type")
+	}
+
+	if time.Now().After(info.Exp) {
+		return nil, fmt.Errorf("token is expired")
+	}
+
+	return &info, nil
+}
+
 func (b *BstConfig) VerifyToken(token string, tokenType uint8) (userID uuid.UUID, err error) {
 	var info Token
 	err = b.Config.ParseToken(token, &info)
