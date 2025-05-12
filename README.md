@@ -12,19 +12,20 @@ tailwind + laraverl + go(at)
 4. other people items page + bidding on each
 
 # backend
-- user profiles
+<!-- - user profiles -->
 - bidding service
+- get listings with search params e.g category, date, pricerange etc
 - checkout
-- add/remove items to sell
+<!-- - add/remove items to sell  -->
 - filter search
 
 # hosting
 
 - databse: neon postgres
-- backend: azure vps + ci/cd
+<!-- - backend: azure vps + ci/cd -->
 - laraver: azure vps + ci/cd
 - cache: redis on azure
-- images: base64 in (maybe seperate) db
+<!-- - images: base64 in (maybe seperate) db -->
 
 # Tables
 
