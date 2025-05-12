@@ -127,6 +127,48 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "This endpoint allows users to delete product listings.",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "tags": [
+                    "listings"
+                ],
+                "summary": "Delete a listing",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Listing deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Product ID not found",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
             }
         },
         "/ping": {
