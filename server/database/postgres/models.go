@@ -26,6 +26,11 @@ func New(dsn string) (pool *Postgres, err error) {
 		return nil, err
 	}
 
+	err = p.Ping(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
 
 	return &Postgres{Pool: p}, nil
 }
