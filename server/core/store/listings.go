@@ -37,3 +37,9 @@ func (c *CoreStoreContext) CreateNewListing(ctx context.Context, userID uuid.UUI
 
 	return c.Database.InsertListing(ctx, userID, product)
 }
+
+func (c *CoreStoreContext) DeleteListing(ctx context.Context, userID uuid.UUID, productId uuid.UUID) (err error) {
+	
+	
+	return
+}
