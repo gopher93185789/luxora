@@ -83,6 +83,47 @@
                 "responses": {}
             }
         },
+        "/auth/refresh": {
+            "post": {
+                "description": "Refresh the access token using the refresh token stored in the cookie.",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Refresh Token",
+                "responses": {
+                    "200": {
+                        "description": "Access token response",
+                        "schema": {
+                            "$ref": "#/definitions/transport.AccessTokenResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Missing cookie error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/listings/": {
             "post": {
                 "description": "This endpoint allows users to create new product listings.",

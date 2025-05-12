@@ -84,3 +84,43 @@ func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request)
 		return
 	}
 }
+
+// @Summary      Refresh Token
+// @Description  Refresh the access token using the refresh token stored in the cookie.
+// @Tags         auth
+// @Accept       */*
+// @Produce      json
+// @Success      200  {object}  AccessTokenResponse  "Access token response"
+// @Failure      404  {object}  errs.ErrorResponse "Missing cookie error"
+// @Failure      401  {object}  errs.ErrorResponse "Unauthorized error"
+// @Failure      500  {object}  errs.ErrorResponse "Internal server error"
+// @Router       /auth/refresh [post]
+func (t *TransportConfig) RefreshToken(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+
+	cookie, err := r.Cookie("LUXORA_REFRESH_TOKEN")
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusNotFound, "missing cookie")
+		return
+	}
+
+	at, rt, err := t.CoreAuth.RefreshToken(r.Context(), cookie.Value)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusUnauthorized, err.Error())
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:  "LUXORA_REFRESH_TOKEN",
+		Value: rt,
+		Path:  "/",
+		// Domain: "app-omain",
+		Expires:  time.Now().Add(720 * time.Hour),
+		HttpOnly: true,
+	})
+
+	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode access token")
+		return
+	}
+}

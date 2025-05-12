@@ -102,6 +102,34 @@ paths:
       summary: Google Oauth redirect
       tags:
       - auth
+  /auth/refresh:
+    post:
+      consumes:
+      - '*/*'
+      description: Refresh the access token using the refresh token stored in the
+        cookie.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Access token response
+          schema:
+            $ref: '#/definitions/transport.AccessTokenResponse'
+        "401":
+          description: Unauthorized error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "404":
+          description: Missing cookie error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      summary: Refresh Token
+      tags:
+      - auth
   /listings/:
     delete:
       consumes:
