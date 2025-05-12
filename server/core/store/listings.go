@@ -39,7 +39,5 @@ func (c *CoreStoreContext) CreateNewListing(ctx context.Context, userID uuid.UUI
 }
 
 func (c *CoreStoreContext) DeleteListing(ctx context.Context, userID uuid.UUID, productId uuid.UUID) (err error) {
-	
-	
-	return
+	return c.DeleteListing(ctx, userID, productId)
 }
