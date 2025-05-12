@@ -27,21 +27,21 @@ func TestDeleteListing(t *testing.T) {
 	}
 
 	product := &models.Product{
-		ItemName: "rizz",
-		Category: "products",
+		ItemName:    "rizz",
+		Category:    "products",
 		Description: "knaye the goat",
-		Price: price,
+		Price:       price,
 		Images: []models.ProductImage{
 			{
-				Image: "wlieblwelkjhe",
-				Order: 0,
-				Checksum: "slkdfkljsfd",
+				Image:           "wlieblwelkjhe",
+				Order:           0,
+				Checksum:        "slkdfkljsfd",
 				CompressedImage: make([]byte, 10),
 			},
 			{
-				Image: "sdvsrtvs",
-				Order: 1,
-				Checksum: "slkdfksgvsljsfd",
+				Image:           "sdvsrtvs",
+				Order:           1,
+				Checksum:        "slkdfksgvsljsfd",
 				CompressedImage: make([]byte, 10),
 			},
 		},

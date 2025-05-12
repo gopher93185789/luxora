@@ -7,4 +7,3 @@ import (
 type CoreStoreContext struct {
 	Database database.Database
 }
-

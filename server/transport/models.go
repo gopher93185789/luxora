@@ -5,7 +5,7 @@ import (
 )
 
 type TransportConfig struct {
-	CoreAuth *auth.CoreAuthContext 
+	CoreAuth *auth.CoreAuthContext
 }
 
 type AccessTokenResponse struct {

@@ -9,24 +9,21 @@ import (
 type CoreAuthContext struct {
 	GoogleConfig *oauth2.Config
 	GithubConfig *oauth2.Config
-	OauthState string
-	Database database.Database
-	TokenConfig token.BstConfig
+	OauthState   string
+	Database     database.Database
+	TokenConfig  token.BstConfig
 }
 
 type GithubUserDetails struct {
-	Email string `json:"email"`
-	Login string `json:"login"`
-	ProviderID int `json:"id"`
+	Email      string `json:"email"`
+	Login      string `json:"login"`
+	ProviderID int    `json:"id"`
 }
-
-
 
 type GoogleUserDetails struct {
 	Email         string `json:"email"`
 	VerifiedEmail bool   `json:"verified_email"`
 	Name          string `json:"name"`
 	Picture       string `json:"picture"`
-	ProviderID string `json:"id"`
-
+	ProviderID    string `json:"id"`
 }

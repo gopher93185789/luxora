@@ -55,7 +55,7 @@ func (s *CoreAuthContext) HandleGithubOauth(ctx context.Context, code string) (a
 
 	id, pid, err := s.Database.GetOauthUserIdByUsername(ctx, user.Login)
 	if err != nil {
-		accessToken, refreshToken, err = s.handleOauthSignup(ctx, user.Login, user.Email,pidn)
+		accessToken, refreshToken, err = s.handleOauthSignup(ctx, user.Login, user.Email, pidn)
 		return accessToken, refreshToken, nil
 	}
 

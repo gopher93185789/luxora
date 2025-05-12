@@ -10,7 +10,7 @@ import (
 func (p *Postgres) DeleteListing(ctx context.Context, userID uuid.UUID, productId uuid.UUID) (err error) {
 	tx, err := p.Pool.Begin(ctx)
 	if err != nil {
-		return  err
+		return err
 	}
 
 	t, err := tx.Exec(ctx, "DELETE FROM luxora_product WHERE user_id=$1 AND item_id=$2", userID, productId)

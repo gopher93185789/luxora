@@ -10,7 +10,7 @@ import (
 	tk "github.com/gopher93185789/luxora/server/pkg/token"
 )
 
-func (s *CoreAuthContext) handleGoogleOauthSignup(ctx context.Context,  email, providerID string) (accessToken, refreshToken string, err error) {
+func (s *CoreAuthContext) handleGoogleOauthSignup(ctx context.Context, email, providerID string) (accessToken, refreshToken string, err error) {
 	uid, err := s.Database.InsertOauthUser(ctx, "Anonymous"+uuid.New().String(), email, "github", providerID)
 	if err != nil {
 		return "", "", err
@@ -41,7 +41,7 @@ func (s *CoreAuthContext) HandleGoogleOauth(ctx context.Context, code string) (a
 		return "", "", err
 	}
 	defer resp.Body.Close()
-	
+
 	var user GoogleUserDetails
 	if err := json.NewDecoder(resp.Body).Decode(&user); err != nil {
 		return "", "", err
@@ -49,11 +49,11 @@ func (s *CoreAuthContext) HandleGoogleOauth(ctx context.Context, code string) (a
 
 	if !user.VerifiedEmail {
 		return "", "", fmt.Errorf("user is not verified on google")
-	} 
-	
+	}
+
 	_, id, err := s.Database.GetIsUsernameAndIDByProviderID(ctx, user.Name)
 	if err != nil {
-		accessToken, refreshToken, err = s.handleGoogleOauthSignup(ctx,  user.Email,  user.ProviderID)
+		accessToken, refreshToken, err = s.handleGoogleOauthSignup(ctx, user.Email, user.ProviderID)
 		return accessToken, refreshToken, nil
 	}
 

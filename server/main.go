@@ -75,8 +75,7 @@ func main() {
 	mux.HandleFunc("GET /auth/google", tx.GoogleRedirect)
 	mux.HandleFunc("GET /auth/google/exchange", tx.GoogleExchange)
 
-
-	log.Println("listening on port "+config.Port)
+	log.Println("listening on port " + config.Port)
 	if config.Env == DEV {
 		panic(http.ListenAndServe(config.Port, mux))
 	} else {

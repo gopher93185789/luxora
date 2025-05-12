@@ -3,7 +3,6 @@ package store
 import (
 	"testing"
 
-
 	"github.com/gopher93185789/luxora/server/database/postgres"
 	"github.com/gopher93185789/luxora/server/pkg/models"
 	"github.com/gopher93185789/luxora/server/pkg/testutils"
@@ -19,7 +18,7 @@ func TestCreateNewListing(t *testing.T) {
 
 	c := &CoreStoreContext{
 		Database: &postgres.Postgres{
-			Pool: conn, 
+			Pool: conn,
 		},
 	}
 
@@ -28,17 +27,16 @@ func TestCreateNewListing(t *testing.T) {
 		t.Fatal(err)
 	}
 
-
 	uid, err := c.Database.InsertOauthUser(t.Context(), "jack", "anish@joc.com", "google", "skofk")
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	product := &models.Product{
-		ItemName: "rizz",
-		Category: "products",
+		ItemName:    "rizz",
+		Category:    "products",
 		Description: "knaye the goat",
-		Price: price,
+		Price:       price,
 		Images: []models.ProductImage{
 			{
 				Image: "wlieblwelkjhe",

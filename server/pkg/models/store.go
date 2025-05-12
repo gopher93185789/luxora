@@ -10,9 +10,9 @@ type ProductImage struct {
 }
 
 type Product struct {
-	ItemName    string         `json:"name"`
-	Category    string         `json:"category"`
-	Description string         `json:"description"`
-	Price       decimal.Decimal    `json:"price"`
-	Images      []ProductImage `json:"product_images"`
+	ItemName    string          `json:"name"`
+	Category    string          `json:"category"`
+	Description string          `json:"description"`
+	Price       decimal.Decimal `json:"price"`
+	Images      []ProductImage  `json:"product_images"`
 }

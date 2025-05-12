@@ -11,17 +11,17 @@ const (
 )
 
 type Config struct {
-	Env uint
-	Port string
-	DSN string
+	Env             uint
+	Port            string
+	DSN             string
 	TlsCertFilePath string
-	TlsKeyFilePath string
-	GithubClient string
-	GithubSecret string
-	GithubRedirect string
-	GoogleClient string
-	GoogleSecret string
-	GoogleRedirect string
+	TlsKeyFilePath  string
+	GithubClient    string
+	GithubSecret    string
+	GithubRedirect  string
+	GoogleClient    string
+	GoogleSecret    string
+	GoogleRedirect  string
 }
 
 func GetServerConfig() (config *Config, err error) {
@@ -30,18 +30,17 @@ func GetServerConfig() (config *Config, err error) {
 	if portEnv == "" {
 		return nil, fmt.Errorf("missing 'PORT' env variable")
 	}
-	config.Port = ":"+portEnv
+	config.Port = ":" + portEnv
 
 	if portEnv == "443" {
 		config.Env = PROD
-	}else{
+	} else {
 		config.Env = DEV
 	}
 
 	config.TlsCertFilePath = os.Getenv("TLS_CERT_FILE_PATH")
 	config.TlsKeyFilePath = os.Getenv("TLS_KEY_FILE_PATH")
 	config.DSN = os.Getenv("DSN")
-
 
 	config.GithubClient = os.Getenv("GITHUB_CLIENT_ID")
 	config.GithubSecret = os.Getenv("GITHUB_CLIENT_SECRET")

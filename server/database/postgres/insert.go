@@ -14,7 +14,7 @@ func (p *Postgres) InsertUser(ctx context.Context, username, email, signupType, 
 		return uuid.Nil, err
 	}
 	var id uuid.UUID
-	
+
 	err = tx.QueryRow(ctx, "INSERT INTO luxora_user (username, email, signup_type, password_hash)  VALUES ($1, $2, $3, $4) RETURNING id", username, strings.ToLower(email), signupType, passwordHash).Scan(&id)
 	if err != nil {
 		tx.Rollback(ctx)
@@ -29,19 +29,18 @@ func (p *Postgres) InsertUser(ctx context.Context, username, email, signupType, 
 
 	if err := tx.Commit(ctx); err != nil {
 		return uuid.Nil, err
-	} 
+	}
 
 	return id, nil
 }
 
-
-func (p *Postgres) InsertOauthUser(ctx context.Context, username, email, provider, providerId string) (userID uuid.UUID, err error)  {
+func (p *Postgres) InsertOauthUser(ctx context.Context, username, email, provider, providerId string) (userID uuid.UUID, err error) {
 	tx, err := p.Pool.Begin(ctx)
 	if err != nil {
 		return uuid.Nil, err
 	}
 	var id uuid.UUID
-	
+
 	err = tx.QueryRow(ctx, "INSERT INTO luxora_user (username, email, provider, provider_user_id)  VALUES ($1, $2, $3, $4) RETURNING id", username, strings.ToLower(email), provider, providerId).Scan(&id)
 	if err != nil {
 		tx.Rollback(ctx)
@@ -56,18 +55,17 @@ func (p *Postgres) InsertOauthUser(ctx context.Context, username, email, provide
 
 	if err := tx.Commit(ctx); err != nil {
 		return uuid.Nil, err
-	} 
+	}
 
 	return id, nil
 }
-
 
 func (p *Postgres) InsertListing(ctx context.Context, userId uuid.UUID, product *models.Product) (productId uuid.UUID, err error) {
 	tx, err := p.Pool.Begin(ctx)
 	if err != nil {
 		return uuid.Nil, err
 	}
-	
+
 	err = tx.QueryRow(ctx, "INSERT INTO luxora_product (user_id, name, category, description) VALUES ($1, $2, $3, $4) RETURNING item_id", userId, product.ItemName, product.Category, product.Description).Scan(&productId)
 	if err != nil {
 		tx.Rollback(ctx)
@@ -85,7 +83,7 @@ func (p *Postgres) InsertListing(ctx context.Context, userId uuid.UUID, product 
 		if err != nil {
 			tx.Rollback(ctx)
 			return uuid.Nil, err
-		}	
+		}
 	}
 
 	return productId, tx.Commit(ctx)

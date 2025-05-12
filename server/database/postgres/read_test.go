@@ -1,8 +1,8 @@
 package postgres
 
 import (
-	"testing"
 	"github.com/gopher93185789/luxora/server/pkg/testutils"
+	"testing"
 )
 
 func TestGetUserIdByUsername(t *testing.T) {
@@ -77,5 +77,5 @@ func TestGetIsUsernameAndIDByProviderID(t *testing.T) {
 
 	if id != uzid {
 		t.Fatal("user id mismatch")
-	}	
+	}
 }

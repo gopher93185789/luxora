@@ -30,4 +30,3 @@ type VerificationToken struct {
 	TokenType uint8     `json:"tt"`
 	Payload   string    `json:"p"`
 }
-
