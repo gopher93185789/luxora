@@ -14,7 +14,7 @@ tailwind + laraverl + go(at)
 # backend
 - user profiles
 - bidding service
-- cart
+- checkout
 - add/remove items to sell
 - filter search
 

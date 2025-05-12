@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
+	"github.com/gopher93185789/luxora/server/pkg/models"
 )
 
 func (p *Postgres) InsertUser(ctx context.Context, username, email, signupType, passwordHash string) (userID uuid.UUID, err error) {
@@ -58,4 +59,34 @@ func (p *Postgres) InsertOauthUser(ctx context.Context, username, email, provide
 	} 
 
 	return id, nil
+}
+
+
+func (p *Postgres) InsertListing(ctx context.Context, userId uuid.UUID, product *models.Product) (productId uuid.UUID, err error) {
+	tx, err := p.Pool.Begin(ctx)
+	if err != nil {
+		return uuid.Nil, err
+	}
+	
+	err = tx.QueryRow(ctx, "INSERT INTO luxora_product (user_id, name, category, description) VALUES ($1, $2, $3, $4) RETURNING item_id", userId, product.ItemName, product.Category, product.Description).Scan(&productId)
+	if err != nil {
+		tx.Rollback(ctx)
+		return uuid.Nil, err
+	}
+
+	_, err = tx.Exec(ctx, "INSERT INTO luxora_product_price_history (product_id, starting_price) VALUES ($1, $2)", productId, product.Price)
+	if err != nil {
+		tx.Rollback(ctx)
+		return uuid.Nil, err
+	}
+
+	for _, p := range product.Images {
+		_, err = tx.Exec(ctx, "INSERT INTO luxora_product_image (user_id, product_id, compressed_image, checksum, sort_order) VALUES ($1, $2, $3, $4, $5)", userId, productId, p.CompressedImage, p.Checksum, p.Order)
+		if err != nil {
+			tx.Rollback(ctx)
+			return uuid.Nil, err
+		}	
+	}
+
+	return productId, tx.Commit(ctx)
 }
