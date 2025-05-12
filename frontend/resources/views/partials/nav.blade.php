@@ -1,22 +1,24 @@
-<nav class="bg-white  relative z-10" x-data="{ open: false }">
-    <div class="container mx-auto px-4 py-4 flex flex-row-reverse items-center justify-between">
-
-        
+<nav class="bg-black  relative z-10" x-data="{ open: false }">
+    <div class="container mx-auto px-4 py-4 flex flex-row items-center justify-between">
             <button @click="open = !open"
             class="focus:outline-none z-50 relative"
             :aria-expanded="open.toString()"
             aria-controls="mobile-menu">
-            <svg x-show="!open" class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg x-show="!open" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M4 6h16M4 12h16M4 18h16"/>
             </svg>
-            <svg x-show="open" x-cloak class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg x-show="open" x-cloak class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M6 18L18 6M6 6l12 12"/>
             </svg>  
             </button>
-        <a href="/" class="text-2xl z-50 font-bold text-gray-800">Luxora</a>
-        <div></div>
+
+                <a href="/" class="text-2xl z-50 font-bold text-white">Luxora</a>
+
+            <button class="flex flex-col p-4 pt-1 pb-1 bg-white rounded gap-7" >
+                <a href="{{ route('login') }}" class=" text-black text-sm hover:text-black">Login</a>
+            </buton>
     </div>
 
     <div x-show="open"
@@ -26,22 +28,20 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 -translate-y-6"
-         class="absolute top-0 left-0 w-full h-screen bg-white z-40 flex flex-col p-56 gap-10">
-         <a href="{{ route('products.index') }}" class="block text-gray-700 text-7xl hover:text-black">Products</a>
-        <a href="{{ route('about') }}" class="block text-gray-700 text-7xl hover:text-black">About</a>
-        <a href="{{ route('contact') }}" class="block text-gray-700 text-7xl hover:text-black">Contact</a>
-
-        @auth
-            <a href="{{ route('profile') }}" class="block text-gray-700 text-7xl hover:text-black">Dashboard</a>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="block w-full text-left text-gray-700 text-5xl hover:text-black">Logout</button>
-            </form>
-        @else
-        <div class="flex flex-col p-7 bg-gray-300 rounded w-3xs gap-7" >
-            <a href="{{ route('login') }}" class="block text-gray-700 text-4xl hover:text-black">Login</a>
-            <a href="{{ route('register') }}" class="block text-gray-700 text-4xl hover:text-black">Register</a>
-        </div>
-        @endauth
+         class="absolute top-0 left-0 w-full h-screen bg-black z-40 flex flex-row p-56 gap-10">
+         <div class="flex flex-col gap-12 w-72" >
+             <a href="{{ route('products.index') }}" class="block text-gray-200 text-7xl hover:text-white">Products</a>
+             <a href="{{ route('about') }}" class="block text-gray-200 text-7xl hover:text-white">About</a>
+             <a href="{{ route('contact') }}" class="block text-gray-200 text-7xl hover:text-white">Contact</a>
+     
+             @auth
+                 <a href="{{ route('profile') }}" class="block text-gray-200 text-7xl hover:text-white">Dashboard</a>
+                 <form method="POST" action="{{ route('logout') }}">
+                     @csrf
+                     <button type="submit" class="block w-full text-left text-gray-200 text-5xl hover:text-white">Logout</button>
+                 </form>
+             @else
+             @endauth
+         </div>
     </div>
 </nav>
