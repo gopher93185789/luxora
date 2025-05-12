@@ -50,6 +50,6 @@ jobs:
 
         ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
           echo "🚀 Connected to VPS"
-          sudo ./deploy.sh
+          ./deploy.sh
           echo "✅ Deployment complete"
         EOF
