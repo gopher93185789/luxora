@@ -2,9 +2,8 @@ package token
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/google/uuid"
+	"time"
 )
 
 func (b *BstConfig) GenerateToken(userID uuid.UUID, exp time.Time, tokenType uint8) (token string, err error) {

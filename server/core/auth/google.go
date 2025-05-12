@@ -67,6 +67,7 @@ func (s *CoreAuthContext) HandleGoogleOauth(ctx context.Context, code string) (a
 		return "", "", err
 	}
 
+	s.Database.UpdateRefreshToken(ctx, id, refreshToken)
 	if err != nil {
 		return "", "", err
 	}

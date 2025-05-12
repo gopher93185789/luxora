@@ -7,6 +7,7 @@ import (
 	"github.com/arbol-labs/bst"
 	coreAuth "github.com/gopher93185789/luxora/server/core/auth"
 	"github.com/gopher93185789/luxora/server/database/postgres"
+	"github.com/gopher93185789/luxora/server/pkg/middleware"
 	"github.com/gopher93185789/luxora/server/pkg/testutils"
 	"github.com/gopher93185789/luxora/server/pkg/token"
 	auth "github.com/gopher93185789/luxora/server/transport"
@@ -40,6 +41,8 @@ func main() {
 	}
 	defer clean()
 
+	tokenConf := bst.New([]byte("2345613455555555"), []byte(";iadufkvdfhkbvhkbfjv"))
+
 	tx := &auth.TransportConfig{
 		CoreAuth: &coreAuth.CoreAuthContext{
 			GithubConfig: &oauth2.Config{
@@ -57,7 +60,7 @@ func main() {
 				Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
 			},
 			TokenConfig: token.BstConfig{
-				Config: bst.New([]byte("2345613455555555"), []byte(";iadufkvdfhkbvhkbfjv")),
+				Config: tokenConf,
 			},
 			Database: &postgres.Postgres{
 				Pool: p,
@@ -69,11 +72,18 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /ping", Ping)
 
+	mcf := middleware.New(&token.BstConfig{Config: tokenConf})
+
 	// auth
 	mux.HandleFunc("GET /auth/github", tx.GithubRedirect)
 	mux.HandleFunc("GET /auth/github/exchange", tx.GithubExchange)
 	mux.HandleFunc("GET /auth/google", tx.GoogleRedirect)
 	mux.HandleFunc("GET /auth/google/exchange", tx.GoogleExchange)
+	mux.HandleFunc("POST /auth/refresh ", tx.RefreshToken)
+
+	// listings
+	mux.HandleFunc("POST /listings", mcf.AuthMiddleware(tx.CreateNewListing))
+	mux.HandleFunc("DELETE /listings", mcf.AuthMiddleware(tx.DeleteListing))
 
 	log.Println("listening on port " + config.Port)
 	if config.Env == DEV {

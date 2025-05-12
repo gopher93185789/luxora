@@ -73,6 +73,7 @@ func (s *CoreAuthContext) HandleGithubOauth(ctx context.Context, code string) (a
 		return "", "", err
 	}
 
+	s.Database.UpdateRefreshToken(ctx, id, refreshToken)
 	if err != nil {
 		return "", "", err
 	}
