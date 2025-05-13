@@ -1,6 +1,11 @@
 package models
 
-import "github.com/shopspring/decimal"
+import (
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/shopspring/decimal"
+)
 
 type ProductImage struct {
 	Image           string `json:"base_64_image"`
@@ -15,4 +20,22 @@ type Product struct {
 	Description string          `json:"description"`
 	Price       decimal.Decimal `json:"price"`
 	Images      []ProductImage  `json:"product_images"`
+}
+
+
+
+type Bid struct {
+	BidAmount decimal.Decimal `json:"amount"`
+	ProductID uuid.UUID `json:"product_id"`
+}
+
+type CreateBidResponse struct {
+	BidID uuid.UUID `json:"bid_id"`
+}
+
+type BidDetails struct {
+	BidID uuid.UUID `json:"bid_id"`
+	BidAmount decimal.Decimal `json:"amount"`
+	ProductID uuid.UUID `json:"product_id"`
+	CreatedAt time.Time `json:"created_at"`
 }

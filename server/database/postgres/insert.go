@@ -88,3 +88,9 @@ func (p *Postgres) InsertListing(ctx context.Context, userId uuid.UUID, product 
 
 	return productId, tx.Commit(ctx)
 }
+
+
+func (p *Postgres) InsertBid(ctx context.Context, userID uuid.UUID, bid *models.Bid) (bidID uuid.UUID, err error) {
+	err = p.Pool.QueryRow(ctx, "INSERT INTO product_bid (item_id, user_id, bid_amount) VALUES ($1, $2, $3) RETURNING bid_id",bid.ProductID, userID, bid.BidAmount).Scan(&bidID)
+	return
+}

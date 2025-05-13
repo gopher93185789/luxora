@@ -100,3 +100,58 @@ func TestInsertListing(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestInsertBid(t *testing.T) {
+	pool, clean, err := testutils.SetupTestPostgresDB("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer clean()
+
+	db := Postgres{Pool: pool}
+	id, err := db.InsertOauthUser(t.Context(), "diddy", "email@gmail.diddy.com", "github", "hwllo")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	price, err := decimal.NewFromString("19.99")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	product := &models.Product{
+		ItemName:    "rizz",
+		Category:    "products",
+		Description: "knaye the goat",
+		Price:       price,
+		Images: []models.ProductImage{
+			{
+				Image:           "wlieblwelkjhe",
+				Order:           0,
+				Checksum:        "slkdfkljsfd",
+				CompressedImage: make([]byte, 10),
+			},
+			{
+				Image:           "sdvsrtvs",
+				Order:           1,
+				Checksum:        "slkdfksgvsljsfd",
+				CompressedImage: make([]byte, 10),
+			},
+		},
+	}
+
+	pid, err := db.InsertListing(t.Context(), id, product)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	bid, err := decimal.NewFromString("200.22")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = db.InsertBid(t.Context(), id, &models.Bid{ProductID: pid, BidAmount: bid})
+	if err != nil {
+		t.Fatal(err)
+	}
+}

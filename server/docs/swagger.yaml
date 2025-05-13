@@ -6,6 +6,18 @@ definitions:
       message:
         type: string
     type: object
+  models.Bid:
+    properties:
+      amount:
+        type: number
+      product_id:
+        type: string
+    type: object
+  models.CreateBidResponse:
+    properties:
+      bid_id:
+        type: string
+    type: object
   models.Product:
     properties:
       category:
@@ -115,12 +127,12 @@ paths:
           description: Access token response
           schema:
             $ref: '#/definitions/transport.AccessTokenResponse'
-        "401":
-          description: Unauthorized error
+        "400":
+          description: Missing cookie error
           schema:
             $ref: '#/definitions/error.ErrorResponse'
-        "404":
-          description: Missing cookie error
+        "401":
+          description: Unauthorized error
           schema:
             $ref: '#/definitions/error.ErrorResponse'
         "500":
@@ -188,6 +200,41 @@ paths:
       summary: Create new listing
       tags:
       - listings
+  /listings/bid:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows users to create bids on product listings.
+        The request body must contain the bid details in JSON format.
+      parameters:
+      - description: Bid details
+        in: body
+        name: bid
+        required: true
+        schema:
+          $ref: '#/definitions/models.Bid'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Bid created successfully with the bid ID
+          schema:
+            $ref: '#/definitions/models.CreateBidResponse'
+        "400":
+          description: Bad request - invalid input or missing fields
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "422":
+          description: Unprocessable entity - failed to decode JSON payload
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      summary: Create a bid
+      tags:
+      - bidding
   /ping:
     get:
       consumes:
