@@ -3,18 +3,29 @@
 <head>
     <title>Home</title>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+    @vite('resources/css/app.css')
 </head>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+    AOS.init();
+</script>
 <body>
     @include('partials.nav')
 
-    <div class="main flex-col w-full h-screen bg-black">
-        <p class="title text-[15rem]text-white">
-            Luxora  
+    <div class="main flex flex-col justify- w-screen h-full text-center px-4">
+    <p class="slogan text-xl sm:text-2xl md:text-4xl lg:text-2xl text-white text-shadow-white mt-24">
+            Rule Your World —
         </p>
-        <p class="slogan text-6xl text-shadow-white text-white">
-            "Rule Your World — Luxora."
-        </p>
+        <div
+        x-data="{ show: true }" 
+        x-intersect:enter="show = false"
+        :class="show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
+        class="transition-all duration-1000 ease-in-out">
+            <p class="title text-5xl font-extrabold sm:text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] 2xl:text-[13rem] text-white leading-tight">
+                Luxora  
+            </p>
+        </div>
     </div>
 </body>
-</html> 
+</html>

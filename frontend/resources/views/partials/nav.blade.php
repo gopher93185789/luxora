@@ -14,7 +14,7 @@
             </svg>  
             </button>
 
-                <a href="/" class="text-2xl z-50 font-bold text-white">Luxora</a>
+                <a href="/" class="text-2xl z-50 font-extrabold text-white">Luxora</a>
 
             <button class="flex flex-col p-4 pt-1 pb-1 bg-white rounded gap-7" >
                 <a href="{{ route('login') }}" class=" text-black text-sm hover:text-black">Login</a>
@@ -23,11 +23,11 @@
 
     <div x-show="open"
          x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0 -translate-y-6"
-         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:enter-start="opacity-0 -translate-x-6"
+         x-transition:enter-end="opacity-100 translate-x-0"
          x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100 translate-y-0"
-         x-transition:leave-end="opacity-0 -translate-y-6"
+         x-transition:leave-start="opacity-100 translate-x-0"
+         x-transition:leave-end="opacity-0 -translate-x-6"
          class="absolute top-0 left-0 w-full h-screen bg-black z-40 flex flex-row p-56 gap-10">
          <div class="flex flex-col gap-12 w-72" >
              <a href="{{ route('products.index') }}" class="block text-gray-200 text-7xl hover:text-white">Products</a>
@@ -43,5 +43,7 @@
              @else
              @endauth
          </div>
+         @include('partials.slider')
+
     </div>
 </nav>
