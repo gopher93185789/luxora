@@ -18,6 +18,9 @@ tailwind + laraverl + go(at)
 - checkout
 <!-- - add/remove items to sell  -->
 - filter search
+- reccomendaton engine
+- endpoitnt to get listings created by a user
+- encpoint to accept bids
 
 # hosting
 
