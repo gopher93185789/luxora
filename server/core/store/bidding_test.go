@@ -80,3 +80,89 @@ func TestCreateNewBid(t *testing.T) {
 		t.Fatal("failed to create bid ")
 	}
 }
+
+func TestGetHighestBid(t *testing.T) {
+	conn, clean, err := testutils.SetupTestPostgresDB("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer clean()
+
+	c := &CoreStoreContext{
+		Database: &postgres.Postgres{
+			Pool: conn,
+		},
+	}
+
+	price, err := decimal.NewFromString("19.99")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	uid, err := c.Database.InsertOauthUser(t.Context(), "jack", "anish@joc.com", "google", "skofk")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	product := &models.Product{
+		ItemName:    "rizz",
+		Category:    "products",
+		Description: "knaye the goat",
+		Price:       price,
+		Images: []models.ProductImage{
+			{
+				Image: "wlieblwelkjhe",
+				Order: 0,
+			},
+			{
+				Image: "sdvsrtvs",
+				Order: 1,
+			},
+		},
+	}
+
+	pid, err := c.CreateNewListing(t.Context(), uid, product)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	amount, err := decimal.NewFromString("200.99")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	nbid := &models.Bid{
+		BidAmount: amount,
+		ProductID: pid,
+	}
+
+
+	_, err = c.CreateBid(t.Context(), uid, nbid)
+
+	amount, err = decimal.NewFromString("202.99")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	nbid = &models.Bid{
+		BidAmount: amount,
+		ProductID: pid,
+	}
+
+
+	_, err = c.CreateBid(t.Context(), uid, nbid)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+
+	bidD, err := c.GetHighestBid(t.Context(), uid, pid)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !nbid.BidAmount.Equal(bidD.BidAmount) {
+		t.Fatal("invalid bids")
+	}
+}

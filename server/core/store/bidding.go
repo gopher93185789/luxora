@@ -16,3 +16,8 @@ func (c *CoreStoreContext) CreateBid(ctx context.Context, userId uuid.UUID, bid 
 
 	return c.Database.InsertBid(ctx, userId, bid)
 }
+
+
+func (c *CoreStoreContext) GetHighestBid(ctx  context.Context, userID uuid.UUID, productID uuid.UUID) (bid *models.BidDetails, err error) {
+	return c.Database.GetHighestBid(ctx, userID, productID)
+}
