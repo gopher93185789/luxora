@@ -11,7 +11,7 @@
     AOS.init();
 </script>
     <body>
-        <div class="showcase  grid grid-cols-3 gap-2" >
+               <div class="showcase  grid grid-cols-3 gap-2" >
             <x-product-card />
         </div>
     </body>
