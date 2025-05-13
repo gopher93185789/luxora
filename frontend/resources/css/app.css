@@ -13,4 +13,19 @@
 
 body{
     background-color: black;
+    overflow-x: hidden;
+    padding: 0.5rem;
+    padding-top: 0;
+    width: 100vw;
+    height: 100%;
+
 }
+
+  
+ body::-webkit-scrollbar {
+  display: none;
+
+}
+html {
+  scroll-behavior: smooth;
+} 

@@ -5,7 +5,7 @@ use App\Http\Controllers\LandingController;
 
 Route::get('/', [LandingController::class, 'index']);
 
-Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
+Route::get('/products', [App\Http\Controllers\ProductController::class, 'product'])->name('product');
 
 Route::view('/about', 'about')->name('about');
 

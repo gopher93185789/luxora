@@ -1,4 +1,4 @@
-<nav class="bg-black  relative z-10" x-data="{ open: false }">
+<nav class= "bg-black sticky top-0 z-10" x-data="{ open: false }">
     <div class="container mx-auto px-4 py-4 flex flex-row items-center justify-between">
             <button @click="open = !open"
             class="focus:outline-none z-50 relative"
@@ -28,7 +28,7 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 translate-x-0"
          x-transition:leave-end="opacity-0 -translate-x-6"
-         class="absolute top-0 left-0 w-full h-screen bg-black z-40 flex flex-row p-56 gap-10">
+         class="fixed top-0 left-0 w-full h-screen bg-black z-40 flex flex-row p-56 gap-10 ">
          <div class="flex flex-col gap-12 w-72" >
              <a href="{{ route('products.index') }}" class="block text-gray-200 text-7xl hover:text-white">Products</a>
              <a href="{{ route('about') }}" class="block text-gray-200 text-7xl hover:text-white">About</a>

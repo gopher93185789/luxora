@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 class ProductController extends Controller
 {
-    public function showLoginForm()
+    public function product()
     {
-        return view('product.index');
+        return view('product');
     }
 }
