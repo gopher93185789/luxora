@@ -93,3 +93,34 @@ func (t *TransportConfig) DeleteListing(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 }
+
+// @Summary      Update sold status via bid
+// @Description  This endpoint updates the sold status of a product based on a successful bid. The request body must contain the bid details in JSON format.
+// @Tags         listings
+// @Accept       json
+// @Produce      json
+// @Param        bid  body      models.SellItemViaBid  true  "Details of the bid used to mark the item as sold"
+// @Success      200  {string}  string                 "Item marked as sold successfully"
+// @Failure      422  {object}  errs.ErrorResponse     "Unprocessable entity - invalid JSON payload"
+// @Failure      500  {object}  errs.ErrorResponse     "Internal server error"
+// @Router       /listings/sold/bid [PUT]
+func (t *TransportConfig) UpdateSoldViaBid(w http.ResponseWriter, r *http.Request) {
+	uid, err := middleware.GetTokenFromRequest(r)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+		return
+	}
+
+	var info models.SellItemViaBid
+	if err := json.NewDecoder(r.Body).Decode(&info); err != nil {
+		errs.ErrorWithJson(w, http.StatusUnprocessableEntity, "failed to decode json payload")
+		return
+
+	}
+
+	err = t.CoreStore.SetItemsSoldViaBid(r.Context(), uid, &info)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to update sold on item: "+err.Error())
+		return
+	}
+}

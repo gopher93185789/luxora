@@ -38,3 +38,9 @@ type BidDetails struct {
 	ProductID uuid.UUID       `json:"product_id"`
 	CreatedAt time.Time       `json:"created_at"`
 }
+
+type SellItemViaBid struct {
+	BidID        uuid.UUID `json:"bid_id"`
+	ItemID       uuid.UUID `json:"item_id"`
+	BidCreatedBy uuid.UUID `json:"bid_created_by"`
+}

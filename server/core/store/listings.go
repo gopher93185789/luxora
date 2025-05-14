@@ -39,5 +39,25 @@ func (c *CoreStoreContext) CreateNewListing(ctx context.Context, userID uuid.UUI
 }
 
 func (c *CoreStoreContext) DeleteListing(ctx context.Context, userID uuid.UUID, productId uuid.UUID) (err error) {
-	return c.DeleteListing(ctx, userID, productId)
+	return c.Database.DeleteListing(ctx, userID, productId)
+}
+
+func (c *CoreStoreContext) SetItemsSoldViaBid(ctx context.Context, userId uuid.UUID, info *models.SellItemViaBid) (err error) {
+	if info.BidID == uuid.Nil {
+		return fmt.Errorf("invalid bid id")
+	}
+
+	if info.BidCreatedBy == uuid.Nil {
+		return fmt.Errorf("invalid BidCreatedBy id")
+	}
+
+	if info.ItemID == uuid.Nil {
+		return fmt.Errorf("invalid item id")
+	}
+
+	if userId == uuid.Nil {
+		return fmt.Errorf("invalid user id")
+	}
+
+	return c.Database.UpdateItemSoldViaBid(ctx, userId, true, info.BidID, info.ItemID, info.BidCreatedBy)
 }

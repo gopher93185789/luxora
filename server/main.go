@@ -81,6 +81,7 @@ func main() {
 	mux.HandleFunc("DELETE /listings", mcf.AuthMiddleware(tx.DeleteListing))
 	mux.HandleFunc("GET /listings/highest-bid", mcf.AuthMiddleware(tx.GetHighestBid))
 	mux.HandleFunc("GET /listings/bids", mcf.AuthMiddleware(tx.GetBids))
+	mux.HandleFunc("PUT /listings/sold/bid", mcf.AuthMiddleware(tx.UpdateSoldViaBid))
 
 	log.Println("listening on port " + config.Port)
 	if config.Env == DEV {

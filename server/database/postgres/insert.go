@@ -72,7 +72,7 @@ func (p *Postgres) InsertListing(ctx context.Context, userId uuid.UUID, product 
 		return uuid.Nil, err
 	}
 
-	_, err = tx.Exec(ctx, "INSERT INTO luxora_product_price_history (product_id, starting_price) VALUES ($1, $2)", productId, product.Price)
+	_, err = tx.Exec(ctx, "INSERT INTO luxora_product_price_history (product_id, price) VALUES ($1, $2)", productId, product.Price)
 	if err != nil {
 		tx.Rollback(ctx)
 		return uuid.Nil, err

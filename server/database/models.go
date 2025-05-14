@@ -25,4 +25,8 @@ type Database interface {
 
 	// update
 	UpdateRefreshToken(ctx context.Context, userId uuid.UUID, refreshToken string) (err error)
+	UpdateItemSoldViaBid(ctx context.Context, userId uuid.UUID, sold bool, bidID, itemID uuid.UUID, bidCreatedBy uuid.UUID) (err error)
+
+	// delete
+	DeleteListing(ctx context.Context, userID uuid.UUID, productId uuid.UUID) (err error)
 }
