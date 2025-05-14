@@ -13,7 +13,7 @@ tailwind + laraverl + go(at)
 
 # backend
 <!-- - user profiles -->
-- bidding service
+<!-- - bidding service -->
 - get listings with search params e.g category, date, pricerange etc
 - checkout
 <!-- - add/remove items to sell  -->

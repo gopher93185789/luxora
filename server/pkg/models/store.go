@@ -22,11 +22,9 @@ type Product struct {
 	Images      []ProductImage  `json:"product_images"`
 }
 
-
-
 type Bid struct {
 	BidAmount decimal.Decimal `json:"amount"`
-	ProductID uuid.UUID `json:"product_id"`
+	ProductID uuid.UUID       `json:"product_id"`
 }
 
 type CreateBidResponse struct {
@@ -34,8 +32,9 @@ type CreateBidResponse struct {
 }
 
 type BidDetails struct {
-	BidID uuid.UUID `json:"bid_id"`
+	BidID     uuid.UUID       `json:"bid_id"`
+	CreatedBy uuid.UUID       `json:"created_by"`
 	BidAmount decimal.Decimal `json:"amount"`
-	ProductID uuid.UUID `json:"product_id"`
-	CreatedAt time.Time `json:"created_at"`
+	ProductID uuid.UUID       `json:"product_id"`
+	CreatedAt time.Time       `json:"created_at"`
 }

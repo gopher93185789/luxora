@@ -74,12 +74,13 @@ func main() {
 	mux.HandleFunc("GET /auth/google", tx.GoogleRedirect)
 	mux.HandleFunc("GET /auth/google/exchange", tx.GoogleExchange)
 	mux.HandleFunc("POST /auth/refresh", tx.RefreshToken)
-	
+
 	// listings
 	mux.HandleFunc("POST /listing/bid", mcf.AuthMiddleware(tx.CreateBid))
 	mux.HandleFunc("POST /listings", mcf.AuthMiddleware(tx.CreateNewListing))
 	mux.HandleFunc("DELETE /listings", mcf.AuthMiddleware(tx.DeleteListing))
 	mux.HandleFunc("GET /listings/highest-bid", mcf.AuthMiddleware(tx.GetHighestBid))
+	mux.HandleFunc("GET /listings/bids", mcf.AuthMiddleware(tx.GetBids))
 
 	log.Println("listening on port " + config.Port)
 	if config.Env == DEV {

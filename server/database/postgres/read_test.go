@@ -83,7 +83,6 @@ func TestGetIsUsernameAndIDByProviderID(t *testing.T) {
 	}
 }
 
-
 func TestGetHighestBid(t *testing.T) {
 	pool, clean, err := testutils.SetupTestPostgresDB("")
 	if err != nil {
@@ -155,5 +154,70 @@ func TestGetHighestBid(t *testing.T) {
 
 	if !bid2.Equal(Hbid.BidAmount) {
 		t.Fatal("highest bid does not match")
+	}
+}
+
+func TestGetBids(t *testing.T) {
+	pool, clean, err := testutils.SetupTestPostgresDB("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer clean()
+
+	db := Postgres{Pool: pool}
+	id, err := db.InsertOauthUser(t.Context(), "diddy", "email@gmail.diddy.com", "github", "hwllo")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	price, err := decimal.NewFromString("0")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	product := &models.Product{
+		ItemName:    "rizz",
+		Category:    "products",
+		Description: "knaye the goat",
+		Price:       price,
+		Images: []models.ProductImage{
+			{
+				Image:           "wlieblwelkjhe",
+				Order:           0,
+				Checksum:        "slkdfkljsfd",
+				CompressedImage: make([]byte, 10),
+			},
+			{
+				Image:           "sdvsrtvs",
+				Order:           1,
+				Checksum:        "slkdfksgvsljsfd",
+				CompressedImage: make([]byte, 10),
+			},
+		},
+	}
+
+	pid, err := db.InsertListing(t.Context(), id, product)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for i := range 100 {
+		_, err := db.InsertBid(t.Context(), id, &models.Bid{
+			BidAmount: decimal.NewFromInt(int64(i)),
+			ProductID: pid,
+		})
+
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	bids, err := db.GetBids(t.Context(), id, pid, 100, 100*(1-1))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(bids) != 100 {
+		t.Fatalf("got insufficxient amount of bids got: %v, want: %v", len(bids), 100)
 	}
 }

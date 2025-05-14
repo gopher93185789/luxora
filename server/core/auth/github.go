@@ -34,10 +34,10 @@ func (s *CoreAuthContext) handleOauthSignup(ctx context.Context, username, email
 }
 
 func (s *CoreAuthContext) HandleGithubOauth(ctx context.Context, code string) (accessToken, refreshToken string, err error) {
-	if code == ""{
+	if code == "" {
 		return "", "", fmt.Errorf("invalid exchange code")
-	}	
-	
+	}
+
 	token, err := s.GithubConfig.Exchange(ctx, code)
 	if err != nil {
 		return "", "", err

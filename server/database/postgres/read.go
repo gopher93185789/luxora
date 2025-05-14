@@ -30,10 +30,34 @@ func (p *Postgres) GetIsUsernameAndIDByProviderID(ctx context.Context, providerI
 
 func (p *Postgres) GetHighestBid(ctx context.Context, userID uuid.UUID, productID uuid.UUID) (bid *models.BidDetails, err error) {
 	bid = &models.BidDetails{}
-	err = p.Pool.QueryRow(ctx, "SELECT bid_id, bid_amount, bid_time FROM product_bid WHERE item_id=$1 ORDER BY bid_amount DESC LIMIT 1", productID).Scan(&bid.BidID, &bid.BidAmount, &bid.CreatedAt)
+	err = p.Pool.QueryRow(ctx, "SELECT bid_id, bid_amount, bid_time, user_id FROM product_bid WHERE item_id=$1 ORDER BY bid_amount DESC LIMIT 1", productID).Scan(&bid.BidID, &bid.BidAmount, &bid.CreatedAt, &bid.CreatedBy)
 	if err != nil {
 		return nil, err
 	}
+
 	bid.ProductID = productID
+	return
+}
+
+func (p *Postgres) GetBids(ctx context.Context, userID uuid.UUID, productID uuid.UUID, limit, offset int) (bids []models.BidDetails, err error) {
+	bids = make([]models.BidDetails, 0, limit)
+
+	rows, err := p.Pool.Query(ctx, "SELECT bid_id, bid_amount, bid_time, user_id FROM product_bid WHERE item_id=$1 ORDER BY bid_amount DESC LIMIT $2 OFFSET $3", productID, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var bid = models.BidDetails{}
+		bid.ProductID = productID
+
+		err := rows.Scan(&bid.BidID, &bid.BidAmount, &bid.CreatedAt, &bid.CreatedBy)
+		if err != nil {
+			return nil, err
+		}
+		bids = append(bids, bid)
+	}
+
 	return
 }
