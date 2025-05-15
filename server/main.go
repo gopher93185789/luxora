@@ -15,17 +15,24 @@ import (
 	"golang.org/x/oauth2/google"
 )
 
-// @Summary		Healthcheck
-// @Description	Endpoint to check if the server is running
-// @Tags			base
-// @Accept			*/*
-// @Produce		plain
-// @Success		200	{string}	string	"pong"
-// @Router			/ping [get]
+//	@Summary		Healthcheck
+//	@Description	Endpoint to check if the server is running
+//	@Tags			base
+//	@Accept			*/*
+//	@Produce		plain
+//	@Success		200	{string}	string	"pong"
+//	@Router			/ping [get]
 func Ping(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("pong"))
 }
 
+//	@title			Luxora Marketplace API
+//	@version		0.8.0
+//	@description	Luxora is a secure, modern backend API for managing listings, bids, and authentication with OAuth2 providers. This API powers the Luxora marketplace platform, enabling seamless user authentication, listing management, and bidding workflows.
+
+//	@host	api.luxoras.nl
+
+//	@schemes	https
 func main() {
 	config, err := GetServerConfig()
 	if err != nil {
