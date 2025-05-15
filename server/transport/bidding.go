@@ -11,18 +11,18 @@ import (
 	"github.com/gopher93185789/luxora/server/pkg/models"
 )
 
-// @Summary		Create a bid
-// @Description	This endpoint allows users to create bids on product listings. The request body must contain the bid details in JSON format.
-// @Tags			bidding
-// @Accept			json
-// @Produce		json
-// @Param			bid	body		models.Bid					true	"Bid details"
-// @Param			Authorization	header	string	true	"Access token"
-// @Success		200	{object}	models.CreateBidResponse	"Bid created successfully with the bid ID"
-// @Failure		400	{object}	errs.ErrorResponse			"Bad request - invalid input or missing fields"
-// @Failure		422	{object}	errs.ErrorResponse			"Unprocessable entity - failed to decode JSON payload"
-// @Failure		500	{object}	errs.ErrorResponse			"Internal server error"
-// @Router			/listings/bid [POST]
+//	@Summary		Create a bid
+//	@Description	This endpoint allows users to create bids on product listings. The request body must contain the bid details in JSON format.
+//	@Tags			bidding
+//	@Accept			json
+//	@Produce		json
+//	@Param			bid				body		models.Bid					true	"Bid details"
+//	@Param			Authorization	header		string						true	"Access token"
+//	@Success		200				{object}	models.CreateBidResponse	"Bid created successfully with the bid ID"
+//	@Failure		400				{object}	errs.ErrorResponse			"Bad request - invalid input or missing fields"
+//	@Failure		422				{object}	errs.ErrorResponse			"Unprocessable entity - failed to decode JSON payload"
+//	@Failure		500				{object}	errs.ErrorResponse			"Internal server error"
+//	@Router			/listings/bid [POST]
 func (t *TransportConfig) CreateBid(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
@@ -51,18 +51,18 @@ func (t *TransportConfig) CreateBid(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// @Summary		Get highest bid
-// @Description	This endpoint retrieves the highest bid for a specific product listing. The product ID must be provided as a query parameter.
-// @Tags			bidding
-// @Accept			*/*
-// @Produce		json
-// @Param			productid	query		string				true	"Product ID"
-// @Param			Authorization	header	string	true	"Access token"
-// @Success		200			{object}	models.Bid			"Highest bid details"
-// @Failure		400			{object}	errs.ErrorResponse	"Bad request - invalid or missing product ID"
-// @Failure		404			{object}	errs.ErrorResponse	"Not found - product ID not provided"
-// @Failure		500			{object}	errs.ErrorResponse	"Internal server error"
-// @Router			/listings/highest-bid [GET]
+//	@Summary		Get highest bid
+//	@Description	This endpoint retrieves the highest bid for a specific product listing. The product ID must be provided as a query parameter.
+//	@Tags			bidding
+//	@Accept			*/*
+//	@Produce		json
+//	@Param			productid		query		string				true	"Product ID"
+//	@Param			Authorization	header		string				true	"Access token"
+//	@Success		200				{object}	models.Bid			"Highest bid details"
+//	@Failure		400				{object}	errs.ErrorResponse	"Bad request - invalid or missing product ID"
+//	@Failure		404				{object}	errs.ErrorResponse	"Not found - product ID not provided"
+//	@Failure		500				{object}	errs.ErrorResponse	"Internal server error"
+//	@Router			/listings/highest-bid [GET]
 func (t *TransportConfig) GetHighestBid(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
@@ -97,20 +97,20 @@ func (t *TransportConfig) GetHighestBid(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
-// @Summary		Get bids for a product listing
-// @Description	Retrieves a paginated list of bids for a specific product listing. The product ID, limit, and page number must be provided as query parameters.
-// @Tags			bidding
-// @Accept			*/*
-// @Produce		json
-// @Param			productid	query		string				true	"The unique identifier of the product listing"
-// @Param			limit		query		int					true	"The maximum number of bids to retrieve per page"
-// @Param			page		query		int					true	"The page number to retrieve"
-// @Param			Authorization	header	string	true	"Access token"
-// @Success		200			{array}		models.Bid			"A list of bids for the specified product listing"
-// @Failure		400			{object}	errs.ErrorResponse	"Bad request - invalid or missing query parameters"
-// @Failure		404			{object}	errs.ErrorResponse	"Not found - product ID not provided"
-// @Failure		500			{object}	errs.ErrorResponse	"Internal server error"
-// @Router			/listings/bids [GET]
+//	@Summary		Get bids for a product listing
+//	@Description	Retrieves a paginated list of bids for a specific product listing. The product ID, limit, and page number must be provided as query parameters.
+//	@Tags			bidding
+//	@Accept			*/*
+//	@Produce		json
+//	@Param			productid		query		string				true	"The unique identifier of the product listing"
+//	@Param			limit			query		int					true	"The maximum number of bids to retrieve per page"
+//	@Param			page			query		int					true	"The page number to retrieve"
+//	@Param			Authorization	header		string				true	"Access token"
+//	@Success		200				{array}		models.Bid			"A list of bids for the specified product listing"
+//	@Failure		400				{object}	errs.ErrorResponse	"Bad request - invalid or missing query parameters"
+//	@Failure		404				{object}	errs.ErrorResponse	"Not found - product ID not provided"
+//	@Failure		500				{object}	errs.ErrorResponse	"Internal server error"
+//	@Router			/listings/bids [GET]
 func (t *TransportConfig) GetBids(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 

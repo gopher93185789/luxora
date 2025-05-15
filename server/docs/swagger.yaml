@@ -207,40 +207,6 @@ paths:
       summary: Get product listings
       tags:
       - listings
-  /listings/:
-    delete:
-      consumes:
-      - '*/*'
-      description: This endpoint allows users to delete product listings.
-      parameters:
-      - description: Product ID
-        in: query
-        name: id
-        required: true
-        type: string
-      - description: Access token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - '*/*'
-      responses:
-        "200":
-          description: Listing deleted successfully
-          schema:
-            type: string
-        "404":
-          description: Product ID not found
-          schema:
-            $ref: '#/definitions/error.ErrorResponse'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/error.ErrorResponse'
-      summary: Delete a listing
-      tags:
-      - listings
     post:
       consumes:
       - application/json
@@ -273,6 +239,40 @@ paths:
           schema:
             $ref: '#/definitions/error.ErrorResponse'
       summary: Create new listing
+      tags:
+      - listings
+  /listings/:
+    delete:
+      consumes:
+      - '*/*'
+      description: This endpoint allows users to delete product listings.
+      parameters:
+      - description: Product ID
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - '*/*'
+      responses:
+        "200":
+          description: Listing deleted successfully
+          schema:
+            type: string
+        "404":
+          description: Product ID not found
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      summary: Delete a listing
       tags:
       - listings
   /listings/bid:

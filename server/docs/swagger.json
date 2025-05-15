@@ -207,9 +207,7 @@
                         }
                     }
                 }
-            }
-        },
-        "/listings/": {
+            },
             "post": {
                 "description": "This endpoint allows users to create new product listings.",
                 "consumes": [
@@ -260,7 +258,9 @@
                         }
                     }
                 }
-            },
+            }
+        },
+        "/listings/": {
             "delete": {
                 "description": "This endpoint allows users to delete product listings.",
                 "consumes": [
