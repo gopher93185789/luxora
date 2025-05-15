@@ -163,7 +163,7 @@ func TestGetHighestBid(t *testing.T) {
 	}
 }
 
-func TestGetGetBids(t *testing.T) {
+func TestGetBids(t *testing.T) {
 	pool, clean, err := testutils.SetupTestPostgresDB("")
 	if err != nil {
 		t.Fatal(err)

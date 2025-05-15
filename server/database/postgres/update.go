@@ -12,20 +12,23 @@ func (p *Postgres) UpdateRefreshToken(ctx context.Context, userId uuid.UUID, ref
 	return
 }
 
-func (p *Postgres) UpdateItemSoldViaBid(ctx context.Context, userId uuid.UUID, sold bool, bidID, itemID uuid.UUID, bidCreatedBy uuid.UUID) (err error) {
+func (p *Postgres) UpdateItemSoldViaBid(ctx context.Context, userId uuid.UUID, sold bool, bidID, itemID uuid.UUID) (err error) {
 	tx, err := p.Pool.Begin(ctx)
 	if err != nil {
 		return err
 	}
 
-	_, err = tx.Exec(ctx, "UPDATE luxora_product SET sold=$1, sold_to_user_id=$2 WHERE item_id=$3 AND user_id=$4", sold, bidCreatedBy, itemID, userId)
+	var (
+		soldPrice    decimal.Decimal
+		bidCreatedBy uuid.UUID
+	)
+	err = tx.QueryRow(ctx, "SELECT bid_amount, user_id FROM product_bid WHERE bid_id=$1 AND item_id=$2", bidID, itemID).Scan(&soldPrice, &bidCreatedBy)
 	if err != nil {
 		tx.Rollback(ctx)
 		return err
 	}
 
-	var soldPrice decimal.Decimal
-	err = tx.QueryRow(ctx, "SELECT bid_amount FROM product_bid WHERE bid_id=$1 AND item_id=$2 AND user_id=$3", bidID, itemID, bidCreatedBy).Scan(&soldPrice)
+	_, err = tx.Exec(ctx, "UPDATE luxora_product SET sold=$1, sold_to_user_id=$2 WHERE item_id=$3 AND user_id=$4", sold, bidCreatedBy, itemID, userId)
 	if err != nil {
 		tx.Rollback(ctx)
 		return err

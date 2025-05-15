@@ -15,13 +15,13 @@ import (
 	"golang.org/x/oauth2/google"
 )
 
-// @Summary      Healthcheck
-// @Description  Endpoint to check if the server is running
-// @Tags         base
-// @Accept       */*
-// @Produce      plain
-// @Success      200  {string}  string  "pong"
-// @Router       /ping [get]
+// @Summary		Healthcheck
+// @Description	Endpoint to check if the server is running
+// @Tags			base
+// @Accept			*/*
+// @Produce		plain
+// @Success		200	{string}	string	"pong"
+// @Router			/ping [get]
 func Ping(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("pong"))
 }
@@ -78,6 +78,7 @@ func main() {
 	// listings
 	mux.HandleFunc("POST /listing/bid", mcf.AuthMiddleware(tx.CreateBid))
 	mux.HandleFunc("POST /listings", mcf.AuthMiddleware(tx.CreateNewListing))
+	mux.HandleFunc("GET /listings", mcf.AuthMiddleware(tx.GetListings))
 	mux.HandleFunc("DELETE /listings", mcf.AuthMiddleware(tx.DeleteListing))
 	mux.HandleFunc("GET /listings/highest-bid", mcf.AuthMiddleware(tx.GetHighestBid))
 	mux.HandleFunc("GET /listings/bids", mcf.AuthMiddleware(tx.GetBids))

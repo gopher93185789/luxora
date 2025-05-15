@@ -101,7 +101,7 @@ func TestUpdateItemSoldViaBid(t *testing.T) {
 		t.Fatal("highest bid does not match")
 	}
 
-	err = db.UpdateItemSoldViaBid(t.Context(), id, true, Hbid.BidID, pid, Hbid.CreatedBy)
+	err = db.UpdateItemSoldViaBid(t.Context(), id, true, Hbid.BidID, pid)
 	if err != nil {
 		t.Fatal(err)
 	}

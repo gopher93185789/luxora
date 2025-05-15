@@ -40,7 +40,18 @@ type BidDetails struct {
 }
 
 type SellItemViaBid struct {
-	BidID        uuid.UUID `json:"bid_id"`
-	ItemID       uuid.UUID `json:"item_id"`
-	BidCreatedBy uuid.UUID `json:"bid_created_by"`
+	BidID  uuid.UUID `json:"bid_id"`
+	ItemID uuid.UUID `json:"item_id"`
+}
+
+type ProductInfo struct {
+	ItemID      uuid.UUID       `json:"id"`
+	Name        string          `json:"name"`
+	CreatedBy   uuid.UUID       `json:"created_by"`
+	CreatedAt   time.Time       `json:"created_at"`
+	Category    string          `json:"category"`
+	Description string          `json:"description"`
+	Price       decimal.Decimal `json:"price"`
+	Currency    string          `json:"string"`
+	Images      []ProductImage  `json:"product_images"`
 }

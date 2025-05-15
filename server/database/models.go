@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gopher93185789/luxora/server/pkg/models"
+	"github.com/shopspring/decimal"
 )
 
 type Database interface {
@@ -22,10 +23,11 @@ type Database interface {
 	GetIsUsernameAndIDByProviderID(ctx context.Context, providerID string) (username string, userID uuid.UUID, err error)
 	GetHighestBid(ctx context.Context, userID uuid.UUID, productID uuid.UUID) (bid *models.BidDetails, err error)
 	GetBids(ctx context.Context, userID uuid.UUID, productID uuid.UUID, limit, page int) (bids []models.BidDetails, err error)
+	GetProducts(ctx context.Context, userID, createdBy uuid.UUID, category *string, startPrice, endPrice *decimal.Decimal, limit, offset int) (products []models.ProductInfo, err error)
 
 	// update
 	UpdateRefreshToken(ctx context.Context, userId uuid.UUID, refreshToken string) (err error)
-	UpdateItemSoldViaBid(ctx context.Context, userId uuid.UUID, sold bool, bidID, itemID uuid.UUID, bidCreatedBy uuid.UUID) (err error)
+	UpdateItemSoldViaBid(ctx context.Context, userId uuid.UUID, sold bool, bidID, itemID uuid.UUID) (err error)
 
 	// delete
 	DeleteListing(ctx context.Context, userID uuid.UUID, productId uuid.UUID) (err error)

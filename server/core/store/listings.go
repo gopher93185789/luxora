@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 	compression "github.com/gopher93185789/luxora/server/pkg/compressions"
 	"github.com/gopher93185789/luxora/server/pkg/models"
+	"github.com/shopspring/decimal"
 )
 
 func (c *CoreStoreContext) CreateNewListing(ctx context.Context, userID uuid.UUID, product *models.Product) (productID uuid.UUID, err error) {
@@ -47,10 +48,6 @@ func (c *CoreStoreContext) SetItemsSoldViaBid(ctx context.Context, userId uuid.U
 		return fmt.Errorf("invalid bid id")
 	}
 
-	if info.BidCreatedBy == uuid.Nil {
-		return fmt.Errorf("invalid BidCreatedBy id")
-	}
-
 	if info.ItemID == uuid.Nil {
 		return fmt.Errorf("invalid item id")
 	}
@@ -59,5 +56,63 @@ func (c *CoreStoreContext) SetItemsSoldViaBid(ctx context.Context, userId uuid.U
 		return fmt.Errorf("invalid user id")
 	}
 
-	return c.Database.UpdateItemSoldViaBid(ctx, userId, true, info.BidID, info.ItemID, info.BidCreatedBy)
+	return c.Database.UpdateItemSoldViaBid(ctx, userId, true, info.BidID, info.ItemID)
+}
+
+func (c *CoreStoreContext) GetListings(ctx context.Context, userID uuid.UUID, category, startPriceStr, endPriceStr, createdByStr string, limit, page int) (products []models.ProductInfo, err error) {
+	if limit < 1 || page < 1 {
+		return nil, fmt.Errorf("invalid limit or page param")
+	}
+
+	var (
+		startPrice *decimal.Decimal = nil
+		endPrice   *decimal.Decimal = nil
+		ct         *string          = nil
+		createdBy  uuid.UUID        = uuid.Nil
+	)
+
+	if startPriceStr != "" {
+		sp, err := decimal.NewFromString(startPriceStr)
+		if err != nil {
+			return nil, err
+		}
+		startPrice = &sp
+	}
+
+	if endPriceStr != "" {
+		ep, err := decimal.NewFromString(endPriceStr)
+		if err != nil {
+			return nil, err
+		}
+		endPrice = &ep
+	}
+
+	if category != "" {
+		ct = &category
+	}
+
+	if createdByStr != "" {
+		createdBy, err = uuid.Parse(createdByStr)
+		if err != nil {
+			return nil, fmt.Errorf("invalid userID")
+		}
+	}
+
+	products, err = c.Database.GetProducts(ctx, userID, createdBy, ct, startPrice, endPrice, limit, limit*(page-1))
+	if err != nil {
+		return nil, err
+	}
+
+	for i := range products {
+		for j := range products[i].Images {
+			decompressed, err := compression.DecompressZSTD(products[i].Images[j].CompressedImage)
+			if err != nil {
+				continue
+			}
+
+			products[i].Images[j].Image = string(decompressed)
+		}
+	}
+
+	return products, nil
 }

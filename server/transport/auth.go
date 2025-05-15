@@ -9,17 +9,17 @@ import (
 	"time"
 )
 
-// @Summary      Github Oauth exchange
-// @Description  Send a request to this endpoint to exchange the Github code you got from Github for an access token.
-// @Tags         auth
-// @Accept       */*
-// @Produce      json
-// @Success      200  {object}  AccessTokenResponse  "Access token response"
-// @Failure      401  {object}  errs.ErrorResponse "Unauthorized error"
-// @Failure      500  {object}  errs.ErrorResponse "Internal server error"
-// @Router       /auth/github/exchange [get]
-// @Param        code  query  string  true  "code"  Format(code)
-// @Param        state  query  string  true  "state"  Format(state)
+// @Summary		Github Oauth exchange
+// @Description	Send a request to this endpoint to exchange the Github code you got from Github for an access token.
+// @Tags			auth
+// @Accept			*/*
+// @Produce		json
+// @Success		200	{object}	AccessTokenResponse	"Access token response"
+// @Failure		401	{object}	errs.ErrorResponse	"Unauthorized error"
+// @Failure		500	{object}	errs.ErrorResponse	"Internal server error"
+// @Router			/auth/github/exchange [get]
+// @Param			code	query	string	true	"code"	Format(code)
+// @Param			state	query	string	true	"state"	Format(state)
 func (t *TransportConfig) GithubExchange(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	code := r.URL.Query().Get("code")
@@ -44,17 +44,17 @@ func (t *TransportConfig) GithubExchange(w http.ResponseWriter, r *http.Request)
 	}
 }
 
-// @Summary      Google Oauth exchange
-// @Description  Send a request to this endpoint to exchange the Google code you got from Google for an access token.
-// @Tags         auth
-// @Accept       */*
-// @Produce      json
-// @Success      200  {object}  AccessTokenResponse  "Access token response"
-// @Failure      401  {object}  errs.ErrorResponse "Unauthorized error"
-// @Failure      500  {object}  errs.ErrorResponse "Internal server error"
-// @Router       /auth/github/exchange [get]
-// @Param        code  query  string  true  "code"  Format(code)
-// @Param        state  query  string  true  "state"  Format(state)
+// @Summary		Google Oauth exchange
+// @Description	Send a request to this endpoint to exchange the Google code you got from Google for an access token.
+// @Tags			auth
+// @Accept			*/*
+// @Produce		json
+// @Success		200	{object}	AccessTokenResponse	"Access token response"
+// @Failure		401	{object}	errs.ErrorResponse	"Unauthorized error"
+// @Failure		500	{object}	errs.ErrorResponse	"Internal server error"
+// @Router			/auth/github/exchange [get]
+// @Param			code	query	string	true	"code"	Format(code)
+// @Param			state	query	string	true	"state"	Format(state)
 func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	code := r.URL.Query().Get("code")
@@ -85,16 +85,16 @@ func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request)
 	}
 }
 
-// @Summary      Refresh Token
-// @Description  Refresh the access token using the refresh token stored in the cookie.
-// @Tags         auth
-// @Accept       */*
-// @Produce      json
-// @Success      200  {object}  AccessTokenResponse  "Access token response"
-// @Failure      400  {object}  errs.ErrorResponse "Missing cookie error"
-// @Failure      401  {object}  errs.ErrorResponse "Unauthorized error"
-// @Failure      500  {object}  errs.ErrorResponse "Internal server error"
-// @Router       /auth/refresh [post]
+// @Summary		Refresh Token
+// @Description	Refresh the access token using the refresh token stored in the cookie.
+// @Tags			auth
+// @Accept			*/*
+// @Produce		json
+// @Success		200	{object}	AccessTokenResponse	"Access token response"
+// @Failure		400	{object}	errs.ErrorResponse	"Missing cookie error"
+// @Failure		401	{object}	errs.ErrorResponse	"Unauthorized error"
+// @Failure		500	{object}	errs.ErrorResponse	"Internal server error"
+// @Router			/auth/refresh [post]
 func (t *TransportConfig) RefreshToken(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 

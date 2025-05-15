@@ -1,8 +1,11 @@
 package postgres
 
 import (
+	"context"
 	"testing"
+	"time"
 
+	"github.com/google/uuid"
 	"github.com/gopher93185789/luxora/server/pkg/models"
 	"github.com/gopher93185789/luxora/server/pkg/testutils"
 	"github.com/shopspring/decimal"
@@ -219,5 +222,53 @@ func TestGetBids(t *testing.T) {
 
 	if len(bids) != 100 {
 		t.Fatalf("got insufficxient amount of bids got: %v, want: %v", len(bids), 100)
+	}
+}
+
+func TestGetProducts(t *testing.T) {
+	ctx, cancel := context.WithTimeout(t.Context(), 10*time.Second)
+	defer cancel()
+
+	pool, _, err := testutils.SetupTestPostgresDB("")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	db := Postgres{Pool: pool}
+
+	t.Log("Inserting user")
+	id, err := db.InsertOauthUser(ctx, "diddy", "email@gmail.diddy.com", "github", "hwllo")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for range 100 {
+
+	}
+	price := decimal.NewFromInt(0)
+	product := &models.Product{
+		ItemName:    "rizz",
+		Category:    "rozz",
+		Description: "knaye the goat",
+		Price:       price,
+		Images: []models.ProductImage{
+			{Image: "img1", Order: 0, Checksum: "chk1", CompressedImage: make([]byte, 10)},
+			{Image: "img2", Order: 1, Checksum: "chk2", CompressedImage: make([]byte, 10)},
+		},
+	}
+
+	pid, err := db.InsertListing(ctx, id, product)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Log("Fetching products")
+	prods, err := db.GetProducts(ctx, id, uuid.Nil, nil, nil, nil, 40, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(prods) == 0 || prods[0].ItemID != pid {
+		t.Fatal("incorrect product fetched")
 	}
 }

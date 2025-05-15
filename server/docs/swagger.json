@@ -124,6 +124,91 @@
                 }
             }
         },
+        "/listings": {
+            "get": {
+                "description": "Retrieves a paginated list of product listings for the authenticated user. Supports optional filtering by category and price range.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "listings"
+                ],
+                "summary": "Get product listings",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Number of listings per page",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number to retrieve",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Category to filter listings",
+                        "name": "category",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Minimum price filter",
+                        "name": "startprice",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Maximum price filter",
+                        "name": "endprice",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "the person who created the listing",
+                        "name": "creator",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of product listings",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Product"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request - missing or invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/listings/": {
             "post": {
                 "description": "This endpoint allows users to create new product listings.",
@@ -146,6 +231,13 @@
                         "schema": {
                             "$ref": "#/definitions/models.Product"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -187,6 +279,13 @@
                         "description": "Product ID",
                         "name": "id",
                         "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Access token",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -234,6 +333,13 @@
                         "schema": {
                             "$ref": "#/definitions/models.Bid"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -251,6 +357,190 @@
                     },
                     "422": {
                         "description": "Unprocessable entity - failed to decode JSON payload",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/listings/bids": {
+            "get": {
+                "description": "Retrieves a paginated list of bids for a specific product listing. The product ID, limit, and page number must be provided as query parameters.",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "bidding"
+                ],
+                "summary": "Get bids for a product listing",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The unique identifier of the product listing",
+                        "name": "productid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "The maximum number of bids to retrieve per page",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "The page number to retrieve",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of bids for the specified product listing",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Bid"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request - invalid or missing query parameters",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found - product ID not provided",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/listings/highest-bid": {
+            "get": {
+                "description": "This endpoint retrieves the highest bid for a specific product listing. The product ID must be provided as a query parameter.",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "bidding"
+                ],
+                "summary": "Get highest bid",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "productid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Highest bid details",
+                        "schema": {
+                            "$ref": "#/definitions/models.Bid"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request - invalid or missing product ID",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found - product ID not provided",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/listings/sold/bid": {
+            "put": {
+                "description": "This endpoint updates the sold status of a product based on a successful bid. The request body must contain the bid details in JSON format.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "listings"
+                ],
+                "summary": "Update sold status via bid",
+                "parameters": [
+                    {
+                        "description": "Details of the bid used to mark the item as sold",
+                        "name": "bid",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SellItemViaBid"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item marked as sold successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable entity - invalid JSON payload",
                         "schema": {
                             "$ref": "#/definitions/error.ErrorResponse"
                         }
@@ -359,6 +649,17 @@
                 },
                 "order": {
                     "type": "integer"
+                }
+            }
+        },
+        "models.SellItemViaBid": {
+            "type": "object",
+            "properties": {
+                "bid_id": {
+                    "type": "string"
+                },
+                "item_id": {
+                    "type": "string"
                 }
             }
         },
