@@ -350,6 +350,25 @@ func TestGetSimiliarProductsWith(t *testing.T) {
 		}
 	})
 
+	t.Run("ball", func(t *testing.T) {
+		searchQ := "ball"
+		results, err := db.GetProducts(ctx, id, uuid.Nil, nil, &searchQ, nil, nil, 40, 0)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if len(results) != 1 {
+			t.Fatalf("expected 1 result, got %d", len(results))
+		}
+
+		for _, r := range results {
+			if !strings.Contains(strings.ToLower(r.Name), "ball") {
+				t.Fatalf("unexpected result: %+v", r)
+			}
+		}
+	})
+
+
 	t.Run("search non-matching term", func(t *testing.T) {
 		searchQ := "nonexistent"
 		results, err := db.GetProducts(ctx, id, uuid.Nil, nil, &searchQ, nil, nil, 40, 0)
