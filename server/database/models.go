@@ -23,7 +23,7 @@ type Database interface {
 	GetIsUsernameAndIDByProviderID(ctx context.Context, providerID string) (username string, userID uuid.UUID, err error)
 	GetHighestBid(ctx context.Context, userID uuid.UUID, productID uuid.UUID) (bid *models.BidDetails, err error)
 	GetBids(ctx context.Context, userID uuid.UUID, productID uuid.UUID, limit, page int) (bids []models.BidDetails, err error)
-	GetProducts(ctx context.Context, userID, createdBy uuid.UUID, category *string, startPrice, endPrice *decimal.Decimal, limit, offset int) (products []models.ProductInfo, err error)
+	GetProducts(ctx context.Context, userID, createdBy uuid.UUID, category, searchQuery *string, startPrice, endPrice *decimal.Decimal, limit, offset int) (products []models.ProductInfo, err error)
 
 	// update
 	UpdateRefreshToken(ctx context.Context, userId uuid.UUID, refreshToken string) (err error)

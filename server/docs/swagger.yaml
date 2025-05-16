@@ -181,6 +181,10 @@ paths:
         in: query
         name: startprice
         type: string
+      - description: search query
+        in: query
+        name: searchquery
+        type: string
       - description: Maximum price filter
         in: query
         name: endprice

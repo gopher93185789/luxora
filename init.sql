@@ -1,4 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+CREATE EXTENSION IF NOT EXISTS "pg_trgm";
+
 
 CREATE TABLE IF NOT EXISTS luxora_user (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

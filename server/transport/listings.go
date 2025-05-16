@@ -119,7 +119,6 @@ func (t *TransportConfig) UpdateSoldViaBid(w http.ResponseWriter, r *http.Reques
 	if err := json.NewDecoder(r.Body).Decode(&info); err != nil {
 		errs.ErrorWithJson(w, http.StatusUnprocessableEntity, "failed to decode json payload")
 		return
-
 	}
 
 	err = t.CoreStore.SetItemsSoldViaBid(r.Context(), uid, &info)
@@ -138,6 +137,7 @@ func (t *TransportConfig) UpdateSoldViaBid(w http.ResponseWriter, r *http.Reques
 //	@Param			page			query		int					true	"Page number to retrieve"
 //	@Param			category		query		string				false	"Category to filter listings"
 //	@Param			startprice		query		string				false	"Minimum price filter"
+//	@Param			searchquery		query		string				false	"search query"
 //	@Param			endprice		query		string				false	"Maximum price filter"
 //	@Param			creator			query		string				false	"the person who created the listing"
 //	@Param			Authorization	header		string				true	"Access token"
@@ -174,7 +174,7 @@ func (t *TransportConfig) GetListings(w http.ResponseWriter, r *http.Request) {
 		errs.ErrorWithJson(w, http.StatusBadRequest, "invalid 'page' URL parameter")
 	}
 
-	products, err := t.CoreStore.GetListings(r.Context(), uid, r.URL.Query().Get("category"), r.URL.Query().Get("startprice"), r.URL.Query().Get("endprice"), r.URL.Query().Get("creator"), limit, page)
+	products, err := t.CoreStore.GetListings(r.Context(), uid, r.URL.Query().Get("category"), r.URL.Query().Get("searchquery"), r.URL.Query().Get("startprice"), r.URL.Query().Get("endprice"), r.URL.Query().Get("creator"), limit, page)
 	if err != nil {
 		errs.ErrorWithJson(w, http.StatusInternalServerError, err.Error())
 		return

@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"strings"
 	"testing"
 	"time"
 
@@ -263,7 +264,7 @@ func TestGetProducts(t *testing.T) {
 	}
 
 	t.Log("Fetching products")
-	prods, err := db.GetProducts(ctx, id, uuid.Nil, nil, nil, nil, 40, 0)
+	prods, err := db.GetProducts(ctx, id, uuid.Nil, nil, nil, nil, nil, 40, 0)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -271,4 +272,93 @@ func TestGetProducts(t *testing.T) {
 	if len(prods) == 0 || prods[0].ItemID != pid {
 		t.Fatal("incorrect product fetched")
 	}
+}
+
+func TestGetSimiliarProductsWith(t *testing.T) {
+	ctx, cancel := context.WithTimeout(t.Context(), 10*time.Second)
+	defer cancel()
+
+	pool, _, err := testutils.SetupTestPostgresDB("")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	db := Postgres{Pool: pool}
+
+	id, err := db.InsertOauthUser(ctx, "diddy", "email@gmail.diddy.com", "github", "hwllo")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	price := decimal.NewFromInt(100)
+
+	products := []models.Product{
+		{
+			ItemName:    "rizz hat",
+			Category:    "fashion",
+			Description: "A stylish rizz hat",
+			Price:       price,
+			Images:      []models.ProductImage{{Image: "img1", Order: 0, Checksum: "chk1", CompressedImage: make([]byte, 10)}},
+		},
+		{
+			ItemName:    "rizz shirt",
+			Category:    "fashion",
+			Description: "A fashionable shirt",
+			Price:       price,
+			Images:      []models.ProductImage{{Image: "img2", Order: 0, Checksum: "chk2", CompressedImage: make([]byte, 10)}},
+		},
+		{
+			ItemName:    "charizma shirt",
+			Category:    "fashion",
+			Description: "A fashionable shirt",
+			Price:       price,
+			Images:      []models.ProductImage{{Image: "img2", Order: 0, Checksum: "chk2", CompressedImage: make([]byte, 10)}},
+		},
+		{
+			ItemName:    "basketball",
+			Category:    "sports",
+			Description: "Standard basketball",
+			Price:       price,
+			Images:      []models.ProductImage{{Image: "img3", Order: 0, Checksum: "chk3", CompressedImage: make([]byte, 10)}},
+		},
+	}
+
+	var insertedIDs []uuid.UUID
+	for _, prod := range products {
+		pid, err := db.InsertListing(ctx, id, &prod)
+		if err != nil {
+			t.Fatal(err)
+		}
+		insertedIDs = append(insertedIDs, pid)
+	}
+
+	t.Run("search matching term", func(t *testing.T) {
+		searchQ := "rozz"
+		results, err := db.GetProducts(ctx, id, uuid.Nil, nil, &searchQ, nil, nil, 40, 0)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if len(results) != 2 {
+			t.Fatalf("expected 2 results, got %d", len(results))
+		}
+
+		for _, r := range results {
+			if !strings.Contains(strings.ToLower(r.Name), "rizz") {
+				t.Fatalf("unexpected result: %+v", r)
+			}
+		}
+	})
+
+	t.Run("search non-matching term", func(t *testing.T) {
+		searchQ := "nonexistent"
+		results, err := db.GetProducts(ctx, id, uuid.Nil, nil, &searchQ, nil, nil, 40, 0)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if len(results) != 0 {
+			t.Fatalf("expected 0 results, got %d", len(results))
+		}
+	})
 }

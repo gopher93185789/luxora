@@ -59,7 +59,7 @@ func (c *CoreStoreContext) SetItemsSoldViaBid(ctx context.Context, userId uuid.U
 	return c.Database.UpdateItemSoldViaBid(ctx, userId, true, info.BidID, info.ItemID)
 }
 
-func (c *CoreStoreContext) GetListings(ctx context.Context, userID uuid.UUID, category, startPriceStr, endPriceStr, createdByStr string, limit, page int) (products []models.ProductInfo, err error) {
+func (c *CoreStoreContext) GetListings(ctx context.Context, userID uuid.UUID, category, searchQuery, startPriceStr, endPriceStr, createdByStr string, limit, page int) (products []models.ProductInfo, err error) {
 	if limit < 1 || page < 1 {
 		return nil, fmt.Errorf("invalid limit or page param")
 	}
@@ -69,6 +69,7 @@ func (c *CoreStoreContext) GetListings(ctx context.Context, userID uuid.UUID, ca
 		endPrice   *decimal.Decimal = nil
 		ct         *string          = nil
 		createdBy  uuid.UUID        = uuid.Nil
+		searchWQ   *string          = nil
 	)
 
 	if startPriceStr != "" {
@@ -91,6 +92,10 @@ func (c *CoreStoreContext) GetListings(ctx context.Context, userID uuid.UUID, ca
 		ct = &category
 	}
 
+	if searchQuery != "" {
+		searchWQ = &searchQuery
+	}
+
 	if createdByStr != "" {
 		createdBy, err = uuid.Parse(createdByStr)
 		if err != nil {
@@ -98,7 +103,7 @@ func (c *CoreStoreContext) GetListings(ctx context.Context, userID uuid.UUID, ca
 		}
 	}
 
-	products, err = c.Database.GetProducts(ctx, userID, createdBy, ct, startPrice, endPrice, limit, limit*(page-1))
+	products, err = c.Database.GetProducts(ctx, userID, createdBy, ct, searchWQ, startPrice, endPrice, limit, limit*(page-1))
 	if err != nil {
 		return nil, err
 	}

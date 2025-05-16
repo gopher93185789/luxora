@@ -107,7 +107,7 @@ func TestGetListings(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	prods, err := c.GetListings(ctx, id, "", "", "", "", 40, 1)
+	prods, err := c.GetListings(ctx, id, "", "", "", "", "", 40, 1)
 	if err != nil {
 		t.Fatal(err)
 	}

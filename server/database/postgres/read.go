@@ -65,7 +65,7 @@ func (p *Postgres) GetBids(ctx context.Context, userID uuid.UUID, productID uuid
 	return
 }
 
-func craftGetQuery(createdBy uuid.UUID, category *string, startPrice, endPrice *decimal.Decimal, limit, offset int) (query string, params []any) {
+func craftGetQuery(createdBy uuid.UUID, category, searchQuery *string, startPrice, endPrice *decimal.Decimal, limit, offset int) (query string, params []any) {
 	var builder = strings.Builder{}
 
 	builder.WriteString(`
@@ -113,21 +113,29 @@ func craftGetQuery(createdBy uuid.UUID, category *string, startPrice, endPrice *
 		filters = append(filters, fmt.Sprintf(" lp.user_id = $%d ", len(params)))
 	}
 
+	if searchQuery != nil {
+		filters = append(filters, fmt.Sprintf(" similarity(lp.name, '%v') > 0.01 ORDER BY similarity(lp.name, '%v') DESC ", *searchQuery, *searchQuery))
+	}
+
 	if len(filters) > 0 {
 		builder.WriteString(" WHERE ")
 		builder.WriteString(strings.Join(filters, " AND "))
 	}
 
+	if searchQuery == nil {
+		builder.WriteString(" ORDER BY lp.created_at DESC ")
+	}
+
 	params = append(params, limit)
-	builder.WriteString(fmt.Sprintf(" ORDER BY lp.created_at DESC LIMIT $%d", len(params)))
+	builder.WriteString(fmt.Sprintf(" LIMIT $%d ", len(params)))
 
 	params = append(params, offset)
-	builder.WriteString(fmt.Sprintf(" OFFSET $%d", len(params)))
+	builder.WriteString(fmt.Sprintf(" OFFSET $%d ", len(params)))
 
 	return builder.String(), params
 }
 
-func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID, category *string, startPrice, endPrice *decimal.Decimal, limit, offset int) (products []models.ProductInfo, err error) {
+func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID, category, searchQuery *string, startPrice, endPrice *decimal.Decimal, limit, offset int) (products []models.ProductInfo, err error) {
 	tx, err := p.Pool.Begin(ctx)
 	if err != nil {
 		return nil, err
@@ -135,7 +143,8 @@ func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID,
 
 	products = make([]models.ProductInfo, 0, limit)
 
-	query, params := craftGetQuery(createdBy, category, startPrice, endPrice, limit, offset)
+	query, params := craftGetQuery(createdBy, category, searchQuery, startPrice, endPrice, limit, offset)
+	fmt.Println(query)
 
 	rows, err := tx.Query(ctx, query, params...)
 	if err != nil {

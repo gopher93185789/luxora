@@ -173,6 +173,12 @@
                     },
                     {
                         "type": "string",
+                        "description": "search query",
+                        "name": "searchquery",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "Maximum price filter",
                         "name": "endprice",
                         "in": "query"
