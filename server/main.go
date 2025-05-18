@@ -130,7 +130,7 @@ func main() {
 				GetCertificate:         reloader.GetCertificate,
 			}
 
-			if err := srv.ListenAndServeTLS(config.TlsCertFilePath, config.TlsKeyFilePath); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			if err := srv.ListenAndServeTLS("", ""); err != nil && !errors.Is(err, http.ErrServerClosed) {
 				log.Fatalf("failed to start server: %v", err)
 			}
 		}
