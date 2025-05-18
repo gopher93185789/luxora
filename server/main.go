@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"log"
@@ -17,7 +18,6 @@ import (
 	"github.com/gopher93185789/luxora/server/pkg/middleware"
 	"github.com/gopher93185789/luxora/server/pkg/token"
 	auth "github.com/gopher93185789/luxora/server/transport"
-	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/github"
 	"golang.org/x/oauth2/google"
@@ -42,7 +42,6 @@ func Ping(w http.ResponseWriter, r *http.Request) {
 
 // @schemes	https
 func main() {
-	godotenv.Load("../.env")
 	config, err := GetServerConfig()
 	if err != nil {
 		log.Fatalln("error in config: " + err.Error())
@@ -106,17 +105,25 @@ func main() {
 	srv := http.Server{
 		Addr:    config.Port,
 		Handler: mux,
+		TLSConfig: &tls.Config{
+			MinVersion:             tls.VersionTLS12,
+			SessionTicketsDisabled: false,
+			NextProtos:             []string{"h2", "http/1.1"},
+		},
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  120 * time.Second,
 	}
 
 	go func() {
 		log.Println("listening on port " + config.Port)
 		if config.Env == DEV {
 			if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-				log.Printf("failed to start server: %v", err)
+				log.Fatalf("failed to start server: %v", err)
 			}
 		} else {
 			if err := srv.ListenAndServeTLS(config.TlsCertFilePath, config.TlsKeyFilePath); err != nil && !errors.Is(err, http.ErrServerClosed) {
-				log.Printf("failed to start server: %v", err)
+				log.Fatalf("failed to start server: %v", err)
 			}
 		}
 	}()

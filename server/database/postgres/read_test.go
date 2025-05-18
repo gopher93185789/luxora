@@ -368,7 +368,6 @@ func TestGetSimiliarProductsWith(t *testing.T) {
 		}
 	})
 
-
 	t.Run("search non-matching term", func(t *testing.T) {
 		searchQ := "nonexistent"
 		results, err := db.GetProducts(ctx, id, uuid.Nil, nil, &searchQ, nil, nil, 40, 0)
