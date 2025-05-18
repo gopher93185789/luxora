@@ -121,7 +121,7 @@ func main() {
 				log.Fatalln(err)
 			}
 
-			reloader.WatchCertificate(config.TlsCertFilePath, config.TlsKeyFilePath, 5*time.Hour)
+			reloader.WatchCertificate(config.TlsCertFilePath, config.TlsKeyFilePath, 10*time.Second)
 
 			srv.TLSConfig = &tls.Config{
 				MinVersion:             tls.VersionTLS12,
