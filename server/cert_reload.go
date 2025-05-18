@@ -62,8 +62,8 @@ func (cr *CertReloader) WatchCertificate(certPath, keyPath string, interval time
 	go func() {
 		t := time.NewTicker(interval)
 
-        for range t.C {
-            ch, err := generateFileHash(certPath)
+		for range t.C {
+			ch, err := generateFileHash(certPath)
 			if err != nil {
 				continue
 			}
@@ -84,11 +84,11 @@ func (cr *CertReloader) WatchCertificate(certPath, keyPath string, interval time
 			}
 
 			cr.mu.Lock()
-            cr.CertFileHash = ch
-            cr.KeyFileHash = kh
+			cr.CertFileHash = ch
+			cr.KeyFileHash = kh
 			cr.cert = &cert
 			cr.mu.Unlock()
 			log.Println("TLS certificate reloaded")
-        }
+		}
 	}()
 }
