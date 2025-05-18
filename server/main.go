@@ -1,8 +1,15 @@
 package main
 
 import (
+	"context"
+	"errors"
+	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/arbol-labs/bst"
 	coreAuth "github.com/gopher93185789/luxora/server/core/auth"
@@ -10,18 +17,19 @@ import (
 	"github.com/gopher93185789/luxora/server/pkg/middleware"
 	"github.com/gopher93185789/luxora/server/pkg/token"
 	auth "github.com/gopher93185789/luxora/server/transport"
+	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/github"
 	"golang.org/x/oauth2/google"
 )
 
-//	@Summary		Healthcheck
-//	@Description	Endpoint to check if the server is running
-//	@Tags			base
-//	@Accept			*/*
-//	@Produce		plain
-//	@Success		200	{string}	string	"pong"
-//	@Router			/ping [get]
+// @Summary		Healthcheck
+// @Description	Endpoint to check if the server is running
+// @Tags			base
+// @Accept			*/*
+// @Produce		plain
+// @Success		200	{string}	string	"pong"
+// @Router			/ping [get]
 func Ping(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("pong"))
 }
@@ -32,8 +40,9 @@ func Ping(w http.ResponseWriter, r *http.Request) {
 
 //	@host	api.luxoras.nl
 
-//	@schemes	https
+// @schemes	https
 func main() {
+	godotenv.Load("../.env")
 	config, err := GetServerConfig()
 	if err != nil {
 		log.Fatalln("error in config: " + err.Error())
@@ -91,10 +100,36 @@ func main() {
 	mux.HandleFunc("GET /listings/bids", mcf.AuthMiddleware(tx.GetBids))
 	mux.HandleFunc("PUT /listings/sold/bid", mcf.AuthMiddleware(tx.UpdateSoldViaBid))
 
-	log.Println("listening on port " + config.Port)
-	if config.Env == DEV {
-		log.Fatalln(http.ListenAndServe(config.Port, mux))
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
+
+	srv := http.Server{
+		Addr:    config.Port,
+		Handler: mux,
+	}
+
+	go func() {
+		log.Println("listening on port " + config.Port)
+		if config.Env == DEV {
+			if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+				log.Printf("failed to start server: %v", err)
+			}
+		} else {
+			if err := srv.ListenAndServeTLS(config.TlsCertFilePath, config.TlsKeyFilePath); err != nil && !errors.Is(err, http.ErrServerClosed) {
+				log.Printf("failed to start server: %v", err)
+			}
+		}
+	}()
+
+	<-sig
+	fmt.Println("shutdown signal received")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		fmt.Println("failed to shutdown server: " + err.Error())
 	} else {
-		log.Fatalln(http.ListenAndServeTLS(config.Port, config.TlsCertFilePath, config.TlsKeyFilePath, mux))
+		fmt.Println("shutdown server")
 	}
 }
