@@ -37,9 +37,8 @@ func Ping(w http.ResponseWriter, r *http.Request) {
 //	@title			Luxora Marketplace API
 //	@version		0.8.0
 //	@description	Luxora is a secure, modern backend API for managing listings, bids, and authentication with OAuth2 providers. This API powers the Luxora marketplace platform, enabling seamless user authentication, listing management, and bidding workflows.
-
 //	@host	api.luxoras.nl
-
+//
 // @schemes	https
 func main() {
 	config, err := GetServerConfig()
@@ -103,13 +102,8 @@ func main() {
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 
 	srv := http.Server{
-		Addr:    config.Port,
-		Handler: mux,
-		TLSConfig: &tls.Config{
-			MinVersion:             tls.VersionTLS12,
-			SessionTicketsDisabled: false,
-			NextProtos:             []string{"h2", "http/1.1"},
-		},
+		Addr:         config.Port,
+		Handler:      mux,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  120 * time.Second,
@@ -122,6 +116,20 @@ func main() {
 				log.Fatalf("failed to start server: %v", err)
 			}
 		} else {
+			reloader, err := NewCertReloader(config.TlsCertFilePath, config.TlsKeyFilePath)
+			if err != nil {
+				log.Fatalln(err)
+			}
+
+			reloader.WatchCertificate(config.TlsCertFilePath, config.TlsKeyFilePath, 5*time.Hour)
+
+			srv.TLSConfig = &tls.Config{
+				MinVersion:             tls.VersionTLS12,
+				SessionTicketsDisabled: false,
+				NextProtos:             []string{"h2", "http/1.1"},
+				GetCertificate:         reloader.GetCertificate,
+			}
+
 			if err := srv.ListenAndServeTLS(config.TlsCertFilePath, config.TlsKeyFilePath); err != nil && !errors.Is(err, http.ErrServerClosed) {
 				log.Fatalf("failed to start server: %v", err)
 			}
