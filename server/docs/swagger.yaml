@@ -13,6 +13,13 @@ definitions:
       product_id:
         type: string
     type: object
+  models.CartItems:
+    properties:
+      products:
+        items:
+          type: string
+        type: array
+    type: object
   models.CreateBidResponse:
     properties:
       bid_id:
@@ -377,6 +384,42 @@ paths:
       summary: Get bids for a product listing
       tags:
       - bidding
+  /listings/checkout:
+    post:
+      consumes:
+      - application/json
+      description: Processes the checkout for the authenticated user's cart. The request
+        body must contain the cart items in JSON format.
+      parameters:
+      - description: Cart items to checkout
+        in: body
+        name: cartItems
+        required: true
+        schema:
+          $ref: '#/definitions/models.CartItems'
+      - description: Access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Checkout successful
+          schema:
+            type: string
+        "422":
+          description: Unprocessable entity - invalid JSON payload
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      summary: Checkout cart
+      tags:
+      - listings
   /listings/highest-bid:
     get:
       consumes:

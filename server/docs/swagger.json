@@ -457,6 +457,59 @@
                 }
             }
         },
+        "/listings/checkout": {
+            "post": {
+                "description": "Processes the checkout for the authenticated user's cart. The request body must contain the cart items in JSON format.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "listings"
+                ],
+                "summary": "Checkout cart",
+                "parameters": [
+                    {
+                        "description": "Cart items to checkout",
+                        "name": "cartItems",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CartItems"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Checkout successful",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable entity - invalid JSON payload",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/listings/highest-bid": {
             "get": {
                 "description": "This endpoint retrieves the highest bid for a specific product listing. The product ID must be provided as a query parameter.",
@@ -611,6 +664,17 @@
                 },
                 "product_id": {
                     "type": "string"
+                }
+            }
+        },
+        "models.CartItems": {
+            "type": "object",
+            "properties": {
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
