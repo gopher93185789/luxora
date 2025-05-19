@@ -30,4 +30,4 @@ tailwind + laraverl + go(at)
 <!-- - images: base64 in (maybe seperate) db -->
 
 
-dev: docker compose -f compose.dev.yml up
+dev: docker compose -f compose.dev.yml up 
