@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/gopher93185789/luxora/server/pkg/models"
 	"github.com/shopspring/decimal"
 )
 
@@ -35,6 +36,21 @@ func (p *Postgres) UpdateItemSoldViaBid(ctx context.Context, userId uuid.UUID, s
 	}
 
 	_, err = tx.Exec(ctx, "INSERT INTO luxora_product_price_history (price, product_id) VALUES ($1, $2)", soldPrice, itemID)
+	if err != nil {
+		tx.Rollback(ctx)
+		return err
+	}
+
+	return tx.Commit(ctx)
+}
+
+func (p *Postgres) UpdateItemSoldViaCheckout(ctx context.Context, buyerID uuid.UUID, cart *models.CartItems) (err error) {
+	tx, err := p.Pool.Begin(ctx)
+	if err != nil {
+		return err
+	}
+
+	_, err = tx.Exec(ctx, "UPDATE luxora_product SET sold=$1, sold_to_user_id=$2 WHERE item_id=ANY($3)", true, buyerID, cart.Products)
 	if err != nil {
 		tx.Rollback(ctx)
 		return err

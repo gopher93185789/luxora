@@ -37,6 +37,13 @@ CREATE TABLE IF NOT EXISTS luxora_product (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS luxora_product_price_history (
+    product_id UUID REFERENCES luxora_product(item_id) ON DELETE CASCADE NOT NULL,
+    price NUMERIC(10, 2) NOT NULL,
+    currency CHAR(3) DEFAULT 'EUR',
+    created TIMESTAMP DEFAULT NOW()
+);
+
 CREATE TABLE IF NOT EXISTS luxora_product_image (
     user_id UUID NOT NULL REFERENCES luxora_user(id) ON DELETE CASCADE,
     image_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -47,12 +54,6 @@ CREATE TABLE IF NOT EXISTS luxora_product_image (
     sort_order INTEGER NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS luxora_product_price_history (
-    product_id UUID REFERENCES luxora_product(item_id) ON DELETE CASCADE NOT NULL,
-    price NUMERIC(10, 2) NOT NULL,
-    currency CHAR(3) DEFAULT 'EUR',
-    created TIMESTAMP DEFAULT NOW()
-);
 
 CREATE TABLE IF NOT EXISTS product_bid (
     bid_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

@@ -1,8 +1,10 @@
 package postgres
 
 import (
+	"context"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/gopher93185789/luxora/server/pkg/models"
 	"github.com/gopher93185789/luxora/server/pkg/testutils"
 	"github.com/shopspring/decimal"
@@ -114,5 +116,88 @@ func TestUpdateItemSoldViaBid(t *testing.T) {
 
 	if !sold {
 		t.Fatal("failed to update sold on item")
+	}
+}
+
+func TestUpdateItemSoldViaCheckout(t *testing.T) {
+	ctx := context.Background()
+	pool, clean, err := testutils.SetupTestPostgresDB("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer clean()
+
+	db := Postgres{Pool: pool}
+	id, err := db.InsertOauthUser(t.Context(), "diddy", "email@gmail.diddy.com", "github", "hwllo")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	price := decimal.NewFromInt(100)
+
+	products := []models.Product{
+		{
+			ItemName:    "rizz hat",
+			Category:    "fashion",
+			Description: "A stylish rizz hat",
+			Price:       price,
+			Images:      []models.ProductImage{{Image: "img1", Order: 0, Checksum: "chk1", CompressedImage: make([]byte, 10)}},
+		},
+		{
+			ItemName:    "rizz shirt",
+			Category:    "fashion",
+			Description: "A fashionable shirt",
+			Price:       price,
+			Images:      []models.ProductImage{{Image: "img2", Order: 0, Checksum: "chk2", CompressedImage: make([]byte, 10)}},
+		},
+		{
+			ItemName:    "charizma shirt",
+			Category:    "fashion",
+			Description: "A fashionable shirt",
+			Price:       price,
+			Images:      []models.ProductImage{{Image: "img2", Order: 0, Checksum: "chk2", CompressedImage: make([]byte, 10)}},
+		},
+		{
+			ItemName:    "basketball",
+			Category:    "sports",
+			Description: "Standard basketball",
+			Price:       price,
+			Images:      []models.ProductImage{{Image: "img3", Order: 0, Checksum: "chk3", CompressedImage: make([]byte, 10)}},
+		},
+	}
+
+	var insertedIDs []uuid.UUID
+	for _, prod := range products {
+		pid, err := db.InsertListing(ctx, id, &prod)
+		if err != nil {
+			t.Fatal(err)
+		}
+		insertedIDs = append(insertedIDs, pid)
+	}
+
+	err = db.UpdateItemSoldViaCheckout(ctx, id, &models.CartItems{Products: insertedIDs})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rows, err := db.Pool.Query(ctx, "SELECT sold, sold_to_user_id FROM luxora_product WHERE item_id=ANY($1)", insertedIDs)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var (
+			sold   bool
+			soldTo uuid.UUID
+		)
+		err = rows.Scan(&sold, &soldTo)
+		if sold != true {
+			t.Fatal("failed to update sold")
+		}
+
+		if soldTo != id {
+			t.Fatal("invalid sold to id")
+		}
 	}
 }

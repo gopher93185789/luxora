@@ -186,3 +186,34 @@ func (t *TransportConfig) GetListings(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// @Summary      Checkout cart
+// @Description  Processes the checkout for the authenticated user's cart. The request body must contain the cart items in JSON format.
+// @Tags         listings
+// @Accept       json
+// @Produce      json
+// @Param        cartItems      body    models.CartItems     true  "Cart items to checkout"
+// @Param        Authorization  header  string               true  "Access token"
+// @Success      200            {string} string              "Checkout successful"
+// @Failure      422            {object} errs.ErrorResponse  "Unprocessable entity - invalid JSON payload"
+// @Failure      500            {object} errs.ErrorResponse  "Internal server error"
+// @Router       /listings/checkout [POST]
+func (t *TransportConfig) Checkout(w http.ResponseWriter, r *http.Request) {
+	var products models.CartItems
+	if err := json.NewDecoder(r.Body).Decode(&products); err != nil {
+		errs.ErrorWithJson(w, http.StatusUnprocessableEntity, "failed to decode json payload")
+		return
+	}
+
+	uid, err := middleware.GetTokenFromRequest(r)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+		return
+	}
+
+	err = t.CoreStore.Checkout(r.Context(), uid, &products)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+}

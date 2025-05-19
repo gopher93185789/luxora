@@ -6,12 +6,12 @@ import (
 )
 
 const (
-	DEV = iota
+	DEV uint8 = iota
 	PROD
 )
 
 type Config struct {
-	Env                uint
+	Env                uint8
 	Port               string
 	DSN                string
 	TlsCertFilePath    string

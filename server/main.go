@@ -5,13 +5,6 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
-	"log"
-	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
-
 	"github.com/arbol-labs/bst"
 	coreAuth "github.com/gopher93185789/luxora/server/core/auth"
 	"github.com/gopher93185789/luxora/server/database/postgres"
@@ -21,6 +14,12 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/github"
 	"golang.org/x/oauth2/google"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 )
 
 // @Summary		Healthcheck
@@ -97,6 +96,7 @@ func main() {
 	mux.HandleFunc("GET /listings/highest-bid", mcf.AuthMiddleware(tx.GetHighestBid))
 	mux.HandleFunc("GET /listings/bids", mcf.AuthMiddleware(tx.GetBids))
 	mux.HandleFunc("PUT /listings/sold/bid", mcf.AuthMiddleware(tx.UpdateSoldViaBid))
+	mux.HandleFunc("POST /listings/checkout", mcf.AuthMiddleware(tx.Checkout))
 
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)

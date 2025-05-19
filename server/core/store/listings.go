@@ -121,3 +121,15 @@ func (c *CoreStoreContext) GetListings(ctx context.Context, userID uuid.UUID, ca
 
 	return products, nil
 }
+
+func (c *CoreStoreContext) Checkout(ctx context.Context, userID uuid.UUID, cart *models.CartItems) (err error) {
+	if err := uuid.Validate(userID.String()); err != nil {
+		return fmt.Errorf("invalid id")
+	}
+
+	if cart.Products == nil || len(cart.Products) == 0 {
+		return fmt.Errorf("cannot process empty cart")
+	}
+
+	return c.Database.UpdateItemSoldViaCheckout(ctx, userID, cart)
+}

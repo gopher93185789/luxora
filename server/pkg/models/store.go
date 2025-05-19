@@ -55,3 +55,7 @@ type ProductInfo struct {
 	Currency    string          `json:"string"`
 	Images      []ProductImage  `json:"product_images"`
 }
+
+type CartItems struct {
+	Products []uuid.UUID `json:"products"`
+}
