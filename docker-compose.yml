@@ -2,7 +2,7 @@ services:
   server:
     image: ghcr.io/gopher93185789/server:latest
     volumes:
-      - certs:/etc/certs:ro
+      - certs:/app/certs:ro
     environment:
       - PORT=${PORT}
       - DSN=${DSN}
