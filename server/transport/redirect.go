@@ -2,7 +2,6 @@ package transport
 
 import (
 	"net/http"
-
 	"golang.org/x/oauth2"
 )
 

@@ -45,9 +45,6 @@ func main() {
 		log.Fatalln("error in config: " + err.Error())
 	}
 
-	fmt.Println("Github redirect url:", config.GithubRedirect)
-	fmt.Println("Google redirect url:", config.GoogleRedirect)
-
 	pool, err := postgres.New(config.DSN)
 	if err != nil {
 		log.Fatalln("Failed to connect to database: " + err.Error())
@@ -78,6 +75,11 @@ func main() {
 			OauthState: "w;iudfiuweiuvhw;hriujwiriwhre",
 		},
 	}
+	
+	fmt.Println("Github redirect url:", config.GithubRedirect)
+	fmt.Println("Google redirect url:", config.GoogleRedirect)
+	fmt.Println("Github auth url:",tx.CoreAuth.GithubConfig.AuthCodeURL(tx.CoreAuth.OauthState))
+	fmt.Println("Google auth url:",tx.CoreAuth.GoogleConfig.AuthCodeURL(tx.CoreAuth.OauthState))
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /ping", Ping)
