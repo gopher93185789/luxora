@@ -44,7 +44,9 @@ func main() {
 	if err != nil {
 		log.Fatalln("error in config: " + err.Error())
 	}
-	fmt.Println(config)
+
+	fmt.Println("Github redirect url:", config.GithubRedirect)
+	fmt.Println("Google redirect url:", config.GoogleRedirect)
 
 	pool, err := postgres.New(config.DSN)
 	if err != nil {
