@@ -44,6 +44,7 @@ func main() {
 	if err != nil {
 		log.Fatalln("error in config: " + err.Error())
 	}
+	fmt.Println(config)
 
 	pool, err := postgres.New(config.DSN)
 	if err != nil {
@@ -116,6 +117,16 @@ func main() {
 				log.Fatalf("failed to start server: %v", err)
 			}
 		} else {
+			go func() {
+				http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+					target := "https://" + r.Host + r.URL.RequestURI()
+					http.Redirect(w, r, target, http.StatusMovedPermanently)
+				})
+				if err := http.ListenAndServe(":80", nil); err != nil {
+					log.Fatalf("HTTP redirect server failed: %v", err)
+				}
+			}()
+			
 			reloader, err := NewCertReloader(config.TlsCertFilePath, config.TlsKeyFilePath)
 			if err != nil {
 				log.Fatalln(err)
