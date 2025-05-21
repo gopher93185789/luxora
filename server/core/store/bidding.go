@@ -14,6 +14,10 @@ func (c *CoreStoreContext) CreateBid(ctx context.Context, userId uuid.UUID, bid 
 		return uuid.Nil, fmt.Errorf("invalid bid amount")
 	}
 
+	if len(bid.Message) > 255 {
+		return uuid.Nil, fmt.Errorf("message is too long, max 255 characters")
+	}
+
 	return c.Database.InsertBid(ctx, userId, bid)
 }
 

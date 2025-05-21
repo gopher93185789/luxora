@@ -136,6 +136,9 @@ func TestGetHighestBid(t *testing.T) {
 	}
 
 	_, err = c.CreateBid(t.Context(), uid, nbid)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	amount, err = decimal.NewFromString("202.99")
 	if err != nil {
@@ -223,12 +226,12 @@ func TestGetBids(t *testing.T) {
 		}
 	}
 
-	bids, err := c.GetBids(t.Context(), id, pid, -2, 0)
+	_, err = c.GetBids(t.Context(), id, pid, -2, 0)
 	if err == nil {
 		t.Fatal("failed to raise error on invalid limit or page amount")
 	}
 
-	bids, err = c.GetBids(t.Context(), id, pid, 100, 1)
+	bids, err := c.GetBids(t.Context(), id, pid, 100, 1)
 	if err != nil {
 		t.Fatal(err)
 	}
