@@ -68,7 +68,7 @@ func (p *Postgres) InsertListing(ctx context.Context, userId uuid.UUID, product 
 	}
 
 	for _, p := range product.Images {
-		_, err = tx.Exec(ctx, "INSERT INTO luxora_product_image (user_id, product_id, compressed_image, checksum, sort_order) VALUES ($1, $2, $3, $4, $5)", userId, productId, p.CompressedImage, p.Checksum, p.Order)
+		_, err = tx.Exec(ctx, "INSERT INTO luxora_product_image (product_id, compressed_image, checksum, sort_order) VALUES ($1, $2, $3, $4)",  productId, p.CompressedImage, p.Checksum, p.Order)
 		if err != nil {
 			tx.Rollback(ctx)
 			return uuid.Nil, err

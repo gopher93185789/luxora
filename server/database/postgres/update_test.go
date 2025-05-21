@@ -192,6 +192,9 @@ func TestUpdateItemSoldViaCheckout(t *testing.T) {
 			soldTo uuid.UUID
 		)
 		err = rows.Scan(&sold, &soldTo)
+		if err != nil {
+			t.Fatal(err)
+		}
 		if sold != true {
 			t.Fatal("failed to update sold")
 		}
