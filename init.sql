@@ -15,17 +15,6 @@ CREATE TABLE IF NOT EXISTS luxora_user (
     password_hash TEXT
 );
 
-CREATE TABLE IF NOT EXISTS luxora_user_verification (
-    user_id UUID PRIMARY KEY REFERENCES luxora_user(id) ON DELETE CASCADE,
-    verification_type VARCHAR(50) DEFAULT 'none',
-    verification_token TEXT,
-    token_expiry TIMESTAMP,
-    last_password_update TIMESTAMP,
-    last_email_update TIMESTAMP,
-    last_username_update TIMESTAMP,
-    isverified BOOLEAN DEFAULT false
-);
-
 CREATE TABLE IF NOT EXISTS luxora_product (
     user_id UUID REFERENCES luxora_user(id) ON DELETE CASCADE NOT NULL,
     item_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -47,7 +36,7 @@ CREATE TABLE IF NOT EXISTS luxora_product_price_history (
 CREATE TABLE IF NOT EXISTS luxora_product_image (
     user_id UUID NOT NULL REFERENCES luxora_user(id) ON DELETE CASCADE,
     image_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    product_id UUID,
+    product_id UUID REFERENCES luxora_product(item_id) ON DELETE CASCADE,
     compressed_image BYTEA,
     checksum TEXT,
     uploaded_at TIMESTAMP DEFAULT NOW(),
@@ -57,9 +46,8 @@ CREATE TABLE IF NOT EXISTS luxora_product_image (
 
 CREATE TABLE IF NOT EXISTS product_bid (
     bid_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    message VARCHAR(255), 
     item_id UUID REFERENCES luxora_product(item_id) ON DELETE CASCADE,
-    user_id UUID,
+    user_id UUID REFERENCES luxora_user(id) ON DELETE CASCADE,
     bid_amount NUMERIC(10, 2) NOT NULL,
     currency CHAR(3) DEFAULT 'EUR',
     bid_time TIMESTAMP DEFAULT NOW()

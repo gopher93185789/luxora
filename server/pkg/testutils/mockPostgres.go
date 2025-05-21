@@ -29,16 +29,6 @@ CREATE TABLE IF NOT EXISTS luxora_user (
     password_hash TEXT
 );
 
-CREATE TABLE IF NOT EXISTS luxora_user_verification (
-    user_id UUID PRIMARY KEY REFERENCES luxora_user(id) ON DELETE CASCADE,
-    verification_type VARCHAR(50) DEFAULT 'none',
-    verification_token TEXT,
-    token_expiry TIMESTAMP,
-    last_password_update TIMESTAMP,
-    last_email_update TIMESTAMP,
-    last_username_update TIMESTAMP,
-    isverified BOOLEAN DEFAULT false
-);
 
 CREATE TABLE IF NOT EXISTS luxora_product (
     user_id UUID REFERENCES luxora_user(id) ON DELETE CASCADE NOT NULL,
