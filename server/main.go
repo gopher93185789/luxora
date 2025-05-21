@@ -125,7 +125,7 @@ func main() {
 					log.Fatalf("HTTP redirect server failed: %v", err)
 				}
 			}()
-			
+
 			reloader, err := NewCertReloader(config.TlsCertFilePath, config.TlsKeyFilePath)
 			if err != nil {
 				log.Fatalln(err)

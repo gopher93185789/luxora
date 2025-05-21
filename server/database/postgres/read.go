@@ -3,8 +3,9 @@ package postgres
 import (
 	"context"
 	"database/sql"
-	"fmt"
+
 	"strings"
+	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/gopher93185789/luxora/server/pkg/models"
@@ -33,7 +34,7 @@ func (p *Postgres) GetIsUsernameAndIDByProviderID(ctx context.Context, providerI
 
 func (p *Postgres) GetHighestBid(ctx context.Context, userID uuid.UUID, productID uuid.UUID) (bid *models.BidDetails, err error) {
 	bid = &models.BidDetails{}
-	err = p.Pool.QueryRow(ctx, "SELECT bid_id, bid_amount, bid_time, user_id FROM product_bid WHERE item_id=$1 ORDER BY bid_amount DESC LIMIT 1", productID).Scan(&bid.BidID, &bid.BidAmount, &bid.CreatedAt, &bid.CreatedBy)
+	err = p.Pool.QueryRow(ctx, "SELECT bid_id, bid_amount, bid_time, user_id, message FROM product_bid WHERE item_id=$1 ORDER BY bid_amount DESC LIMIT 1", productID).Scan(&bid.BidID, &bid.BidAmount, &bid.CreatedAt, &bid.CreatedBy, &bid.Message)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +46,7 @@ func (p *Postgres) GetHighestBid(ctx context.Context, userID uuid.UUID, productI
 func (p *Postgres) GetBids(ctx context.Context, userID uuid.UUID, productID uuid.UUID, limit, offset int) (bids []models.BidDetails, err error) {
 	bids = make([]models.BidDetails, 0, limit)
 
-	rows, err := p.Pool.Query(ctx, "SELECT bid_id, bid_amount, bid_time, user_id FROM product_bid WHERE item_id=$1 ORDER BY bid_amount DESC LIMIT $2 OFFSET $3", productID, limit, offset)
+	rows, err := p.Pool.Query(ctx, "SELECT bid_id, bid_amount, bid_time, user_id, message FROM product_bid WHERE item_id=$1 ORDER BY bid_amount DESC LIMIT $2 OFFSET $3", productID, limit, offset)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +56,7 @@ func (p *Postgres) GetBids(ctx context.Context, userID uuid.UUID, productID uuid
 		var bid = models.BidDetails{}
 		bid.ProductID = productID
 
-		err := rows.Scan(&bid.BidID, &bid.BidAmount, &bid.CreatedAt, &bid.CreatedBy)
+		err := rows.Scan(&bid.BidID, &bid.BidAmount, &bid.CreatedAt, &bid.CreatedBy, &bid.Message)
 		if err != nil {
 			return nil, err
 		}
@@ -144,7 +145,6 @@ func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID,
 	products = make([]models.ProductInfo, 0, limit)
 
 	query, params := craftGetQuery(createdBy, category, searchQuery, startPrice, endPrice, limit, offset)
-	fmt.Println(query)
 
 	rows, err := tx.Query(ctx, query, params...)
 	if err != nil {

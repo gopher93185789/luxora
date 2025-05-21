@@ -87,9 +87,6 @@ func TestGetListings(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	for range 100 {
-
-	}
 	price := decimal.NewFromInt(0)
 	product := &models.Product{
 		ItemName:    "rizz",

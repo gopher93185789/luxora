@@ -216,7 +216,7 @@ func TestGetBids(t *testing.T) {
 		}
 	}
 
-	bids, err := db.GetBids(t.Context(), id, pid, 100, 100*(1-1))
+	bids, err := db.GetBids(t.Context(), id, pid, 100, 0)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -323,13 +323,11 @@ func TestGetSimiliarProductsWith(t *testing.T) {
 		},
 	}
 
-	var insertedIDs []uuid.UUID
 	for _, prod := range products {
-		pid, err := db.InsertListing(ctx, id, &prod)
+		_, err := db.InsertListing(ctx, id, &prod)
 		if err != nil {
 			t.Fatal(err)
 		}
-		insertedIDs = append(insertedIDs, pid)
 	}
 
 	t.Run("search matching term", func(t *testing.T) {

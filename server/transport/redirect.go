@@ -1,8 +1,8 @@
 package transport
 
 import (
-	"net/http"
 	"golang.org/x/oauth2"
+	"net/http"
 )
 
 // @Summary		Github Oauth redirect

@@ -15,7 +15,6 @@ var postgrestable = `
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 CREATE EXTENSION IF NOT EXISTS "pg_trgm";
 
-
 CREATE TABLE IF NOT EXISTS luxora_user (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     username VARCHAR(255) UNIQUE,
@@ -52,16 +51,6 @@ CREATE TABLE IF NOT EXISTS luxora_product (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS luxora_product_image (
-    user_id UUID NOT NULL REFERENCES luxora_user(id) ON DELETE CASCADE,
-    image_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    product_id UUID REFERENCES luxora_product(item_id) ON DELETE CASCADE,
-    compressed_image BYTEA,
-    checksum TEXT,
-    uploaded_at TIMESTAMP DEFAULT NOW(),
-    sort_order INTEGER NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS luxora_product_price_history (
     product_id UUID REFERENCES luxora_product(item_id) ON DELETE CASCADE NOT NULL,
     price NUMERIC(10, 2) NOT NULL,
@@ -69,15 +58,26 @@ CREATE TABLE IF NOT EXISTS luxora_product_price_history (
     created TIMESTAMP DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS luxora_product_image (
+    user_id UUID NOT NULL REFERENCES luxora_user(id) ON DELETE CASCADE,
+    image_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_id UUID,
+    compressed_image BYTEA,
+    checksum TEXT,
+    uploaded_at TIMESTAMP DEFAULT NOW(),
+    sort_order INTEGER NOT NULL
+);
+
+
 CREATE TABLE IF NOT EXISTS product_bid (
     bid_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    message VARCHAR(255), 
     item_id UUID REFERENCES luxora_product(item_id) ON DELETE CASCADE,
-    user_id UUID REFERENCES luxora_user(id) ON DELETE CASCADE,
+    user_id UUID,
     bid_amount NUMERIC(10, 2) NOT NULL,
     currency CHAR(3) DEFAULT 'EUR',
     bid_time TIMESTAMP DEFAULT NOW()
 );
-
 `
 
 func SetupTestPostgresDBConnStr(testData string) (string, func(), error) {

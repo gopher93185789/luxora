@@ -127,7 +127,7 @@ func (c *CoreStoreContext) Checkout(ctx context.Context, userID uuid.UUID, cart 
 		return fmt.Errorf("invalid id")
 	}
 
-	if cart.Products == nil || len(cart.Products) == 0 {
+	if len(cart.Products) == 0 {
 		return fmt.Errorf("cannot process empty cart")
 	}
 

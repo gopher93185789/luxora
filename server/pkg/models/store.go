@@ -24,6 +24,7 @@ type Product struct {
 
 type Bid struct {
 	BidAmount decimal.Decimal `json:"amount"`
+	Message   string          `json:"mesage"`
 	ProductID uuid.UUID       `json:"product_id"`
 }
 
@@ -33,6 +34,7 @@ type CreateBidResponse struct {
 
 type BidDetails struct {
 	BidID     uuid.UUID       `json:"bid_id"`
+	Message   string          `json:"message"`
 	CreatedBy uuid.UUID       `json:"created_by"`
 	BidAmount decimal.Decimal `json:"amount"`
 	ProductID uuid.UUID       `json:"product_id"`

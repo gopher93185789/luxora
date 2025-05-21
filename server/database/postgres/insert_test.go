@@ -150,8 +150,19 @@ func TestInsertBid(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_, err = db.InsertBid(t.Context(), id, &models.Bid{ProductID: pid, BidAmount: bid})
+	inmsg := "gki"
+	bID, err := db.InsertBid(t.Context(), id, &models.Bid{ProductID: pid, BidAmount: bid, Message: inmsg})
 	if err != nil {
 		t.Fatal(err)
+	}
+
+	var message string
+	err = db.Pool.QueryRow(t.Context(), "SELECT message FROM product_bid WHERE bid_id=$1", bID).Scan(&message)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if message != inmsg {
+		t.Fatalf("messages dont match, got: %v, want: %v", message, inmsg)
 	}
 }
