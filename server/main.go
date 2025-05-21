@@ -86,6 +86,7 @@ func main() {
 	mux.HandleFunc("GET /auth/github/exchange", tx.GithubExchange)
 	mux.HandleFunc("GET /auth/google", tx.GoogleRedirect)
 	mux.HandleFunc("GET /auth/google/exchange", tx.GoogleExchange)
+	mux.HandleFunc("GET /auth/userinfo", tx.GetUserInfo)
 	mux.HandleFunc("POST /auth/refresh", tx.RefreshToken)
 
 	// listings

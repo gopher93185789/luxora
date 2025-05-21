@@ -15,9 +15,10 @@ type CoreAuthContext struct {
 }
 
 type GithubUserDetails struct {
-	Email      string `json:"email"`
-	Login      string `json:"login"`
-	ProviderID int    `json:"id"`
+	Email            string `json:"email"`
+	Login            string `json:"login"`
+	ProviderID       int    `json:"id"`
+	ProfileImageLink string `json:"avatar_url"`
 }
 
 type GoogleUserDetails struct {

@@ -4,8 +4,8 @@ import (
 	"context"
 	"database/sql"
 
-	"strings"
 	"fmt"
+	"strings"
 
 	"github.com/google/uuid"
 	"github.com/gopher93185789/luxora/server/pkg/models"
@@ -187,4 +187,11 @@ func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID,
 	}
 
 	return products, nil
+}
+
+func (p *Postgres) GetUserDetails(ctx context.Context, userID uuid.UUID) (details models.UserDetails, err error) {
+	details = models.UserDetails{}
+	err = p.Pool.QueryRow(ctx, "SELECT email, username, profile_picture_link FROM luxora_user WHERE id=$1", userID).Scan(&details.Email, &details.Username, &details.ProfileImageLink)
+	details.UserID = userID
+	return
 }

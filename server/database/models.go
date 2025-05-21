@@ -12,7 +12,7 @@ import (
 type Database interface {
 	// insert
 	InsertUser(ctx context.Context, username, email, signupType, passwordHash string) (userID uuid.UUID, err error)
-	InsertOauthUser(ctx context.Context, username, email, provider, provider_user_id string) (userID uuid.UUID, err error)
+	InsertOauthUser(ctx context.Context, username, email, provider, providerId, profileImageLink string) (userID uuid.UUID, err error)
 	InsertListing(ctx context.Context, userId uuid.UUID, product *models.Product) (productId uuid.UUID, err error)
 	InsertBid(ctx context.Context, userID uuid.UUID, bid *models.Bid) (bidID uuid.UUID, err error)
 
@@ -24,6 +24,7 @@ type Database interface {
 	GetHighestBid(ctx context.Context, userID uuid.UUID, productID uuid.UUID) (bid *models.BidDetails, err error)
 	GetBids(ctx context.Context, userID uuid.UUID, productID uuid.UUID, limit, page int) (bids []models.BidDetails, err error)
 	GetProducts(ctx context.Context, userID, createdBy uuid.UUID, category, searchQuery *string, startPrice, endPrice *decimal.Decimal, limit, offset int) (products []models.ProductInfo, err error)
+	GetUserDetails(ctx context.Context, userID uuid.UUID) (details models.UserDetails, err error)
 
 	// update
 	UpdateRefreshToken(ctx context.Context, userId uuid.UUID, refreshToken string) (err error)

@@ -28,7 +28,7 @@ func TestCreateNewBid(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	uid, err := c.Database.InsertOauthUser(t.Context(), "jack", "anish@joc.com", "google", "skofk")
+	uid, err := c.Database.InsertOauthUser(t.Context(), "jack", "anish@joc.com", "google", "skofk", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -98,7 +98,7 @@ func TestGetHighestBid(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	uid, err := c.Database.InsertOauthUser(t.Context(), "jack", "anish@joc.com", "google", "skofk")
+	uid, err := c.Database.InsertOauthUser(t.Context(), "jack", "anish@joc.com", "google", "skofk", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -176,7 +176,7 @@ func TestGetBids(t *testing.T) {
 		},
 	}
 
-	id, err := c.Database.InsertOauthUser(t.Context(), "diddy", "email@gmail.diddy.com", "github", "hwllo")
+	id, err := c.Database.InsertOauthUser(t.Context(), "diddy", "email@gmail.diddy.com", "github", "hwllo", "")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -23,7 +23,6 @@ CREATE TABLE IF NOT EXISTS luxora_user (
     last_login TIMESTAMP,
     provider VARCHAR(50) CHECK (provider IN ('github', 'google', 'plain')),
     provider_user_id TEXT UNIQUE,
-    profile_picture BYTEA,
     profile_picture_link TEXT,
     signup_type VARCHAR(50) CHECK (signup_type IN ('github', 'google', 'plain')),
     password_hash TEXT
@@ -48,9 +47,9 @@ CREATE TABLE IF NOT EXISTS luxora_product_price_history (
 );
 
 CREATE TABLE IF NOT EXISTS luxora_product_image (
-    product_id UUID REFERENCES luxora_product(item_id) ON DELETE CASCADE,
-
+    user_id UUID NOT NULL,
     image_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_id UUID  REFERENCES luxora_product(item_id) ON DELETE CASCADE,
     compressed_image BYTEA,
     checksum TEXT,
     uploaded_at TIMESTAMP DEFAULT NOW(),
