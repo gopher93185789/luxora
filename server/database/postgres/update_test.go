@@ -38,7 +38,7 @@ func TestUpdateItemSoldViaBid(t *testing.T) {
 	defer clean()
 
 	db := Postgres{Pool: pool}
-	id, err := db.InsertOauthUser(t.Context(), "diddy", "email@gmail.diddy.com", "github", "hwllo")
+	id, err := db.InsertOauthUser(t.Context(), "diddy", "email@gmail.diddy.com", "github", "hwllo", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -128,7 +128,7 @@ func TestUpdateItemSoldViaCheckout(t *testing.T) {
 	defer clean()
 
 	db := Postgres{Pool: pool}
-	id, err := db.InsertOauthUser(t.Context(), "diddy", "email@gmail.diddy.com", "github", "hwllo")
+	id, err := db.InsertOauthUser(t.Context(), "diddy", "email@gmail.diddy.com", "github", "hwllo", "")
 	if err != nil {
 		t.Fatal(err)
 	}

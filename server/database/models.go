@@ -12,7 +12,7 @@ import (
 type Database interface {
 	// insert
 	InsertUser(ctx context.Context, username, email, signupType, passwordHash string) (userID uuid.UUID, err error)
-	InsertOauthUser(ctx context.Context, username, email, provider, provider_user_id string) (userID uuid.UUID, err error)
+	InsertOauthUser(ctx context.Context, username, email, provider, providerId, profileImageLink string) (userID uuid.UUID, err error)
 	InsertListing(ctx context.Context, userId uuid.UUID, product *models.Product) (productId uuid.UUID, err error)
 	InsertBid(ctx context.Context, userID uuid.UUID, bid *models.Bid) (bidID uuid.UUID, err error)
 

@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS luxora_user (
     last_login TIMESTAMP,
     provider VARCHAR(50) CHECK (provider IN ('github', 'google', 'plain')),
     provider_user_id TEXT UNIQUE,
-    profile_picture BYTEA,
     profile_picture_link TEXT,
     signup_type VARCHAR(50) CHECK (signup_type IN ('github', 'google', 'plain')),
     password_hash TEXT
