@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	errs "github.com/gopher93185789/luxora/server/pkg/error"
+	"github.com/gopher93185789/luxora/server/pkg/middleware"
 
 	"net/http"
 	"time"
@@ -121,6 +122,36 @@ func (t *TransportConfig) RefreshToken(w http.ResponseWriter, r *http.Request) {
 
 	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
 		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode access token")
+		return
+	}
+}
+
+// @Summary      Get user info
+// @Description  Retrieves the authenticated user's profile information.
+// @Tags         auth
+// @Accept       */*
+// @Produce      json
+// @Param        Authorization  header  string  true  "Access token"
+// @Success      200  {object}  models.UserDetails "User profile details"
+// @Failure      401  {object}  errs.ErrorResponse  "Unauthorized error"
+// @Failure      500  {object}  errs.ErrorResponse  "Internal server error"
+// @Router       /auth/userinfo [get]
+func (t *TransportConfig) GetUserInfo(w http.ResponseWriter, r *http.Request) {
+	uid, err := middleware.GetTokenFromRequest(r)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+		return
+	}
+
+	details, err := t.CoreAuth.GetUserInfo(r.Context(), uid)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user details: "+err.Error())
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(details); err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode product id: "+err.Error())
 		return
 	}
 }

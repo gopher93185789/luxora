@@ -58,6 +58,13 @@ type ProductInfo struct {
 	Images      []ProductImage  `json:"product_images"`
 }
 
+type UserDetails struct {
+	UserID           uuid.UUID `json:"id"`
+	Username         string    `json:"username"`
+	Email            string    `json:"email"`
+	ProfileImageLink string    `json:"profile_image_link"`
+}
+
 type CartItems struct {
 	Products []uuid.UUID `json:"products"`
 }

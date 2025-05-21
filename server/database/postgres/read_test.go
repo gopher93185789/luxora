@@ -40,6 +40,42 @@ func TestGetUserIdByUsername(t *testing.T) {
 	}
 
 }
+func TestGetUserDetails(t *testing.T) {
+	pool, clean, err := testutils.SetupTestPostgresDB("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer clean()
+
+	db := Postgres{Pool: pool}
+
+	userame := "diddy"
+	email := "ksjfnv@kdjfb.com"
+	pfp := "ksfjkkjsfksjn"
+
+	uzid, err := db.InsertOauthUser(t.Context(), userame, email, "github", "hello", pfp)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	details, err := db.GetUserDetails(t.Context(), uzid)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if details.Username != userame {
+		t.Fatal("usernames dont match")
+	}
+
+	if details.Email != email {
+		t.Fatal("emails dont match")
+	}
+
+	if details.ProfileImageLink != details.ProfileImageLink {
+		t.Fatal("profile links dont match")
+	}
+
+}
 func TestGetLastLogin(t *testing.T) {
 	pool, clean, err := testutils.SetupTestPostgresDB("")
 	if err != nil {
