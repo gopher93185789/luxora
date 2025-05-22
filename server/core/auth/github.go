@@ -57,14 +57,10 @@ func (s *CoreAuthContext) HandleGithubOauth(ctx context.Context, code string) (a
 
 	pidn := strconv.Itoa(user.ProviderID)
 
-	id, pid, err := s.Database.GetOauthUserIdByUsername(ctx, user.Login)
+	id, err := s.Database.GetOauthUserIdByProviderID(ctx, pidn)
 	if err != nil {
 		accessToken, refreshToken, err = s.handleOauthSignup(ctx, user.Login, user.Email, pidn, user.ProfileImageLink)
 		return accessToken, refreshToken, nil
-	}
-
-	if pidn != pid {
-		return "", "", fmt.Errorf("provider ids dont match")
 	}
 
 	accessToken, err = s.TokenConfig.GenerateToken(id, time.Now().Add(1*time.Hour), tk.ACCESS_TOKEN)

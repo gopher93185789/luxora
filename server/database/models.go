@@ -18,7 +18,7 @@ type Database interface {
 
 	// query
 	GetLastLogin(ctx context.Context, userID uuid.UUID) (LastLogin sql.NullTime, err error)
-	GetOauthUserIdByUsername(ctx context.Context, username string) (id uuid.UUID, providerID string, err error)
+	GetOauthUserIdByProviderID(ctx context.Context, pid string) (id uuid.UUID, err error)
 	GetRefreshToken(ctx context.Context, userId uuid.UUID) (refreshToken string, err error)
 	GetIsUsernameAndIDByProviderID(ctx context.Context, providerID string) (username string, userID uuid.UUID, err error)
 	GetHighestBid(ctx context.Context, userID uuid.UUID, productID uuid.UUID) (bid *models.BidDetails, err error)

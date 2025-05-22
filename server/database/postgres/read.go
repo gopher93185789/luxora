@@ -12,8 +12,8 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-func (p *Postgres) GetOauthUserIdByUsername(ctx context.Context, username string) (id uuid.UUID, providerID string, err error) {
-	err = p.Pool.QueryRow(ctx, "SELECT id, provider_user_id FROM luxora_user WHERE username = $1", username).Scan(&id, &providerID)
+func (p *Postgres) GetOauthUserIdByProviderID(ctx context.Context, pid string) (id uuid.UUID, err error) {
+	err = p.Pool.QueryRow(ctx, "SELECT id FROM luxora_user WHERE provider_user_id = $1", pid).Scan(&id)
 	return
 }
 
