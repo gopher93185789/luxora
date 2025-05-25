@@ -19,7 +19,7 @@
             </p>
             <div
             class="transition-all duration-1000 ease-in-out h-screen">
-                <p class="title text-5xl font-extrabold sm:text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] 2xl:text-[13rem] text-white leading-tight">
+                <p class="title text-5xl font-extrabold sm:text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] 2xl:text-[13rem] text-white leading-tight text-shadow-white">
                     Luxora
                 </p>
             </div>
