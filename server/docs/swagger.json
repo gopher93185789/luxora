@@ -26,7 +26,7 @@
         },
         "/auth/github/exchange": {
             "get": {
-                "description": "Send a request to this endpoint to exchange the Google code you got from Google for an access token.",
+                "description": "Send a request to this endpoint to exchange the Github code you got from Github for an access token.",
                 "consumes": [
                     "*/*"
                 ],
@@ -36,7 +36,7 @@
                 "tags": [
                     "auth"
                 ],
-                "summary": "Google Oauth exchange",
+                "summary": "Github Oauth exchange",
                 "parameters": [
                     {
                         "type": "string",
@@ -90,6 +90,59 @@
                 "responses": {}
             }
         },
+        "/auth/google/exchange": {
+            "get": {
+                "description": "Send a request to this endpoint to exchange the Google code you got from Google for an access token.",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Google Oauth exchange",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "code",
+                        "description": "code",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "state",
+                        "description": "state",
+                        "name": "state",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Access token response",
+                        "schema": {
+                            "$ref": "#/definitions/transport.AccessTokenResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/refresh": {
             "post": {
                 "description": "Refresh the access token using the refresh token stored in the cookie.",
@@ -114,6 +167,50 @@
                         "description": "Missing cookie error",
                         "schema": {
                             "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/userinfo": {
+            "get": {
+                "description": "Retrieves the authenticated user's profile information.",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Get user info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User profile details",
+                        "schema": {
+                            "$ref": "#/definitions/models.UserDetails"
                         }
                     },
                     "401": {
@@ -662,6 +759,9 @@
                 "amount": {
                     "type": "number"
                 },
+                "mesage": {
+                    "type": "string"
+                },
                 "product_id": {
                     "type": "string"
                 }
@@ -736,6 +836,23 @@
                     "type": "string"
                 },
                 "item_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserDetails": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "profile_image_link": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }

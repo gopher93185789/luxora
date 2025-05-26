@@ -10,6 +10,8 @@ definitions:
     properties:
       amount:
         type: number
+      mesage:
+        type: string
       product_id:
         type: string
     type: object
@@ -60,6 +62,17 @@ definitions:
       item_id:
         type: string
     type: object
+  models.UserDetails:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      profile_image_link:
+        type: string
+      username:
+        type: string
+    type: object
   transport.AccessTokenResponse:
     properties:
       access_token:
@@ -90,6 +103,52 @@ paths:
       tags:
       - auth
   /auth/github/exchange:
+    get:
+      consumes:
+      - '*/*'
+      description: Send a request to this endpoint to exchange the Github code you
+        got from Github for an access token.
+      parameters:
+      - description: code
+        format: code
+        in: query
+        name: code
+        required: true
+        type: string
+      - description: state
+        format: state
+        in: query
+        name: state
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Access token response
+          schema:
+            $ref: '#/definitions/transport.AccessTokenResponse'
+        "401":
+          description: Unauthorized error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      summary: Github Oauth exchange
+      tags:
+      - auth
+  /auth/google:
+    get:
+      consumes:
+      - '*/*'
+      description: redirect to Google for Oauth authentication.
+      responses: {}
+      summary: Google Oauth redirect
+      tags:
+      - auth
+  /auth/google/exchange:
     get:
       consumes:
       - '*/*'
@@ -126,15 +185,6 @@ paths:
       summary: Google Oauth exchange
       tags:
       - auth
-  /auth/google:
-    get:
-      consumes:
-      - '*/*'
-      description: redirect to Google for Oauth authentication.
-      responses: {}
-      summary: Google Oauth redirect
-      tags:
-      - auth
   /auth/refresh:
     post:
       consumes:
@@ -161,6 +211,35 @@ paths:
           schema:
             $ref: '#/definitions/error.ErrorResponse'
       summary: Refresh Token
+      tags:
+      - auth
+  /auth/userinfo:
+    get:
+      consumes:
+      - '*/*'
+      description: Retrieves the authenticated user's profile information.
+      parameters:
+      - description: Access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User profile details
+          schema:
+            $ref: '#/definitions/models.UserDetails'
+        "401":
+          description: Unauthorized error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      summary: Get user info
       tags:
       - auth
   /listings:
