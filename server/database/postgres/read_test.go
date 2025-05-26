@@ -26,17 +26,13 @@ func TestGetUserIdByUsername(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	uid, pid, err := db.GetOauthUserIdByUsername(t.Context(), "diddy")
+	uid, err := db.GetOauthUserIdByProviderID(t.Context(), "hello")
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	if uzid != uid {
 		t.Fatal("uuids dont match")
-	}
-
-	if pid != "hello" {
-		t.Fatal("got invalid provider id")
 	}
 
 }
@@ -71,7 +67,7 @@ func TestGetUserDetails(t *testing.T) {
 		t.Fatal("emails dont match")
 	}
 
-	if details.ProfileImageLink != details.ProfileImageLink {
+	if details.ProfileImageLink != pfp {
 		t.Fatal("profile links dont match")
 	}
 
