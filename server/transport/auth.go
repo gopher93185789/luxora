@@ -53,7 +53,7 @@ func (t *TransportConfig) GithubExchange(w http.ResponseWriter, r *http.Request)
 // @Success		200	{object}	AccessTokenResponse	"Access token response"
 // @Failure		401	{object}	errs.ErrorResponse	"Unauthorized error"
 // @Failure		500	{object}	errs.ErrorResponse	"Internal server error"
-// @Router			/auth/github/exchange [get]
+// @Router			/auth/google/exchange [get]
 // @Param			code	query	string	true	"code"	Format(code)
 // @Param			state	query	string	true	"state"	Format(state)
 func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request) {

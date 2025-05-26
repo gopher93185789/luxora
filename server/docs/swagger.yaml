@@ -106,6 +106,52 @@ paths:
     get:
       consumes:
       - '*/*'
+      description: Send a request to this endpoint to exchange the Github code you
+        got from Github for an access token.
+      parameters:
+      - description: code
+        format: code
+        in: query
+        name: code
+        required: true
+        type: string
+      - description: state
+        format: state
+        in: query
+        name: state
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Access token response
+          schema:
+            $ref: '#/definitions/transport.AccessTokenResponse'
+        "401":
+          description: Unauthorized error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      summary: Github Oauth exchange
+      tags:
+      - auth
+  /auth/google:
+    get:
+      consumes:
+      - '*/*'
+      description: redirect to Google for Oauth authentication.
+      responses: {}
+      summary: Google Oauth redirect
+      tags:
+      - auth
+  /auth/google/exchange:
+    get:
+      consumes:
+      - '*/*'
       description: Send a request to this endpoint to exchange the Google code you
         got from Google for an access token.
       parameters:
@@ -137,15 +183,6 @@ paths:
           schema:
             $ref: '#/definitions/error.ErrorResponse'
       summary: Google Oauth exchange
-      tags:
-      - auth
-  /auth/google:
-    get:
-      consumes:
-      - '*/*'
-      description: redirect to Google for Oauth authentication.
-      responses: {}
-      summary: Google Oauth redirect
       tags:
       - auth
   /auth/refresh:

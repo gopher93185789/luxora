@@ -26,7 +26,7 @@
         },
         "/auth/github/exchange": {
             "get": {
-                "description": "Send a request to this endpoint to exchange the Google code you got from Google for an access token.",
+                "description": "Send a request to this endpoint to exchange the Github code you got from Github for an access token.",
                 "consumes": [
                     "*/*"
                 ],
@@ -36,7 +36,7 @@
                 "tags": [
                     "auth"
                 ],
-                "summary": "Google Oauth exchange",
+                "summary": "Github Oauth exchange",
                 "parameters": [
                     {
                         "type": "string",
@@ -88,6 +88,59 @@
                 ],
                 "summary": "Google Oauth redirect",
                 "responses": {}
+            }
+        },
+        "/auth/google/exchange": {
+            "get": {
+                "description": "Send a request to this endpoint to exchange the Google code you got from Google for an access token.",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Google Oauth exchange",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "code",
+                        "description": "code",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "state",
+                        "description": "state",
+                        "name": "state",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Access token response",
+                        "schema": {
+                            "$ref": "#/definitions/transport.AccessTokenResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
             }
         },
         "/auth/refresh": {
