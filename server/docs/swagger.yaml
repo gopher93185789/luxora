@@ -10,6 +10,8 @@ definitions:
     properties:
       amount:
         type: number
+      mesage:
+        type: string
       product_id:
         type: string
     type: object
@@ -58,6 +60,17 @@ definitions:
       bid_id:
         type: string
       item_id:
+        type: string
+    type: object
+  models.UserDetails:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      profile_image_link:
+        type: string
+      username:
         type: string
     type: object
   transport.AccessTokenResponse:
@@ -161,6 +174,35 @@ paths:
           schema:
             $ref: '#/definitions/error.ErrorResponse'
       summary: Refresh Token
+      tags:
+      - auth
+  /auth/userinfo:
+    get:
+      consumes:
+      - '*/*'
+      description: Retrieves the authenticated user's profile information.
+      parameters:
+      - description: Access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User profile details
+          schema:
+            $ref: '#/definitions/models.UserDetails'
+        "401":
+          description: Unauthorized error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      summary: Get user info
       tags:
       - auth
   /listings:

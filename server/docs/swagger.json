@@ -131,6 +131,50 @@
                 }
             }
         },
+        "/auth/userinfo": {
+            "get": {
+                "description": "Retrieves the authenticated user's profile information.",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Get user info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User profile details",
+                        "schema": {
+                            "$ref": "#/definitions/models.UserDetails"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/listings": {
             "get": {
                 "description": "Retrieves a paginated list of product listings for the authenticated user. Supports optional filtering by category and price range.",
@@ -662,6 +706,9 @@
                 "amount": {
                     "type": "number"
                 },
+                "mesage": {
+                    "type": "string"
+                },
                 "product_id": {
                     "type": "string"
                 }
@@ -736,6 +783,23 @@
                     "type": "string"
                 },
                 "item_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserDetails": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "profile_image_link": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }
