@@ -1,4 +1,4 @@
-<nav class= "bg-black sticky top-0 z-10" x-data="{ open: false }">
+<nav class= "bg-black backdrop-blur-xl sticky top-0 z-10" x-data="{ open: false }">
     <div class="container mx-auto px-4 py-4 flex flex-row items-center justify-between">
             <button @click="open = !open"
             class="focus:outline-none z-50 relative"
@@ -44,6 +44,5 @@
              @endauth
          </div>
          @include('partials.slider')
-
     </div>
 </nav>
