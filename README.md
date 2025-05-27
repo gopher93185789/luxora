@@ -1,8 +1,6 @@
 # luxora
 
-homo rapist (Nick Dima)
-
-tailwind + laraverl + go(at)
+tailwind + remix + go(at)
 
 # frontend
 
@@ -20,13 +18,13 @@ tailwind + laraverl + go(at)
 <!-- - filter search -->
 <!-- - endpoitnt to get listings created by a user -->
 <!-- - encpoint to accept bids -->
-- pofile pictuire func
+<!-- - pofile pictuire func -->
 
 # hosting
 
-- databse: neon postgres
+<!-- - databse: neon postgres -->
 <!-- - backend: azure vps + ci/cd -->
-- laraver: azure vps + ci/cd
+- Remix: cloudflare workers
 - cache: redis on azure
 <!-- - images: base64 in (maybe seperate) db -->
 
