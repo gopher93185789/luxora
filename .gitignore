@@ -30,6 +30,13 @@ build/
 # Logs
 *.log
 
+node_modules
+
+/.cache
+/build
+.env
+
+
 # OS-specific
 .DS_Store
 Thumbs.db
