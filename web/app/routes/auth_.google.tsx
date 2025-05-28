@@ -16,7 +16,6 @@ export default function GoogleHandler() {
         if (!state || state === "") throw new Error("missing state url param");
 
         const resp = await OauthExchange(code, state, "google");
-        console.log(resp);
         if (resp?.code) throw new Error("unable to log you in");
 
         navigate("/marketplace");

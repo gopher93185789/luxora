@@ -10,7 +10,6 @@ export default function Auth() {
   useEffect(() => {
     const handle = async () => {
       const resp = await VerifyToken();
-      console.log(resp)
       if (resp === 200) navigate("/dashboard");
 
     };
