@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
+import { Link } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -8,5 +9,19 @@ export const meta: MetaFunction = () => {
 };
 
 export default function HomePage() {
-  return <></>
+  return(
+    <main>
+      <p>
+        Luxoras
+      </p>
+      <p>
+        Indulge in what u deserve, the luxuries of life.
+      </p>
+      <button>
+        <Link to={"/auth/signin-signup"} >
+          Dive into luxury
+        </Link>
+      </button>
+    </main>
+  )
 }
