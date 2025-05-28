@@ -65,7 +65,7 @@ export async function Refresh(): Promise<number> {
   if (token === "") return 403;
 
   try {
-    const resp = await fetch(`https://api.luxoras.nl/refresh`, {
+    const resp = await fetch(`https://api.luxoras.nl/auth/refresh`, {
       method: "GET",
       credentials: "include",
     });
