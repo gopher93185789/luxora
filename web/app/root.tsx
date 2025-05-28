@@ -6,7 +6,7 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/cloudflare";
-
+import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import "./globals.css";
 
 export const links: LinksFunction = () => [
@@ -21,6 +21,33 @@ export const links: LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
 ];
+
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div className="w-full h-screen bg-black flex items-center justify-center">
+        <h1 className="text-white font-bold text-4xl">
+          jouw kkr moeder
+        </h1>
+      </div>
+    );
+  } else if (error instanceof Error) {
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>{error.message}</p>
+        <p>The stack trace is:</p>
+        <pre>{error.stack}</pre>
+      </div>
+    );
+  } else {
+    return <h1>Unknown Error</h1>;
+  }
+}
+
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
