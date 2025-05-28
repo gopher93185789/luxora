@@ -18,7 +18,7 @@ export default function HomePage() {
         Indulge in what u deserve, the luxuries of life.
       </p>
       <button>
-        <Link to={"/auth/signin-signup"} >
+        <Link to={"/auth"} >
           Dive into luxury
         </Link>
       </button>
