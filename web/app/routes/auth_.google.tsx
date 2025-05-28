@@ -19,7 +19,8 @@ export default function GoogleHandler() {
         if (resp) throw new Error("unable to log you in");
 
         navigate("/marketplace");
-      } catch {
+      } catch (e) {
+        console.error(e);
         navigate("/");
       }
     };
