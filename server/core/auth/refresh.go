@@ -9,8 +9,8 @@ import (
 )
 
 func (s *CoreAuthContext) RefreshToken(ctx context.Context, token string) (accessToken, refreshToken string, err error) {
-	if token != "" {
-		return "", "", err
+	if token == "" {
+		return "", "", fmt.Errorf("no token provided")
 	}
 
 	userid, err := s.TokenConfig.VerifyToken(token, tk.REFRESH_TOKEN)
