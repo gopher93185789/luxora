@@ -3,6 +3,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { OauthButton } from "~/components/oauthButton";
 
+
 export default function Auth() {
   return (
     <>
