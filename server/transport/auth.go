@@ -41,6 +41,7 @@ func (t *TransportConfig) GithubExchange(w http.ResponseWriter, r *http.Request)
 		Secure:   true,
 	})
 
+	w.Header().Set("Content-type", "application/json")
 	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
 		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode access token")
 		return
@@ -84,6 +85,7 @@ func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request)
 		Secure:   true,
 	})
 
+	w.Header().Set("Content-type", "application/json")
 	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
 		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode access token")
 		return
@@ -126,6 +128,7 @@ func (t *TransportConfig) RefreshToken(w http.ResponseWriter, r *http.Request) {
 		Secure:   true,
 	})
 
+	w.Header().Set("Content-type", "application/json")
 	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
 		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode access token")
 		return
