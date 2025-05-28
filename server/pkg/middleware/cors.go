@@ -7,7 +7,7 @@ import (
 
 var allowedOrigins = []string{
 	"http://localhost:5173",
-	"https://luxoras.nl/",
+	"https://luxoras.nl",
 }
 
 func CORSMiddleware(next http.Handler) http.Handler {
