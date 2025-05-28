@@ -38,7 +38,7 @@ export async function VerifyToken(): Promise<number> {
   if (token === "") return 403;
 
   const req = async (): Promise<Response> => {
-    const resp = await fetch(`https://api.luxoras.nl/verify?token=${token}`, {
+    const resp = await fetch(`https://api.luxoras.nl/auth/verify?token=${token}`, {
       method: "GET",
       credentials: "include",
     });
