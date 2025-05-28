@@ -22,6 +22,7 @@ export async function OauthExchange(
     );
 
     const data = (await resp.json()) as AccessTokenResponse | ErrorResponse;
+    console.log(data)
     if (!resp.ok) return data as ErrorResponse;
 
     const tokenResponse = data as AccessTokenResponse;
