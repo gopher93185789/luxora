@@ -26,6 +26,11 @@ func (s *CoreAuthContext) handleGoogleOauthSignup(ctx context.Context, email, pr
 		return "", "", err
 	}
 
+	err = s.Database.UpdateRefreshToken(ctx, uid, refreshToken)
+	if err != nil {
+		return "", "", err
+	}
+
 	return accessToken, refreshToken, err
 }
 
@@ -55,9 +60,13 @@ func (s *CoreAuthContext) HandleGoogleOauth(ctx context.Context, code string) (a
 		return "", "", fmt.Errorf("user is not verified on google")
 	}
 
-	_, id, err := s.Database.GetIsUsernameAndIDByProviderID(ctx, user.Name)
+	_, id, err := s.Database.GetIsUsernameAndIDByProviderID(ctx, user.ProviderID)
 	if err != nil {
 		accessToken, refreshToken, err = s.handleGoogleOauthSignup(ctx, user.Email, user.ProviderID, user.Picture)
+		if err != nil {
+			return "", "", err
+		}
+		
 		return accessToken, refreshToken, nil
 	}
 
@@ -71,7 +80,7 @@ func (s *CoreAuthContext) HandleGoogleOauth(ctx context.Context, code string) (a
 		return "", "", err
 	}
 
-	s.Database.UpdateRefreshToken(ctx, id, refreshToken)
+	err = s.Database.UpdateRefreshToken(ctx, id, refreshToken)
 	if err != nil {
 		return "", "", err
 	}

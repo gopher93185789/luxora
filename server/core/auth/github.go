@@ -30,6 +30,12 @@ func (s *CoreAuthContext) handleOauthSignup(ctx context.Context, username, email
 		return "", "", err
 	}
 
+	
+	err = s.Database.UpdateRefreshToken(ctx, uid, refreshToken)
+	if err != nil {
+		return "", "", err
+	}
+
 	return accessToken, refreshToken, err
 }
 
@@ -60,6 +66,10 @@ func (s *CoreAuthContext) HandleGithubOauth(ctx context.Context, code string) (a
 	id, err := s.Database.GetOauthUserIdByProviderID(ctx, pidn)
 	if err != nil {
 		accessToken, refreshToken, err = s.handleOauthSignup(ctx, user.Login, user.Email, pidn, user.ProfileImageLink)
+		if err != nil {
+			return "", "", err
+		}
+		
 		return accessToken, refreshToken, nil
 	}
 
@@ -73,7 +83,7 @@ func (s *CoreAuthContext) HandleGithubOauth(ctx context.Context, code string) (a
 		return "", "", err
 	}
 
-	s.Database.UpdateRefreshToken(ctx, id, refreshToken)
+	err = s.Database.UpdateRefreshToken(ctx, id, refreshToken)
 	if err != nil {
 		return "", "", err
 	}
