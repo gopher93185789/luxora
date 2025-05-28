@@ -26,6 +26,7 @@ export async function OauthExchange(
     if (!resp.ok) return (await resp.json()) as ErrorResponse;
 
     const data = (await resp.json()) as AccessTokenResponse;
+    if (data.access_token === "") throw new Error("failed to get access token");
     SetTokenInLocalStorage(data.access_token);
   } catch (e) {
     console.error(e);
@@ -63,7 +64,7 @@ export async function VerifyToken(): Promise<number> {
 export async function Refresh(): Promise<number> {
   const token = GetTokenFromLocalStorage();
   if (token === "") return 403;
-  
+
   try {
     const resp = await fetch(`https://api.luxoras.nl/refresh`, {
       method: "GET",
