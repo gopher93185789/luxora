@@ -25,7 +25,7 @@ export default function HomePage() {
       />
       <div className="w-full h-24 flex flex-row items-center justify-center relative">
         <p className="text-white font-bold text-2xl">Luxoras</p>
-        <div className="absolute w-full h-full -z-5 bg-gradient-to-b from-black via-black "/>
+        <div className="absolute w-full h-42 -z-5 bg-gradient-to-b from-black "/>
       </div>
     </main>
   );
