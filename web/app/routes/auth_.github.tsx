@@ -22,7 +22,6 @@ export default function GithubHandler() {
         SetTokenInLocalStorage(resp.access_token)
 
         navigate("/marketplace")
-        
       } catch {
         navigate("/");
       }
