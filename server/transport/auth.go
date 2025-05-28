@@ -34,9 +34,11 @@ func (t *TransportConfig) GithubExchange(w http.ResponseWriter, r *http.Request)
 		Name:  "LUXORA_REFRESH_TOKEN",
 		Value: rt,
 		Path:  "/",
-		// Domain: "app-omain",
+		Domain: "https://www.luxoras.nl",
 		Expires:  time.Now().Add(720 * time.Hour),
 		HttpOnly: true,
+		SameSite: http.SameSiteNoneMode,
+		Secure:   true,
 	})
 
 	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
@@ -75,9 +77,11 @@ func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request)
 		Name:  "LUXORA_REFRESH_TOKEN",
 		Value: rt,
 		Path:  "/",
-		// Domain: "app-omain",
+		Domain: "https://www.luxoras.nl",
 		Expires:  time.Now().Add(720 * time.Hour),
 		HttpOnly: true,
+		SameSite: http.SameSiteNoneMode,
+		Secure:   true,
 	})
 
 	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
@@ -115,9 +119,11 @@ func (t *TransportConfig) RefreshToken(w http.ResponseWriter, r *http.Request) {
 		Name:  "LUXORA_REFRESH_TOKEN",
 		Value: rt,
 		Path:  "/",
-		// Domain: "app-omain",
+		Domain: "https://www.luxoras.nl",
 		Expires:  time.Now().Add(720 * time.Hour),
 		HttpOnly: true,
+		SameSite: http.SameSiteNoneMode,
+		Secure:   true,
 	})
 
 	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {

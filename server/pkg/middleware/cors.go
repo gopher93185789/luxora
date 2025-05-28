@@ -6,7 +6,7 @@ import (
 )
 
 var allowedOrigins = []string{
-	"http://localhost:5173",
+	"https://www.luxoras.nl",
 	"https://luxoras.nl",
 }
 
