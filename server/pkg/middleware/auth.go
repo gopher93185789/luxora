@@ -57,6 +57,16 @@ func GetTokenFromRequest(r *http.Request) (userID uuid.UUID, err error) {
 	return uid, nil
 }
 
+// @Summary      Verify access token
+// @Description  Verifies the provided access token and returns its expiry if valid.
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        token  query   string  true  "Access token to verify"
+// @Success      200    {object} ValidTokenResponse "Token is valid and expiry is returned"
+// @Failure      401    {string} string             "Unauthorized or invalid token"
+// @Failure      500    {string} string             "Internal server error"
+// @Router       /auth/verify [get]
 func (a *AuthMiddleWareConfig) VerifyTokenEndpoint(w http.ResponseWriter, r *http.Request) {
 	token := r.URL.Query().Get("token")
 	if token == "" {
