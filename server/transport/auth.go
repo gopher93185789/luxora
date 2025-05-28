@@ -10,6 +10,32 @@ import (
 	"time"
 )
 
+func setCookies(w http.ResponseWriter, accessToken, refreshToken string) http.ResponseWriter {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "LUXORA_REFRESH_TOKEN",
+		Value:    refreshToken,
+		Path:     "/",
+		Domain:   "www.luxoras.nl",
+		Expires:  time.Now().Add(720 * time.Hour),
+		HttpOnly: true,
+		SameSite: http.SameSiteNoneMode,
+		Secure:   true,
+	})
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "LUXORA_ACCESS_TOKEN",
+		Value:    accessToken,
+		Path:     "/",
+		Domain:   "www.luxoras.nl",
+		Expires:  time.Now().Add(720 * time.Hour),
+		HttpOnly: false,
+		SameSite: http.SameSiteNoneMode,
+		Secure:   true,
+	})
+
+	return w
+}
+
 // @Summary		Github Oauth exchange
 // @Description	Send a request to this endpoint to exchange the Github code you got from Github for an access token.
 // @Tags			auth
@@ -35,16 +61,7 @@ func (t *TransportConfig) GithubExchange(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	http.SetCookie(w, &http.Cookie{
-		Name:  "LUXORA_REFRESH_TOKEN",
-		Value: rt,
-		Path:  "/",
-		Domain: "https://www.luxoras.nl",
-		Expires:  time.Now().Add(720 * time.Hour),
-		HttpOnly: true,
-		SameSite: http.SameSiteNoneMode,
-		Secure:   true,
-	})
+	w = setCookies(w, at, rt)
 
 	w.Header().Set("Content-type", "application/json")
 	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
@@ -78,16 +95,7 @@ func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	http.SetCookie(w, &http.Cookie{
-		Name:  "LUXORA_REFRESH_TOKEN",
-		Value: rt,
-		Path:  "/",
-		Domain: "https://www.luxoras.nl",
-		Expires:  time.Now().Add(720 * time.Hour),
-		HttpOnly: true,
-		SameSite: http.SameSiteNoneMode,
-		Secure:   true,
-	})
+	w = setCookies(w, at, rt)
 
 	w.Header().Set("Content-type", "application/json")
 	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
@@ -121,16 +129,7 @@ func (t *TransportConfig) RefreshToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.SetCookie(w, &http.Cookie{
-		Name:  "LUXORA_REFRESH_TOKEN",
-		Value: rt,
-		Path:  "/",
-		Domain: "https://www.luxoras.nl",
-		Expires:  time.Now().Add(720 * time.Hour),
-		HttpOnly: true,
-		SameSite: http.SameSiteNoneMode,
-		Secure:   true,
-	})
+	w = setCookies(w, at, rt)
 
 	w.Header().Set("Content-type", "application/json")
 	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
