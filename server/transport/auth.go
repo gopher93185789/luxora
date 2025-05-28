@@ -67,12 +67,6 @@ func (t *TransportConfig) GithubExchange(w http.ResponseWriter, r *http.Request)
 func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	code := r.URL.Query().Get("code")
-	state := r.URL.Query().Get("state")
-	if state != t.CoreAuth.OauthState {
-		errs.ErrorWithJson(w, http.StatusUnauthorized, "Mismatched state")
-		return
-	}
-
 	at, rt, err := t.CoreAuth.HandleGoogleOauth(r.Context(), code)
 	if err != nil {
 		errs.ErrorWithJson(w, http.StatusUnauthorized, err.Error())
