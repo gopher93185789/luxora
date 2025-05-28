@@ -21,11 +21,12 @@ export async function OauthExchange(
       }
     );
 
-    if (!resp.ok) return (await resp.json()) as ErrorResponse;
+    const data = await resp.json() as AccessTokenResponse | ErrorResponse;
+    if (!resp.ok) return data as ErrorResponse;
 
-    const data = (await resp.json()) as AccessTokenResponse;
-    if (data.access_token === "") throw new Error("failed to get access token");
-    SetTokenInLocalStorage(data.access_token);
+    const tokenResponse = data as AccessTokenResponse;
+    if (!tokenResponse.access_token) throw new Error("failed to get access token");
+    SetTokenInLocalStorage(tokenResponse.access_token);
   } catch (e) {
     console.error(e);
     return { code: 500, message: "Unexpected error" } as ErrorResponse;
