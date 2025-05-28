@@ -30,6 +30,11 @@ func (t *TransportConfig) GithubExchange(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	if at == "" || rt == "" {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to generate tokens")
+		return
+	}
+
 	http.SetCookie(w, &http.Cookie{
 		Name:  "LUXORA_REFRESH_TOKEN",
 		Value: rt,
@@ -71,6 +76,11 @@ func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request)
 	at, rt, err := t.CoreAuth.HandleGoogleOauth(r.Context(), code)
 	if err != nil {
 		errs.ErrorWithJson(w, http.StatusUnauthorized, err.Error())
+		return
+	}
+
+	if at == "" || rt == "" {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to generate tokens")
 		return
 	}
 
