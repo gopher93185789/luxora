@@ -30,7 +30,7 @@ export function ErrorBoundary() {
     return (
       <div className="w-full h-screen bg-black flex items-center justify-center">
         <h1 className="text-white font-bold text-4xl">
-          jouw kkr moeder
+          jouw kkr moeder, ga terug.
         </h1>
       </div>
     );
