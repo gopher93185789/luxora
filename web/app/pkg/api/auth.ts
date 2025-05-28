@@ -2,7 +2,7 @@ import {
   GetTokenFromLocalStorage,
   SetTokenInLocalStorage,
 } from "../helpers/tokenHandling";
-import { AccessTokenResponse, ErrorResponse } from "../models/api";
+import { AccessTokenResponse, ErrorResponse, UserDetails } from "../models/api";
 
 export async function OauthExchange(
   code: string,
@@ -21,11 +21,12 @@ export async function OauthExchange(
       }
     );
 
-    const data = await resp.json() as AccessTokenResponse | ErrorResponse;
+    const data = (await resp.json()) as AccessTokenResponse | ErrorResponse;
     if (!resp.ok) return data as ErrorResponse;
 
     const tokenResponse = data as AccessTokenResponse;
-    if (!tokenResponse.access_token) throw new Error("failed to get access token");
+    if (!tokenResponse.access_token)
+      throw new Error("failed to get access token");
     SetTokenInLocalStorage(tokenResponse.access_token);
   } catch (e) {
     console.error(e);
@@ -38,10 +39,13 @@ export async function VerifyToken(): Promise<number> {
   if (token === "") return 403;
 
   const req = async (): Promise<Response> => {
-    const resp = await fetch(`https://api.luxoras.nl/auth/verify?token=${token}`, {
-      method: "GET",
-      credentials: "include",
-    });
+    const resp = await fetch(
+      `https://api.luxoras.nl/auth/verify?token=${token}`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
 
     return resp;
   };
@@ -78,5 +82,41 @@ export async function Refresh(): Promise<number> {
   } catch (e) {
     console.error(e);
     return 500;
+  }
+}
+
+export async function GetUserDetails(): Promise<UserDetails | ErrorResponse> {
+  const token = GetTokenFromLocalStorage();
+  if (token === "")
+    return { code: 403, message: "missing auth token" } as ErrorResponse;
+
+  const req = async (): Promise<Response> => {
+    const resp = await fetch(`https://api.luxoras.nl/auth/userinfo`, {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return resp;
+  };
+
+  try {
+    let resp = await req();
+    if (!resp.ok) {
+      const ok = await Refresh();
+      if (ok != 200)
+        return { code: 401, message: "unauthorized" } as ErrorResponse;
+
+      resp = await req();
+    }
+
+    return (await resp.json()) as UserDetails;
+  } catch (e) {
+    console.error(e);
+    return {
+      code: 401,
+      message: "an unexpected error occured",
+    } as ErrorResponse;
   }
 }
