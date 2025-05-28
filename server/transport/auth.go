@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func setCookies(w http.ResponseWriter, accessToken, refreshToken string) http.ResponseWriter {
+func setCookies(w http.ResponseWriter, accessToken, refreshToken string) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "LUXORA_REFRESH_TOKEN",
 		Value:    refreshToken,
@@ -32,8 +32,6 @@ func setCookies(w http.ResponseWriter, accessToken, refreshToken string) http.Re
 		SameSite: http.SameSiteNoneMode,
 		Secure:   true,
 	})
-
-	return w
 }
 
 // @Summary		Github Oauth exchange
@@ -61,7 +59,7 @@ func (t *TransportConfig) GithubExchange(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	w = setCookies(w, at, rt)
+	setCookies(w, at, rt)
 
 	w.Header().Set("Content-type", "application/json")
 	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
@@ -95,7 +93,7 @@ func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	w = setCookies(w, at, rt)
+	setCookies(w, at, rt)
 
 	w.Header().Set("Content-type", "application/json")
 	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
@@ -129,7 +127,7 @@ func (t *TransportConfig) RefreshToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w = setCookies(w, at, rt)
+	setCookies(w, at, rt)
 
 	w.Header().Set("Content-type", "application/json")
 	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
