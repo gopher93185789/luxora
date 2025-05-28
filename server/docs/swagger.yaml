@@ -6,6 +6,11 @@ definitions:
       message:
         type: string
     type: object
+  middleware.ValidTokenResponse:
+    properties:
+      exp:
+        type: string
+    type: object
   models.Bid:
     properties:
       amount:
@@ -240,6 +245,35 @@ paths:
           schema:
             $ref: '#/definitions/error.ErrorResponse'
       summary: Get user info
+      tags:
+      - auth
+  /auth/verify:
+    get:
+      consumes:
+      - application/json
+      description: Verifies the provided access token and returns its expiry if valid.
+      parameters:
+      - description: Access token to verify
+        in: query
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Token is valid and expiry is returned
+          schema:
+            $ref: '#/definitions/middleware.ValidTokenResponse'
+        "401":
+          description: Unauthorized or invalid token
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Verify access token
       tags:
       - auth
   /listings:

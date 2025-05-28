@@ -228,6 +228,50 @@
                 }
             }
         },
+        "/auth/verify": {
+            "get": {
+                "description": "Verifies the provided access token and returns its expiry if valid.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Verify access token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Access token to verify",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Token is valid and expiry is returned",
+                        "schema": {
+                            "$ref": "#/definitions/middleware.ValidTokenResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized or invalid token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/listings": {
             "get": {
                 "description": "Retrieves a paginated list of product listings for the authenticated user. Supports optional filtering by category and price range.",
@@ -749,6 +793,14 @@
                     "type": "integer"
                 },
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "middleware.ValidTokenResponse": {
+            "type": "object",
+            "properties": {
+                "exp": {
                     "type": "string"
                 }
             }

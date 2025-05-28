@@ -1,7 +1,6 @@
 import { useNavigate, useSearchParams } from "@remix-run/react";
 import { useEffect } from "react";
-import { OauthExchange } from "~/pkg/api/oauthExchange";
-import { SetTokenInLocalStorage } from "~/pkg/helpers/tokenHandling";
+import { OauthExchange } from "~/pkg/api/auth";
 
 export default function GithubHandler() {
   const [searchParams] = useSearchParams();
@@ -16,21 +15,19 @@ export default function GithubHandler() {
         if (!code || code === "") throw new Error("missing code url param");
         if (!state || state === "") throw new Error("missing state url param");
 
-        const resp = await OauthExchange(code, state, "github")
-        if ("code" in resp) throw new Error("unable to log you in");
+        const resp = await OauthExchange(code, state, "github");
+        if (resp) throw new Error("unable to log you in");
 
-        SetTokenInLocalStorage(resp.access_token)
-
-        navigate("/marketplace")
+        navigate("/marketplace");
       } catch {
         navigate("/");
       }
     };
 
-    handler()
+    handler();
   }, []);
 
   return (
-    <div className="h-screen w-full bg-primary flex items-center justify-center"></div>
+    <div className="h-screen w-full  flex items-center justify-center"></div>
   );
 }
