@@ -41,13 +41,13 @@ export default function HomePage() {
         <div className="absolute w-full h-42 -z-5 bg-gradient-to-b from-black " />
       </div>
       <motion.div
-        className=" absolute bottom-15 left-15 flex flex-col gap-10"
+        className=" flex flex-col gap-10 absolute bottom-0 left-0"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.5 }}
       >
         <motion.p
-          className="text-white text-5xl font-semi text-center mt-20"
+          className="text-white text-5xl font-semi mt-20 m-10 mb-0"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 1 }}
@@ -56,9 +56,7 @@ export default function HomePage() {
         </motion.p>
         <Link to="/auth">
           <motion.button
-            className=" font-thin text-3xl items-center border hover:bg-white/15 justify-center border-border/10 flex flex-row gap-2 hover:cursor-pointer duration-200 text-text-primary rounded p-3 px-16"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.97 }}
+            className=" font-thin text-3xl items-center border hover:bg-white/15 justify-center border-border/10 flex flex-row gap-2 hover:cursor-pointer duration-200 text-text-primary rounded p-3 px-16 m-10"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.5 }}

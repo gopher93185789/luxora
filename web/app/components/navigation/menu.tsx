@@ -1,18 +1,42 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from '@remix-run/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FcMenu } from 'react-icons/fc';
 
 export function DropdownMenu() {
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="inline-block text-left absolute top-4 left-4 z-50">
+        <motion.div 
+        className="inline-block text-left z-50 absolute m-10 mt-6"
+        >
             <button
                 onClick={() => setOpen((prev) => !prev)}
                 className="z-50 relative"
             >
-                <FcMenu fill='white' className="w-12 h-12 text-white" />
+                <motion.div 
+                    animate={{ rotate: open ? 90 : 0, opacity: 1, y: 0, scale: 1 }}
+                    initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                    exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                    transition={{ duration: 0.3 }}
+                    className="p-2 rounded bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors"
+                >
+                    <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="30" 
+                        height="30" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="white" 
+                        strokeWidth="2" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        className="text-white"
+                    >
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </motion.div>
             </button>
             <AnimatePresence>
                 {open && (
@@ -25,40 +49,67 @@ export function DropdownMenu() {
                             stiffness: 300, 
                             damping: 30 
                         }}
-                        className="fixed top-0 left-0 w-screen h-screen bg-black flex items-center justify-center z-40"
+                        className="fixed top-0 left-0 w-screen h-screen bg-black flex  z-40"
                     >
-                        <ul className="py-6 flex flex-col items-center w-full">
-                            <li className="w-full max-w-md">
+                        <motion.ul 
+                        className="py-6 flex flex-col items-center justify-center h-full gap-4"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.3  ,delay: 0.7}}
+                        >
+                            <motion.li 
+                            className="w-full max-w-md"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.3, delay: 0.8 }}
+                            >
                                 <Link
                                     to="/auth"
-                                    className="block px-6 py-4 text-xl text-center text-white rounded-lg transition-all"
+                                    className="block px-6 py-4 text-8xl text-white rounded-lg transition-all"
                                     onClick={() => setOpen(false)}
                                 >
                                     Login
                                 </Link>
-                            </li>
-                            <li className="w-full max-w-md">
+                            </motion.li>
+                            <motion.li 
+                            className="w-full max-w-md"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.3, delay: 0.9 }}
+                            >
                                 <Link
                                     to="/marketplace"
-                                    className="block px-6 py-4 text-xl text-center text-white rounded-lg transition-all"
+                                    className="block px-6 py-4 text-8xl text-white rounded-lg transition-all"
                                     onClick={() => setOpen(false)}
                                 >
                                     Marketplace
                                 </Link>
-                            </li>
-                            <li className="w-full max-w-md">
+                            </motion.li>
+                            <motion.li 
+                            className="w-full max-w-md"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.3, delay: 1 }}
+                            >
                                 <Link
                                     to="/about"
-                                    className="block px-6 py-4 text-xl text-center text-white rounded-lg transition-all"
+                                    className="block px-6 py-4 text-8xl text-white rounded-lg transition-all"
                                     onClick={() => setOpen(false)}
                                 >
                                     About Us
                                 </Link>
-                            </li>
-                        </ul>
+                            </motion.li>
+                        </motion.ul>
                     </motion.div>
                 )}
+                
+
+
             </AnimatePresence>
-        </div>
+        </motion.div>
     );
 }
