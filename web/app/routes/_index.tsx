@@ -22,11 +22,13 @@ export default function HomePage() {
 
       <video
         className="absolute w-full -z-10 h-full object-cover"
-        src={"/rrbg.mp4"}
+        src="/aston.mp4"
         autoPlay
         loop
         muted
+        playsInline
       />
+
       <div className="w-full h-24 flex flex-row items-center justify-center relative">
         <motion.p
           className="text-white font-bold text-2xl md:text-4xl lg:text-2xl z-10"
@@ -68,4 +70,3 @@ export default function HomePage() {
     </main>
   );
 }
-
