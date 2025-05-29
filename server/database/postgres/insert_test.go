@@ -41,7 +41,7 @@ func TestInsertOauthUser(t *testing.T) {
 	defer clean()
 
 	db := Postgres{Pool: pool}
-	id, err := db.InsertOauthUser(t.Context(), "diddy", "email@gmail.diddy.com", "github", "hwllo", "")
+	id, err := db.InsertOauthUser(t.Context(), "diddy", "github", "hwllo", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -50,7 +50,7 @@ func TestInsertOauthUser(t *testing.T) {
 		t.Fatal("invalid uuid")
 	}
 
-	_, err = db.InsertOauthUser(t.Context(), "dixddy", "email@gmaixl.diddy.com", "github", "hwllo", "")
+	_, err = db.InsertOauthUser(t.Context(), "dixddy", "github", "hwllo", "")
 	if err == nil {
 		t.Fatal("failed to raise error on duplicate user")
 	}
@@ -64,7 +64,7 @@ func TestInsertListing(t *testing.T) {
 	defer clean()
 
 	db := Postgres{Pool: pool}
-	id, err := db.InsertOauthUser(t.Context(), "diddy", "email@gmail.diddy.com", "github", "hwllo", "")
+	id, err := db.InsertOauthUser(t.Context(), "diddy", "github", "hwllo", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -109,7 +109,7 @@ func TestInsertBid(t *testing.T) {
 	defer clean()
 
 	db := Postgres{Pool: pool}
-	id, err := db.InsertOauthUser(t.Context(), "diddy", "email@gmail.diddy.com", "github", "hwllo", "")
+	id, err := db.InsertOauthUser(t.Context(), "diddy", "github", "hwllo", "")
 	if err != nil {
 		t.Fatal(err)
 	}

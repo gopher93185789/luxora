@@ -21,7 +21,7 @@ func TestGetUserIdByUsername(t *testing.T) {
 
 	db := Postgres{Pool: pool}
 
-	uzid, err := db.InsertOauthUser(t.Context(), "diddy", "", "github", "hello", "")
+	uzid, err := db.InsertOauthUser(t.Context(), "diddy", "github", "hello", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,10 +46,9 @@ func TestGetUserDetails(t *testing.T) {
 	db := Postgres{Pool: pool}
 
 	userame := "diddy"
-	email := "ksjfnv@kdjfb.com"
 	pfp := "ksfjkkjsfksjn"
 
-	uzid, err := db.InsertOauthUser(t.Context(), userame, email, "github", "hello", pfp)
+	uzid, err := db.InsertOauthUser(t.Context(), userame, "github", "hello", pfp)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -61,10 +60,6 @@ func TestGetUserDetails(t *testing.T) {
 
 	if details.Username != userame {
 		t.Fatal("usernames dont match")
-	}
-
-	if details.Email != email {
-		t.Fatal("emails dont match")
 	}
 
 	if details.ProfileImageLink != pfp {
@@ -81,7 +76,7 @@ func TestGetLastLogin(t *testing.T) {
 
 	db := Postgres{Pool: pool}
 
-	uzid, err := db.InsertOauthUser(t.Context(), "diddy", "", "github", "hello", "")
+	uzid, err := db.InsertOauthUser(t.Context(), "diddy", "github", "hello", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -100,7 +95,7 @@ func TestGetIsUsernameAndIDByProviderID(t *testing.T) {
 
 	db := Postgres{Pool: pool}
 
-	uzid, err := db.InsertOauthUser(t.Context(), "diddy", "", "github", "hello", "")
+	uzid, err := db.InsertOauthUser(t.Context(), "diddy", "github", "hello", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -127,7 +122,7 @@ func TestGetHighestBid(t *testing.T) {
 	defer clean()
 
 	db := Postgres{Pool: pool}
-	id, err := db.InsertOauthUser(t.Context(), "diddy", "email@gmail.diddy.com", "github", "hwllo", "")
+	id, err := db.InsertOauthUser(t.Context(), "diddy", "github", "hwllo", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -201,7 +196,7 @@ func TestGetBids(t *testing.T) {
 	defer clean()
 
 	db := Postgres{Pool: pool}
-	id, err := db.InsertOauthUser(t.Context(), "diddy", "email@gmail.diddy.com", "github", "hwllo", "")
+	id, err := db.InsertOauthUser(t.Context(), "diddy", "github", "hwllo", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -270,7 +265,7 @@ func TestGetProducts(t *testing.T) {
 	db := Postgres{Pool: pool}
 
 	t.Log("Inserting user")
-	id, err := db.InsertOauthUser(ctx, "diddy", "email@gmail.diddy.com", "github", "hwllo", "")
+	id, err := db.InsertOauthUser(ctx, "diddy", "github", "hwllo", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -317,7 +312,7 @@ func TestGetSimiliarProductsWith(t *testing.T) {
 
 	db := Postgres{Pool: pool}
 
-	id, err := db.InsertOauthUser(ctx, "diddy", "email@gmail.diddy.com", "github", "hwllo", "")
+	id, err := db.InsertOauthUser(ctx, "diddy", "github", "hwllo", "")
 	if err != nil {
 		t.Fatal(err)
 	}

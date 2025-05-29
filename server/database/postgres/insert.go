@@ -28,14 +28,14 @@ func (p *Postgres) InsertUser(ctx context.Context, username, email, signupType, 
 	return id, nil
 }
 
-func (p *Postgres) InsertOauthUser(ctx context.Context, username, email, provider, providerId, profileImageLink string) (userID uuid.UUID, err error) {
+func (p *Postgres) InsertOauthUser(ctx context.Context, username, provider, providerId, profileImageLink string) (userID uuid.UUID, err error) {
 	tx, err := p.Pool.Begin(ctx)
 	if err != nil {
 		return uuid.Nil, err
 	}
 	var id uuid.UUID
 
-	err = tx.QueryRow(ctx, "INSERT INTO luxora_user (username, email, provider, provider_user_id, profile_picture_link)  VALUES ($1, $2, $3, $4, $5) RETURNING id", username, strings.ToLower(email), provider, providerId, profileImageLink).Scan(&id)
+	err = tx.QueryRow(ctx, "INSERT INTO luxora_user (username, provider, provider_user_id, profile_picture_link)  VALUES ($1, $2, $3, $4) RETURNING id", username, provider, providerId, profileImageLink).Scan(&id)
 	if err != nil {
 		tx.Rollback(ctx)
 		return uuid.Nil, err

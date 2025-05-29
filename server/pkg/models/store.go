@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -59,10 +60,10 @@ type ProductInfo struct {
 }
 
 type UserDetails struct {
-	UserID           uuid.UUID `json:"id"`
-	Username         string    `json:"username"`
-	Email            string    `json:"email"`
-	ProfileImageLink string    `json:"profile_image_link"`
+	UserID           uuid.UUID      `json:"id"`
+	Username         string         `json:"username"`
+	Email            sql.NullString `json:"email"`
+	ProfileImageLink string         `json:"profile_image_link"`
 }
 
 type CartItems struct {

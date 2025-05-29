@@ -10,12 +10,12 @@ import (
 	tk "github.com/gopher93185789/luxora/server/pkg/token"
 )
 
-func (s *CoreAuthContext) handleOauthSignup(ctx context.Context, username, email, providerID, profileImageLink string) (accessToken, refreshToken string, err error) {
+func (s *CoreAuthContext) handleOauthSignup(ctx context.Context, username, providerID, profileImageLink string) (accessToken, refreshToken string, err error) {
 	if len(username) == 0 {
 		return "", "", fmt.Errorf("invalid username")
 	}
 
-	uid, err := s.Database.InsertOauthUser(ctx, username, email, "github", providerID, profileImageLink)
+	uid, err := s.Database.InsertOauthUser(ctx, username, "github", providerID, profileImageLink)
 	if err != nil {
 		return "", "", err
 	}
@@ -30,7 +30,6 @@ func (s *CoreAuthContext) handleOauthSignup(ctx context.Context, username, email
 		return "", "", err
 	}
 
-	
 	err = s.Database.UpdateRefreshToken(ctx, uid, refreshToken)
 	if err != nil {
 		return "", "", err
@@ -65,11 +64,11 @@ func (s *CoreAuthContext) HandleGithubOauth(ctx context.Context, code string) (a
 
 	id, err := s.Database.GetOauthUserIdByProviderID(ctx, pidn)
 	if err != nil {
-		accessToken, refreshToken, err = s.handleOauthSignup(ctx, user.Login, user.Email, pidn, user.ProfileImageLink)
+		accessToken, refreshToken, err = s.handleOauthSignup(ctx, user.Login, pidn, user.ProfileImageLink)
 		if err != nil {
 			return "", "", err
 		}
-		
+
 		return accessToken, refreshToken, nil
 	}
 

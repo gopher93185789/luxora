@@ -29,7 +29,7 @@ func TestCreateNewListing(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	uid, err := c.Database.InsertOauthUser(t.Context(), "jack", "anish@joc.com", "google", "skofk", "")
+	uid, err := c.Database.InsertOauthUser(t.Context(), "jack", "google", "skofk", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -82,7 +82,7 @@ func TestGetListings(t *testing.T) {
 		},
 	}
 
-	id, err := c.Database.InsertOauthUser(ctx, "diddy", "email@gmail.diddy.com", "github", "hwllo", "")
+	id, err := c.Database.InsertOauthUser(ctx, "diddy", "github", "hwllo", "")
 	if err != nil {
 		t.Fatal(err)
 	}
