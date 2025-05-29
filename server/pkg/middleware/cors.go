@@ -7,7 +7,6 @@ import (
 
 var allowedOrigins = []string{
 	"https://www.luxoras.nl",
-	"https://luxoras.nl",
 }
 
 func CORSMiddleware(next http.Handler) http.Handler {
