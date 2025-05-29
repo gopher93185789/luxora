@@ -11,7 +11,7 @@ export function OauthButton({ href, icon, children }: OauthButtonProps) {
   return (
     <Link
       to={href}
-      className="w-full font-medium items-center border hover:bg-white/15 justify-center border-border/10 flex flex-row gap-2 hover:cursor-pointer duration-200 text-text-primary  rounded-lg p-2"
+      className="w-full font-thin items-center border hover:bg-white/15 justify-center border-border/10 flex flex-row gap-2 hover:cursor-pointer duration-200 text-text-primary  rounded p-2"
     >
       {icon}
       {children && typeof children === "string" ? (

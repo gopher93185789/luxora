@@ -34,7 +34,7 @@ export default function Auth() {
           </OauthButton>
           <Link
             to={"/"}
-            className="text-text-primary/50 hover:text-text-primary duration-300 "
+            className="text-text-primary/50 font-thin hover:text-text-primary duration-300 "
           >
             Go back home
           </Link>
