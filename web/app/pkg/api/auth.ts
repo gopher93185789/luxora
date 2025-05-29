@@ -71,7 +71,7 @@ export async function Refresh(): Promise<number> {
 
   try {
     const resp = await fetch(`https://api.luxoras.nl/auth/refresh`, {
-      method: "GET",
+      method: "POST",
       credentials: "include",
     });
 
