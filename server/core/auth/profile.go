@@ -10,3 +10,7 @@ import (
 func (c *CoreAuthContext) GetUserInfo(ctx context.Context, userID uuid.UUID) (details models.UserDetails, err error) {
 	return c.Database.GetUserDetails(ctx, userID)
 }
+
+func (c *CoreAuthContext) Logout(ctx context.Context, userID uuid.UUID) (err error) {
+	return c.Database.UpdateRefreshToken(ctx, userID, "")
+}

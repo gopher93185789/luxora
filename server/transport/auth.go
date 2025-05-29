@@ -10,6 +10,19 @@ import (
 	"time"
 )
 
+func clearCookies(w http.ResponseWriter) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "LUXORA_REFRESH_TOKEN",
+		Value:    "",
+		Path:     "/",
+		Domain:   "https://www.luxoras.nl",
+		Expires:  time.Unix(0, 0),
+		HttpOnly: true,
+		SameSite: http.SameSiteNoneMode,
+		Secure:   true,
+	})
+}
+
 func setCookies(w http.ResponseWriter, refreshToken string) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "LUXORA_REFRESH_TOKEN",
@@ -153,4 +166,30 @@ func (t *TransportConfig) GetUserInfo(w http.ResponseWriter, r *http.Request) {
 		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode product id: "+err.Error())
 		return
 	}
+}
+
+// @Summary      Logout user
+// @Description  Logs out the authenticated user and invalidates their tokens
+// @Tags         auth
+// @Accept       */*
+// @Produce      json
+// @Param        Authorization  header  string  true  "Access token"
+// @Success      200  {object}  nil  "Successfully logged out"
+// @Failure      401  {object}  errs.ErrorResponse  "Unauthorized error"
+// @Failure      500  {object}  errs.ErrorResponse  "Internal server error"
+// @Router       /auth/logout [post]
+func (t *TransportConfig) Logout(w http.ResponseWriter, r *http.Request) {
+	uid, err := middleware.GetTokenFromRequest(r)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+		return
+	}
+
+	err = t.CoreAuth.Logout(r.Context(), uid)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to log user out")
+		return
+	}
+
+	clearCookies(w)
 }

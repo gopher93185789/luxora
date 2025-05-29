@@ -190,6 +190,33 @@ paths:
       summary: Google Oauth exchange
       tags:
       - auth
+  /auth/logout:
+    post:
+      consumes:
+      - '*/*'
+      description: Logs out the authenticated user and invalidates their tokens
+      parameters:
+      - description: Access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully logged out
+        "401":
+          description: Unauthorized error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      summary: Logout user
+      tags:
+      - auth
   /auth/refresh:
     post:
       consumes:
