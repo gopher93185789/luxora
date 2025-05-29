@@ -30,7 +30,7 @@ export function DropdownMenu() {
                         strokeWidth="2" 
                         strokeLinecap="round" 
                         strokeLinejoin="round" 
-                        className="text-white"
+                        className="text-text-primary duration-200 ease-in-out"
                     >
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -67,7 +67,7 @@ export function DropdownMenu() {
                             >
                                 <Link
                                     to="/auth"
-                                    className="block px-6 py-4 text-8xl text-white rounded-lg transition-all"
+                                    className="block px-6 py-4 text-8xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all"
                                     onClick={() => setOpen(false)}
                                 >
                                     Login
@@ -82,7 +82,7 @@ export function DropdownMenu() {
                             >
                                 <Link
                                     to="/marketplace"
-                                    className="block px-6 py-4 text-8xl text-white rounded-lg transition-all"
+                                    className="block px-6 py-4 text-8xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all"
                                     onClick={() => setOpen(false)}
                                 >
                                     Marketplace
@@ -97,7 +97,7 @@ export function DropdownMenu() {
                             >
                                 <Link
                                     to="/about"
-                                    className="block px-6 py-4 text-8xl text-white rounded-lg transition-all"
+                                    className="block px-6 py-4 text-8xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all"
                                     onClick={() => setOpen(false)}
                                 >
                                     About Us
