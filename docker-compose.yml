@@ -25,6 +25,10 @@ services:
       # Security keys
       - TOKEN_ENCRYPTION_KEY=${TOKEN_ENCRYPTION_KEY}
       - TOKEN_SIGNING_KEY=${TOKEN_SIGNING_KEY}
+
+      # misc
+      - SCALAR_PASSWORD=${SCALAR_PASSWORD}
+      - SCALAR_FILEPATH=${SCALAR_FILEPATH}
     ports:
       - "443:443"
     restart: on-failure:10
