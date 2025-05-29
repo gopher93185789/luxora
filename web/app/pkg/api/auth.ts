@@ -86,8 +86,7 @@ export async function Refresh(): Promise<number> {
   }
 }
 
-export async function GetUserDetails(): Promise<UserDetails | ErrorResponse> {
-  const token = GetTokenFromLocalStorage();
+export async function GetUserDetails(token: string): Promise<UserDetails | ErrorResponse> {
   if (token === "")
     return { code: 403, message: "missing auth token" } as ErrorResponse;
 
@@ -105,11 +104,7 @@ export async function GetUserDetails(): Promise<UserDetails | ErrorResponse> {
   try {
     let resp = await req();
     if (!resp.ok) {
-      const ok = await Refresh();
-      if (ok != 200)
-        return { code: 401, message: "unauthorized" } as ErrorResponse;
-
-      resp = await req();
+      return (await resp.json()) as ErrorResponse;
     }
 
     return (await resp.json()) as UserDetails;
