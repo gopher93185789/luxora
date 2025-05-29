@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func setCookies(w http.ResponseWriter, accessToken, refreshToken string) {
+func setCookies(w http.ResponseWriter, refreshToken string) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "LUXORA_REFRESH_TOKEN",
 		Value:    refreshToken,
@@ -18,17 +18,6 @@ func setCookies(w http.ResponseWriter, accessToken, refreshToken string) {
 		Domain:   "https://www.luxoras.nl",
 		Expires:  time.Now().Add(720 * time.Hour),
 		HttpOnly: true,
-		SameSite: http.SameSiteNoneMode,
-		Secure:   true,
-	})
-
-	http.SetCookie(w, &http.Cookie{
-		Name:     "LUXORA_ACCESS_TOKEN",
-		Value:    accessToken,
-		Path:     "/",
-		Domain:   "https://www.luxoras.nl",
-		Expires:  time.Now().Add(1 * time.Hour),
-		HttpOnly: false,
 		SameSite: http.SameSiteNoneMode,
 		Secure:   true,
 	})
@@ -59,7 +48,7 @@ func (t *TransportConfig) GithubExchange(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	setCookies(w, at, rt)
+	setCookies(w, rt)
 
 	w.Header().Set("Content-type", "application/json")
 	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
@@ -93,7 +82,7 @@ func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	setCookies(w, at, rt)
+	setCookies(w, rt)
 
 	w.Header().Set("Content-type", "application/json")
 	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
@@ -127,7 +116,7 @@ func (t *TransportConfig) RefreshToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	setCookies(w, at, rt)
+	setCookies(w, rt)
 
 	w.Header().Set("Content-type", "application/json")
 	if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil {
