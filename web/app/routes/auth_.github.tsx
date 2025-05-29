@@ -1,6 +1,7 @@
 import { useNavigate, useSearchParams } from "@remix-run/react";
 import { useEffect } from "react";
 import { OauthExchange } from "~/pkg/api/auth";
+import { GetTokenFromLocalStorage } from "~/pkg/helpers/tokenHandling";
 
 export default function GithubHandler() {
   const [searchParams] = useSearchParams();
@@ -18,6 +19,16 @@ export default function GithubHandler() {
         const resp = await OauthExchange(code, state, "github");
         if (resp?.code) throw new Error("unable to log you in");
 
+
+        const tk = GetTokenFromLocalStorage();
+
+        await fetch("/auth/cookie", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ tk }),
+        });
 
         navigate("/marketplace");
       } catch (e){

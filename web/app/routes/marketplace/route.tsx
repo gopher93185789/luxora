@@ -2,9 +2,11 @@ import { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
 import { GetUserDetails } from "~/pkg/api/auth";
+import { authCookie } from "../auth.cookie";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const cookieHeader = request.headers.get("Cookie");
+  const token = await authCookie.parse(cookieHeader);
 
   const resp = await fetch(request.url, { headers: request.headers });
   const h = resp.headers;
@@ -16,7 +18,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }) || []
   );
 
-  return JSON.stringify({ cookies, cookieHeader, h });
+  return JSON.stringify({ cookies, cookieHeader, h , token});
 }
 
 export default function Dashboard() {
