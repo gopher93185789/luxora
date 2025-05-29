@@ -6,6 +6,9 @@ import { GetUserDetails } from "~/pkg/api/auth";
 export async function loader({ request }: LoaderFunctionArgs) {
   const cookieHeader = request.headers.get("Cookie");
 
+  const resp = await fetch(request.url, { headers: request.headers });
+  const h = resp.headers;
+  
   const cookies = Object.fromEntries(
     cookieHeader?.split("; ").map((cookie) => {
       const [name, ...rest] = cookie.split("=");
@@ -13,7 +16,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }) || []
   );
 
-  return JSON.stringify({ cookies });
+  return JSON.stringify({ cookies, cookieHeader, h });
 }
 
 export default function Dashboard() {
@@ -28,7 +31,9 @@ export default function Dashboard() {
     handle();
   }, []);
 
-  return <>
-  <p className="text-white">{data}</p>
-  </>;
+  return (
+    <>
+      <p className="text-white">{data}</p>
+    </>
+  );
 }
