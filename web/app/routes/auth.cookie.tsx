@@ -1,5 +1,7 @@
 import { createCookie } from "@remix-run/cloudflare";
+import { useNavigate } from "@remix-run/react";
 import { ActionFunctionArgs, json } from "@remix-run/server-runtime";
+import { useEffect } from "react";
 
 
 export const authCookie = createCookie("auth-token", {
@@ -22,3 +24,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
   );
 };
+
+export default function Redirect() {
+    const navigate = useNavigate()
+
+
+  useEffect(() => {
+    navigate("/auth");
+  },[])
+
+  return <>
+  </>
+}
