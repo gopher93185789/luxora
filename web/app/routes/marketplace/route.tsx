@@ -3,13 +3,11 @@ import { useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
 import { GetUserDetails } from "~/pkg/api/auth";
 import { authCookie } from "../auth.cookie";
+import { getTokenFromServerSideCaller } from "~/pkg/helpers/server";
 
 
-
-
-export async function loader({ request }: LoaderFunctionArgs) {
-  const cookieHeader = request.headers.get("Cookie");
-  const token = await authCookie.parse(cookieHeader);
+export async function loader(lfa: LoaderFunctionArgs) {
+  const token = getTokenFromServerSideCaller(lfa)
   return JSON.stringify({ token});
 }
 
