@@ -12,6 +12,14 @@ export const authCookie = createCookie("auth-token", {
   maxAge: 60 * 60,
 });
 
+export const rizz = createCookie("LUXORA_ACCESS_TOKEN", {
+  httpOnly: true,
+  secure: true,
+  sameSite: "lax",
+  path: "/",
+  maxAge: 60 * 60,
+});
+
 export const action = async ({ request }: ActionFunctionArgs) => {
   const data = await request.json() as {tk:string};
 

@@ -27,7 +27,7 @@ func setCookies(w http.ResponseWriter, accessToken, refreshToken string) {
 		Value:    accessToken,
 		Path:     "/",
 		Domain:   "https://www.luxoras.nl",
-		Expires:  time.Now().Add(720 * time.Hour),
+		Expires:  time.Now().Add(1 * time.Hour),
 		HttpOnly: false,
 		SameSite: http.SameSiteNoneMode,
 		Secure:   true,

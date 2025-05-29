@@ -2,12 +2,16 @@ import { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
 import { GetUserDetails } from "~/pkg/api/auth";
-import { authCookie } from "../auth.cookie";
+import { authCookie, rizz } from "../auth.cookie";
+
+
+
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const cookieHeader = request.headers.get("Cookie");
   const token = await authCookie.parse(cookieHeader);
-  return JSON.stringify({ token});
+  const token2 = await rizz.parse(cookieHeader);
+  return JSON.stringify({ token, token2});
 }
 
 export default function Dashboard() {
