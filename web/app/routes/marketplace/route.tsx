@@ -26,6 +26,7 @@ export default function Dashboard() {
     const handle = async () => {
       if (!requireRefresh) return;
 
+      console.log("defaulting to csr")
       try {
         const rt = await Refresh();
         if (rt !== 200) throw new Error("Failed to refresh");
