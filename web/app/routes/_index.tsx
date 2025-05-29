@@ -1,7 +1,4 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
-import { Link } from "@remix-run/react";
-
-import background from "~/public/video/rrbg.mp4";
 
 export const meta: MetaFunction = () => {
   return [
@@ -18,7 +15,7 @@ export default function HomePage() {
     <main className="bg w-screen h-screen">
       <video
         className="absolute w-full -z-10 h-full object-cover"
-        src={background}
+        src={"/rrbg.mp4"}
         autoPlay
         loop
         muted
