@@ -3,6 +3,7 @@ services:
     image: ghcr.io/gopher93185789/server:latest
     volumes:
       - certs:/app/certs:ro
+      - docs:/app/docs:ro
     environment:
       - PORT=${PORT}
       - DSN=${DSN}
@@ -40,3 +41,9 @@ volumes:
       type: none
       o: bind
       device: ./certificates/server
+  docs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./server/docs

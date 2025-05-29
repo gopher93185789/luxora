@@ -5,21 +5,23 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
-	"github.com/arbol-labs/bst"
-	coreAuth "github.com/gopher93185789/luxora/server/core/auth"
-	"github.com/gopher93185789/luxora/server/database/postgres"
-	"github.com/gopher93185789/luxora/server/pkg/middleware"
-	"github.com/gopher93185789/luxora/server/pkg/token"
-	auth "github.com/gopher93185789/luxora/server/transport"
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/github"
-	"golang.org/x/oauth2/google"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/arbol-labs/bst"
+	coreAuth "github.com/gopher93185789/luxora/server/core/auth"
+	"github.com/gopher93185789/luxora/server/database/postgres"
+	"github.com/gopher93185789/luxora/server/docs"
+	"github.com/gopher93185789/luxora/server/pkg/middleware"
+	"github.com/gopher93185789/luxora/server/pkg/token"
+	auth "github.com/gopher93185789/luxora/server/transport"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/github"
+	"golang.org/x/oauth2/google"
 )
 
 // @Summary		Healthcheck
@@ -75,11 +77,18 @@ func main() {
 			OauthState: "w;iudfiuweiuvhw;hriujwiriwhre",
 		},
 	}
+	
+	scalPass := &docs.ScalarRoute{
+		Password: config.ScalarPassword,
+		FilePath: config.ScalarFilePath,
+	}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /ping", Ping)
 
 	mcf := middleware.New(&token.BstConfig{Config: tokenConf})
+
+	mux.HandleFunc("GET /ref", scalPass.RegisterScalarDocs)
 
 	// auth
 	mux.HandleFunc("GET /auth/github", tx.GithubRedirect)

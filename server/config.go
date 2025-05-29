@@ -24,6 +24,8 @@ type Config struct {
 	GoogleRedirect     string
 	TokenEncryptionKey string
 	TokenSigningKey    string
+	ScalarPassword     string
+	ScalarFilePath     string
 }
 
 func GetServerConfig() (*Config, error) {
@@ -42,6 +44,8 @@ func GetServerConfig() (*Config, error) {
 		"GOOGLE_REDIRECT_URL":  &config.GoogleRedirect,
 		"TOKEN_ENCRYPTION_KEY": &config.TokenEncryptionKey,
 		"TOKEN_SIGNING_KEY":    &config.TokenSigningKey,
+		"SCALAR_PASSWORD":      &config.ScalarPassword,
+		"SCALAR_FILEPATH":      &config.ScalarFilePath,
 	}
 
 	missingVars := []string{}
