@@ -4,6 +4,17 @@ import { FaGithub } from "react-icons/fa";
 import { OauthButton } from "~/components/oauthButton";
 import { useEffect } from "react";
 import { VerifyToken } from "~/pkg/api/auth";
+import { MetaFunction } from "@remix-run/cloudflare";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "luxora - auth" },
+    {
+      name: "description",
+      content: "The marketplace for the rich by the rich",
+    },
+  ];
+};
 
 export default function Auth() {
   const navigate = useNavigate();
