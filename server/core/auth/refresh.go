@@ -37,5 +37,10 @@ func (s *CoreAuthContext) RefreshToken(ctx context.Context, token string) (acces
 		return "", "", err
 	}
 
+	err = s.Database.UpdateRefreshToken(ctx,userid, refreshToken)
+	if err != nil {
+		return "", "", err
+	}
+
 	return
 }
