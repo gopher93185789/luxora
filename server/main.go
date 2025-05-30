@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -77,7 +78,7 @@ func main() {
 			OauthState: "w;iudfiuweiuvhw;hriujwiriwhre",
 		},
 	}
-	
+
 	scalPass := &docs.ScalarRoute{
 		Password: config.ScalarPassword,
 		FilePath: config.ScalarFilePath,
@@ -110,12 +111,16 @@ func main() {
 	mux.HandleFunc("PUT /listings/sold/bid", mcf.AuthMiddleware(tx.UpdateSoldViaBid))
 	mux.HandleFunc("POST /listings/checkout", mcf.AuthMiddleware(tx.Checkout))
 
+	cors := &middleware.CorsConfig{
+		AllowedOrigins: strings.Split(strings.TrimSpace(config.AllowedOrigin), ","),
+	}
+
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 
 	srv := http.Server{
 		Addr:         config.Port,
-		Handler:      middleware.CORSMiddleware(mux),
+		Handler:      cors.CORSMiddleware(mux),
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  120 * time.Second,

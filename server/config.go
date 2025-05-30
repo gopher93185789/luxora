@@ -26,6 +26,7 @@ type Config struct {
 	TokenSigningKey    string
 	ScalarPassword     string
 	ScalarFilePath     string
+	AllowedOrigin      string
 }
 
 func GetServerConfig() (*Config, error) {
@@ -46,6 +47,7 @@ func GetServerConfig() (*Config, error) {
 		"TOKEN_SIGNING_KEY":    &config.TokenSigningKey,
 		"SCALAR_PASSWORD":      &config.ScalarPassword,
 		"SCALAR_FILEPATH":      &config.ScalarFilePath,
+		"ALLOWED_ORIGIN":       &config.AllowedOrigin,
 	}
 
 	missingVars := []string{}

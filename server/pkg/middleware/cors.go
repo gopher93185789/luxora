@@ -5,16 +5,17 @@ import (
 	"slices"
 )
 
-var allowedOrigins = []string{
-	"https://www.luxoras.nl",
+
+type CorsConfig struct {
+	AllowedOrigins []string
 }
 
-func CORSMiddleware(next http.Handler) http.Handler {
+func (c *CorsConfig)CORSMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		origin := r.Header.Get("Origin")
 
 		// Check if the origin is allowed
-		if slices.Contains(allowedOrigins, origin) {
+		if slices.Contains(c.AllowedOrigins, origin) {
 			w.Header().Set("Access-Control-Allow-Origin", origin)
 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
