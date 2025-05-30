@@ -22,15 +22,13 @@ export async function OauthExchange(
     );
 
     const data = (await resp.json()) as AccessTokenResponse | ErrorResponse;
-    console.log(data)
     if (!resp.ok) return data as ErrorResponse;
 
     const tokenResponse = data as AccessTokenResponse;
     if (!tokenResponse.access_token)
       throw new Error("failed to get access token");
     SetTokenInLocalStorage(tokenResponse.access_token);
-  } catch (e) {
-    console.error(e);
+  } catch  {
     return { code: 500, message: "Unexpected error" } as ErrorResponse;
   }
 }
@@ -59,8 +57,7 @@ export async function VerifyToken(): Promise<number> {
     }
 
     return 200;
-  } catch (e) {
-    console.error(e);
+  } catch  {
     return 500;
   }
 }
@@ -80,8 +77,7 @@ export async function Refresh(): Promise<number> {
     const data = (await resp.json()) as AccessTokenResponse;
     SetTokenInLocalStorage(data.access_token);
     return 200;
-  } catch (e) {
-    console.error(e);
+  } catch  {
     return 500;
   }
 }
@@ -108,8 +104,7 @@ export async function GetUserDetails(token: string): Promise<UserDetails | Error
     }
 
     return (await resp.json()) as UserDetails;
-  } catch (e) {
-    console.error(e);
+  } catch {
     return {
       code: 401,
       message: "an unexpected error occured",

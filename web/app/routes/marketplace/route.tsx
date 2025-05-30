@@ -31,6 +31,15 @@ export default function Dashboard() {
         const rt = await Refresh();
         if (rt !== 200) throw new Error("Failed to refresh");
 
+        const tk = GetTokenFromLocalStorage();
+        await fetch("/auth/cookie", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ tk }),
+        });
+
         const token = GetTokenFromLocalStorage();
         const userData = await GetUserDetails(token);
         if ("code" in userData) throw new Error("Failed to fetch user");

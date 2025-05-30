@@ -30,8 +30,7 @@ export default function GoogleHandler() {
         });
 
         navigate("/marketplace");
-      } catch (e) {
-        console.error(e);
+      } catch {
         navigate("/auth");
       }
     };
