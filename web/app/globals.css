@@ -1,17 +1,28 @@
 @import "tailwindcss";
 
-
 @theme {
-    --color-primary: #070707;
-    --color-secondary: #004221;
-    --color-accent: #ffffff;
-    --color-text-primary: #ffffff;
-    --color-text-secondary: #33e26c;
-    --color-border: rgba(255, 255, 255);
-    --color-input-bg: transparent;
-    --color-button-bg: #004221;
-    --color-button-text: #ffffff;
-    --color-button-hover-bg: rgba(255, 255, 255, 0.8);
-    --color-button-border: rgba(255, 255, 255, 0.10);
+  --color-primary: #070707;
+  --color-secondary: #004221;
+  --color-accent: #ffffff;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #33e26c;
+  --color-border: rgba(255, 255, 255);
+  --color-input-bg: transparent;
+  --color-button-bg: #004221;
+  --color-button-text: #ffffff;
+  --color-button-hover-bg: rgba(255, 255, 255, 0.8);
+  --color-button-border: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes shine {
+  0% {
+    background-position: 100%;
   }
-  
+  100% {
+    background-position: -100%;
+  }
+}
+
+.animate-shine {
+  animation: shine 5s linear infinite
+}

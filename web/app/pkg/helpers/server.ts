@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs } from "@remix-run/server-runtime";
-import { authCookie } from "~/routes/auth.cookie";
+import { authCookie } from "~/routes/auth_.cookie";
 
 export async function getTokenFromServerSideCaller(
   r: LoaderFunctionArgs

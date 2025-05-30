@@ -1,5 +1,6 @@
 import { useNavigate, useSearchParams } from "@remix-run/react";
 import { useEffect } from "react";
+import ShinyText from "~/components/ShinyText";
 import { OauthExchange } from "~/pkg/api/auth";
 import { GetTokenFromLocalStorage } from "~/pkg/helpers/tokenHandling";
 
@@ -31,7 +32,7 @@ export default function GoogleHandler() {
         navigate("/marketplace");
       } catch (e) {
         console.error(e);
-        navigate("/");
+        navigate("/auth");
       }
     };
 
@@ -39,6 +40,8 @@ export default function GoogleHandler() {
   }, []);
 
   return (
-    <div className="h-screen w-full  flex items-center justify-center"></div>
+    <div className="h-screen w-full  flex items-center justify-center">
+      <ShinyText className="text-2xl" text="Logging you in" speed={1} />
+    </div>
   );
 }

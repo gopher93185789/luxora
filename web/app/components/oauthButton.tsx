@@ -15,7 +15,7 @@ export function OauthButton({ href, icon, children }: OauthButtonProps) {
     >
       {icon}
       {children && typeof children === "string" ? (
-        <p className="text-text-primary">{children}</p>
+        <p className="text-text-primary font-medium">{children}</p>
       ) : (
         children
       )}
