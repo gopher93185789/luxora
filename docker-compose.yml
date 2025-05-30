@@ -29,6 +29,7 @@ services:
       # misc
       - SCALAR_PASSWORD=${SCALAR_PASSWORD}
       - SCALAR_FILEPATH=${SCALAR_FILEPATH}
+      - ALLOWED_ORIGIN=${ALLOWED_ORIGIN}
     ports:
       - "443:443"
     restart: on-failure:10
