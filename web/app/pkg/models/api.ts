@@ -5,7 +5,7 @@ export interface ErrorResponse {
 
 export interface Bid {
   amount: number;
-  mesage: string; 
+  mesage: string;
   product_id: string;
 }
 
@@ -37,8 +37,13 @@ export interface SellItemViaBid {
   item_id: string;
 }
 
+export interface Email {
+  Valid: boolean;
+  String: string;
+}
+
 export interface UserDetails {
-  email: string;
+  email: Email;
   id: string;
   profile_image_link: string;
   username: string;

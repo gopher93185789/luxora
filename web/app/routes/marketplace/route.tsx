@@ -45,6 +45,15 @@ export default function Dashboard() {
   }, [requireRefresh, navigate]);
 
   return (
-    <pre className="text-white">{JSON.stringify(data || user, null, 2)}</pre>
+    <div className="flex flex-col gap-5">
+      <h1>Welkom, {data?.username}!</h1>
+      <img
+        src={data?.profile_image_link}
+        alt="Profielfoto"
+        style={{ borderRadius: "50%", width: 100, height: 100 }}
+      />
+      {data?.email.String === "" ? null : <p>Email: {data?.email.String}</p>}
+    </div>
+    // <pre className="text-white">{JSON.stringify(data || user, null, 2)}</pre>
   );
 }
