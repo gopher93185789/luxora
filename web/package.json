@@ -21,6 +21,7 @@
     "@remix-run/react": "^2.16.7",
     "@remix-run/server-runtime": "^2.16.7",
     "@tailwindcss/postcss": "^4.1.7",
+    "cookie": "^1.0.2",
     "framer-motion": "^12.15.0",
     "isbot": "^4.1.0",
     "lucide-react": "^0.511.0",

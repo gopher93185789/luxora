@@ -16,7 +16,7 @@ export async function OauthExchange(
     const resp = await fetch(
       `https://api.luxoras.nl/auth/${provider}/exchange?code=${code}&state=${state}`,
       {
-        method: "GET",
+        method: "GET", 
         credentials: "include",
       }
     );
