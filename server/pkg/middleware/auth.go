@@ -80,7 +80,7 @@ func (a *AuthMiddleWareConfig) VerifyTokenEndpoint(w http.ResponseWriter, r *htt
 		return
 	}
 
-	if err := json.NewEncoder(w).Encode(ValidTokenResponse{Expiry: fields.Exp}); err != nil {
+	if err := json.NewEncoder(w).Encode(ValidTokenResponse{Expiry: fields.ExpiresAt.Time}); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

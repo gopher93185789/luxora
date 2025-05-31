@@ -4,7 +4,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/arbol-labs/bst"
 	"github.com/gopher93185789/luxora/server/database/postgres"
 	"github.com/gopher93185789/luxora/server/pkg/testutils"
 	"github.com/gopher93185789/luxora/server/pkg/token"
@@ -22,7 +21,7 @@ func TestRefreshToken(t *testing.T) {
 			Pool: conn,
 		},
 		TokenConfig: token.BstConfig{
-			Config: bst.New([]byte("6666666666666666"), []byte("skjvkfbvdkfhvjfvkjf")),
+			SecretKey: []byte("skjvkfbvdkfhvjfvkjf"),
 		},
 	}
 

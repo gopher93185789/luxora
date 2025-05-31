@@ -13,7 +13,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/arbol-labs/bst"
 	coreAuth "github.com/gopher93185789/luxora/server/core/auth"
 	"github.com/gopher93185789/luxora/server/database/postgres"
 	"github.com/gopher93185789/luxora/server/docs"
@@ -53,8 +52,6 @@ func main() {
 		log.Fatalln("Failed to connect to database: " + err.Error())
 	}
 
-	tokenConf := bst.New([]byte(config.TokenEncryptionKey), []byte(config.TokenSigningKey))
-
 	tx := &auth.TransportConfig{
 		CoreAuth: &coreAuth.CoreAuthContext{
 			GithubConfig: &oauth2.Config{
@@ -72,7 +69,7 @@ func main() {
 				Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
 			},
 			TokenConfig: token.BstConfig{
-				Config: tokenConf,
+				SecretKey: []byte(config.TokenSigningKey),
 			},
 			Database:   pool,
 			OauthState: "w;iudfiuweiuvhw;hriujwiriwhre",
@@ -87,7 +84,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /ping", Ping)
 
-	mcf := middleware.New(&token.BstConfig{Config: tokenConf})
+	mcf := middleware.New(&token.BstConfig{SecretKey: []byte(config.TokenSigningKey)})
 
 	mux.HandleFunc("GET /ref", scalPass.RegisterScalarDocs)
 

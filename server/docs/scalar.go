@@ -12,7 +12,7 @@ type ScalarRoute struct {
 	FilePath string
 }
 
-func (s *ScalarRoute) RegisterScalarDocs(w http.ResponseWriter, r * http.Request) {
+func (s *ScalarRoute) RegisterScalarDocs(w http.ResponseWriter, r *http.Request) {
 	password := r.URL.Query().Get("password")
 
 	if password != s.Password {
@@ -21,7 +21,7 @@ func (s *ScalarRoute) RegisterScalarDocs(w http.ResponseWriter, r * http.Request
 	}
 
 	htmlContent, err := scalar.ApiReferenceHTML(&scalar.Options{
-		SpecURL: s.FilePath, 
+		SpecURL: s.FilePath,
 		CustomOptions: scalar.CustomOptions{
 			PageTitle: "Luxora API",
 		},

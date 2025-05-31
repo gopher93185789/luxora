@@ -15,7 +15,7 @@ func clearCookies(w http.ResponseWriter) {
 		Name:     "LUXORA_REFRESH_TOKEN",
 		Value:    "",
 		Path:     "/",
-		Domain:   "https://www.luxoras.nl",
+		Domain:   "luxoras.nl",
 		Expires:  time.Unix(0, 0),
 		HttpOnly: true,
 		SameSite: http.SameSiteNoneMode,

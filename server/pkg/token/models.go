@@ -1,20 +1,14 @@
 package token
 
 import (
-	"time"
-
-	"github.com/arbol-labs/bst"
 	"github.com/google/uuid"
+	"time"
 )
 
 type Token struct {
 	Exp       time.Time `json:"exp"`
 	UserID    uuid.UUID `json:"uid"`
 	TokenType uint8     `json:"tt"`
-}
-
-type BstConfig struct {
-	Config *bst.Token
 }
 
 const (
