@@ -23,30 +23,30 @@ export const links: LinksFunction = () => [
 ];
 
 
-export function ErrorBoundary() {
-  const error = useRouteError();
+// export function ErrorBoundary() {
+//   const error = useRouteError();
 
-  if (isRouteErrorResponse(error)) {
-    return (
-      <div className="w-full h-screen bg-black flex items-center justify-center">
-        <h1 className="text-white font-bold text-4xl">
-          jouw kkr moeder, ga terug.
-        </h1>
-      </div>
-    );
-  } else if (error instanceof Error) {
-    return (
-      <div>
-        <h1>Error</h1>
-        <p>{error.message}</p>
-        <p>The stack trace is:</p>
-        <pre>{error.stack}</pre>
-      </div>
-    );
-  } else {
-    return <h1>Unknown Error</h1>;
-  }
-}
+//   if (isRouteErrorResponse(error)) {
+//     return (
+//       <div className="w-full h-screen bg-black flex items-center justify-center">
+//         <h1 className="text-white font-bold text-4xl">
+//           {error.status} - {error.statusText}
+//         </h1>
+//       </div>
+//     );
+//   } else if (error instanceof Error) {
+//     return (
+//       <div>
+//         <h1>Error</h1>
+//         <p>{error.message}</p>
+//         <p>The stack trace is:</p>
+//         <pre>{error.stack}</pre>
+//       </div>
+//     );
+//   } else {
+//     return <h1>Unknown Error</h1>;
+//   }
+// }
 
 
 export function Layout({ children }: { children: React.ReactNode }) {
