@@ -23,7 +23,7 @@ export default function Auth() {
   useEffect(() => {
     const handle = async () => {
       const resp = await VerifyToken();
-      if (resp === 200) navigate("/marketplace");
+      if (resp === 200) navigate("/dashboard/marketplace");
       setIsLoading(false);
     };
     handle();
