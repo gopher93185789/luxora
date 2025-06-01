@@ -56,14 +56,14 @@ export function DropdownMenu() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -20 }}
-                        transition={{ duration: 0.3  ,delay: 0.7}}
+                        transition={{ duration: 0.3}}
                         >
                             <motion.li 
                             className="w-full max-w-md"
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.3, delay: 0.8 }}
+                            transition={{ duration: 0.3, delay: 0.2 }}
                             >
                                 <Link
                                     to="/auth"
@@ -78,7 +78,7 @@ export function DropdownMenu() {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.3, delay: 0.9 }}
+                            transition={{ duration: 0.3, delay: 0.4 }}
                             >
                                 <Link
                                     to="/marketplace"
@@ -93,7 +93,7 @@ export function DropdownMenu() {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.3, delay: 1 }}
+                            transition={{ duration: 0.3, delay: 0.6 }}
                             >
                                 <Link
                                     to="/about"
