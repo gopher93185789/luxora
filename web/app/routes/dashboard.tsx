@@ -1,21 +1,35 @@
 import { Link, Outlet } from "@remix-run/react";
+import { Sidebar } from "~/components/navigation/sidebar";
+import { useUserInfo } from "~/hooks/use-user-info";
 
 
 export default function DashboardLayout() {
-  return (
-    <div className="dashboard-container flex">
-      <div className="dashboard-sidebar w-64 bg-gray-100 min-h-screen p-4">
-        {/* menu */}
-        <nav className="flex flex-col gap-2">
-          <Link to="/dashboard" className="font-bold text-lg mb-4">Dashboard</Link>
-          <Link to="/dashboard/listings" className="hover:bg-gray-200 p-2 rounded">Listings</Link>
-          <Link to="/dashboard/products" className="hover:bg-gray-200 p-2 rounded">Products</Link>
-          <Link to="/dashboard/settings" className="hover:bg-gray-200 p-2 rounded">Settings</Link>
-        </nav>
+  const { user, loading } = useUserInfo();
+  if (loading) {
+    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+  }
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <h1 className="text-2xl">You are not logged in!</h1>
+        <Link to="/auth" className="ml-4 text-blue-500 hover:underline">
+          Login
+        </Link>
       </div>
-      <main className="dashboard-content flex-1 p-6">
+    );
+  }
+  return (
+    <div className="flex h-screen">
+      <Sidebar />
+      <div className="flex-1 p-4 overflow-y-auto">
+        <h1 className="text-2xl mb-4">Welcome, {user.username}!</h1>
+        <img
+          src={user.profile_image_link}
+          alt="Profile"
+          className="w-24 h-24 rounded-full mb-4"
+        />
         <Outlet />
-      </main>
+      </div>
     </div>
   );
 }

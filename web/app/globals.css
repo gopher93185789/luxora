@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Cantata+One&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 @theme {
   --color-primary: #070707;
@@ -12,6 +13,9 @@
   --color-button-text: #ffffff;
   --color-button-hover-bg: rgba(255, 255, 255, 0.8);
   --color-button-border: rgba(255, 255, 255, 0.1);
+  --color-button-hover-text: #004221;
+  --color-button-active-bg: rgba(255, 255, 255, 0.2);
+  --font-family: 'Montserrat', sans-serif;
 }
 
 @keyframes shine {
