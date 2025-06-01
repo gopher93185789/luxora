@@ -12,7 +12,7 @@ import (
 
 func clearCookies(w http.ResponseWriter) {
 	http.SetCookie(w, &http.Cookie{
-		Name:     "LUXORA_REFRESH_TOKEN",
+		Name:     "LRF",
 		Value:    "",
 		Path:     "/",
 		Domain:   "luxoras.nl",
@@ -25,10 +25,10 @@ func clearCookies(w http.ResponseWriter) {
 
 func setCookies(w http.ResponseWriter, refreshToken string) {
 	http.SetCookie(w, &http.Cookie{
-		Name:     "LUXORA_REFRESH_TOKEN",
+		Name:     "LRF",
 		Value:    refreshToken,
 		Path:     "/",
-		Domain:   "https://www.luxoras.nl",
+		Domain:   "luxoras.nl",
 		Expires:  time.Now().Add(720 * time.Hour),
 		HttpOnly: true,
 		SameSite: http.SameSiteNoneMode,
@@ -49,8 +49,7 @@ func setCookies(w http.ResponseWriter, refreshToken string) {
 // @Param			state	query	string	true	"state"	Format(state)
 func (t *TransportConfig) GithubExchange(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	code := r.URL.Query().Get("code")
-	at, rt, err := t.CoreAuth.HandleGithubOauth(r.Context(), code)
+	at, rt, err := t.CoreAuth.HandleGithubOauth(r.Context(), r.URL.Query().Get("code"))
 	if err != nil {
 		errs.ErrorWithJson(w, http.StatusUnauthorized, err.Error())
 		return
@@ -83,8 +82,7 @@ func (t *TransportConfig) GithubExchange(w http.ResponseWriter, r *http.Request)
 // @Param			state	query	string	true	"state"	Format(state)
 func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	code := r.URL.Query().Get("code")
-	at, rt, err := t.CoreAuth.HandleGoogleOauth(r.Context(), code)
+	at, rt, err := t.CoreAuth.HandleGoogleOauth(r.Context(), r.URL.Query().Get("code"))
 	if err != nil {
 		errs.ErrorWithJson(w, http.StatusUnauthorized, err.Error())
 		return
@@ -117,7 +115,7 @@ func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request)
 func (t *TransportConfig) RefreshToken(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
-	cookie, err := r.Cookie("LUXORA_REFRESH_TOKEN")
+	cookie, err := r.Cookie("LRF")
 	if err != nil {
 		errs.ErrorWithJson(w, http.StatusBadRequest, "missing cookie")
 		return

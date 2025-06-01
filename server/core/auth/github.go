@@ -5,9 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
-	"time"
-
-	tk "github.com/gopher93185789/luxora/server/pkg/token"
 )
 
 func (s *CoreAuthContext) handleOauthSignup(ctx context.Context, username, providerID, profileImageLink string) (accessToken, refreshToken string, err error) {
@@ -20,12 +17,7 @@ func (s *CoreAuthContext) handleOauthSignup(ctx context.Context, username, provi
 		return "", "", err
 	}
 
-	accessToken, err = s.TokenConfig.GenerateToken(uid, time.Now().Add(1*time.Hour), tk.ACCESS_TOKEN)
-	if err != nil {
-		return "", "", err
-	}
-
-	refreshToken, err = s.TokenConfig.GenerateToken(uid, time.Now().Add(720*time.Hour), tk.REFRESH_TOKEN)
+	accessToken, refreshToken, err = s.generateTokens(uid)
 	if err != nil {
 		return "", "", err
 	}
@@ -72,12 +64,7 @@ func (s *CoreAuthContext) HandleGithubOauth(ctx context.Context, code string) (a
 		return accessToken, refreshToken, nil
 	}
 
-	accessToken, err = s.TokenConfig.GenerateToken(id, time.Now().Add(1*time.Hour), tk.ACCESS_TOKEN)
-	if err != nil {
-		return "", "", err
-	}
-
-	refreshToken, err = s.TokenConfig.GenerateToken(id, time.Now().Add(720*time.Hour), tk.REFRESH_TOKEN)
+	accessToken, refreshToken, err = s.generateTokens(id)
 	if err != nil {
 		return "", "", err
 	}

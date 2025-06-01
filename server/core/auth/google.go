@@ -4,10 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"time"
 
 	"github.com/google/uuid"
-	tk "github.com/gopher93185789/luxora/server/pkg/token"
 )
 
 func (s *CoreAuthContext) handleGoogleOauthSignup(ctx context.Context, providerID, profileImageLink string) (accessToken, refreshToken string, err error) {
@@ -16,12 +14,7 @@ func (s *CoreAuthContext) handleGoogleOauthSignup(ctx context.Context, providerI
 		return "", "", err
 	}
 
-	accessToken, err = s.TokenConfig.GenerateToken(uid, time.Now().Add(1*time.Hour), tk.ACCESS_TOKEN)
-	if err != nil {
-		return "", "", err
-	}
-
-	refreshToken, err = s.TokenConfig.GenerateToken(uid, time.Now().Add(720*time.Hour), tk.REFRESH_TOKEN)
+	accessToken, refreshToken, err = s.generateTokens(uid)
 	if err != nil {
 		return "", "", err
 	}
@@ -70,12 +63,7 @@ func (s *CoreAuthContext) HandleGoogleOauth(ctx context.Context, code string) (a
 		return accessToken, refreshToken, nil
 	}
 
-	accessToken, err = s.TokenConfig.GenerateToken(id, time.Now().Add(1*time.Hour), tk.ACCESS_TOKEN)
-	if err != nil {
-		return "", "", err
-	}
-
-	refreshToken, err = s.TokenConfig.GenerateToken(id, time.Now().Add(720*time.Hour), tk.REFRESH_TOKEN)
+	accessToken, refreshToken, err = s.generateTokens(id)
 	if err != nil {
 		return "", "", err
 	}
