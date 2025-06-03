@@ -28,6 +28,8 @@ func TestRefreshToken(t *testing.T) {
 		Logger: logger.New(os.Stdout),
 	}
 
+	c.Logger.Close()
+
 	uid, err := c.Database.InsertUser(t.Context(), "dffdf@dkjfdj.com", "sfksuhuv", "google", "")
 	if err != nil {
 		t.Fatal(err)
