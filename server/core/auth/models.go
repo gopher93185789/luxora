@@ -2,6 +2,7 @@ package auth
 
 import (
 	"github.com/gopher93185789/luxora/server/database"
+	"github.com/gopher93185789/luxora/server/pkg/logger"
 	"github.com/gopher93185789/luxora/server/pkg/token"
 	"golang.org/x/oauth2"
 )
@@ -12,6 +13,7 @@ type CoreAuthContext struct {
 	OauthState   string
 	Database     database.Database
 	TokenConfig  token.BstConfig
+	Logger *logger.Logger
 }
 
 type GithubUserDetails struct {

@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"fmt"
-	"time"
 
 	tk "github.com/gopher93185789/luxora/server/pkg/token"
 )
@@ -15,11 +14,13 @@ func (s *CoreAuthContext) RefreshToken(ctx context.Context, token string) (acces
 
 	userid, err := s.TokenConfig.VerifyToken(token, tk.REFRESH_TOKEN)
 	if err != nil {
+		s.Logger.Error(fmt.Sprintf("Token verification failed: %v", err))
 		return "", "", err
 	}
 
 	dbtoken, err := s.Database.GetRefreshToken(ctx, userid)
 	if err != nil {
+		s.Logger.Error(fmt.Sprintf("Failed to get refresh token from database: %v", err))
 		return "", "", err
 	}
 
@@ -27,20 +28,17 @@ func (s *CoreAuthContext) RefreshToken(ctx context.Context, token string) (acces
 		return "", "", fmt.Errorf("tokens dont match")
 	}
 
-	accessToken, err = s.TokenConfig.GenerateToken(userid, time.Now().Add(1*time.Hour), tk.ACCESS_TOKEN)
+	accessToken, refreshToken, err = s.generateTokens(userid)
 	if err != nil {
-		return "", "", err
-	}
-
-	refreshToken, err = s.TokenConfig.GenerateToken(userid, time.Now().Add(720*time.Hour), tk.REFRESH_TOKEN)
-	if err != nil {
-		return "", "", err
+		return "", "", fmt.Errorf("failed to generate tokens")
 	}
 
 	err = s.Database.UpdateRefreshToken(ctx, userid, refreshToken)
 	if err != nil {
+		s.Logger.Error(fmt.Sprintf("Failed to update refresh token in database: %v", err))
 		return "", "", err
 	}
 
+	s.Logger.Info(fmt.Sprintf("Successfully refreshed tokens for user: %s", userid))
 	return
 }

@@ -14,8 +14,10 @@ import (
 	"time"
 
 	coreAuth "github.com/gopher93185789/luxora/server/core/auth"
+	"github.com/gopher93185789/luxora/server/core/store"
 	"github.com/gopher93185789/luxora/server/database/postgres"
 	"github.com/gopher93185789/luxora/server/docs"
+	"github.com/gopher93185789/luxora/server/pkg/logger"
 	"github.com/gopher93185789/luxora/server/pkg/middleware"
 	"github.com/gopher93185789/luxora/server/pkg/token"
 	auth "github.com/gopher93185789/luxora/server/transport"
@@ -52,8 +54,15 @@ func main() {
 		log.Fatalln("Failed to connect to database: " + err.Error())
 	}
 
+	mcf := middleware.New(&token.BstConfig{SecretKey: []byte(config.TokenSigningKey)})
+
+	logger := logger.New(os.Stdout, &logger.LoggerOpts{
+		BufferSize: 2048,
+	})
+
 	tx := &auth.TransportConfig{
 		CoreAuth: &coreAuth.CoreAuthContext{
+			Logger: logger,
 			GithubConfig: &oauth2.Config{
 				ClientID:     config.GithubClient,
 				ClientSecret: config.GithubSecret,
@@ -74,6 +83,14 @@ func main() {
 			Database:   pool,
 			OauthState: "w;iudfiuweiuvhw;hriujwiriwhre",
 		},
+
+		CoreStore: &store.CoreStoreContext{
+			Logger: logger,
+			Database: pool,
+		},
+
+		Middleware: mcf,
+		Logger: logger,
 	}
 
 	scalPass := &docs.ScalarRoute{
@@ -83,8 +100,6 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /ping", Ping)
-
-	mcf := middleware.New(&token.BstConfig{SecretKey: []byte(config.TokenSigningKey)})
 
 	mux.HandleFunc("GET /ref", scalPass.RegisterScalarDocs)
 
