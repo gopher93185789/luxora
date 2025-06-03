@@ -1,13 +1,13 @@
 import { Link } from "@remix-run/react";
 import { motion } from "framer-motion";
 import { useHref } from "@remix-run/react";
+import { useState } from "react";
 
 
 const navLinks = [
     { to: "/dashboard", label: "Dashboard" },
     { to: "/dashboard/listings", label: "Listings"},
-    { to: "/dashboard/products", label: "Products"},
-    { to: "/dashboard/settings", label: "Settings"},
+    { to: "/dashboard/profile", label: "Profile"},
 ];
 
 const sidebarVariants = {
@@ -23,40 +23,34 @@ const itemVariants = {
 
 
 export function Sidebar() {
-    const currentPath = useHref(
-        (typeof window !== "undefined" && window.location.pathname) || ""
-    );
-    const isActive = (to: string) => currentPath === to;
+    const [currPath, setCurrPath] = useState<string>("Dashboard")
 
     return (
-        <motion.div
-            className="w-64 text-white min-h-screen p-4"
-            initial="hidden"
-            animate="visible"
-            variants={sidebarVariants}
-        >
-            <nav className="flex flex-col gap-2">
-                <ul className="flex flex-col gap-2">
-                    {navLinks.map((link, idx) => (
-                        <motion.li
-                            key={link.to}
-                            className={idx === 0 ? "mb-4" : ""}
-                            variants={itemVariants}
-                        >
-                            <Link
-                                to={link.to}
-                                className="block px-6 py-2 text-2xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all hover:bg-accent/20 font-family"
-                                // style={{
-                                //     backgroundColor: isActive(link.to) ? "rgba(255, 255, 255, 0.1)" : "transparent",
-                                //     color: isActive(link.to) ? "#fff" : "inherit",
-                                // }}
-                            >
-                                {link.label}
-                            </Link>
-                        </motion.li>
-                    ))}
-                </ul>
-            </nav>
-        </motion.div>
+      <motion.div
+        className="w-64 bg-primary select-none text-text-primary h-screen p-4"
+        initial="hidden"
+        animate="visible"
+        variants={sidebarVariants}
+      >
+        <nav className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-2">
+            {navLinks.map((link, idx) => (
+              <motion.li key={link.to} variants={itemVariants}>
+                <Link
+                  onClick={() => setCurrPath(link.label)}
+                  to={link.to}
+                  className={`block px-6 py-2 text-2xl ${
+                    currPath === link.label
+                      ? "text-text-primary"
+                      : "text-text-primary/50 hover:text-text-primary"
+                  } duration-200 ease-in-out rounded-lg transition-all hover:bg-accent/20 font-family`}
+                >
+                  {link.label}
+                </Link>
+              </motion.li>
+            ))}
+          </ul>
+        </nav>
+      </motion.div>
     );
 }

@@ -19,14 +19,16 @@ export async function loader(lfa: LoaderFunctionArgs) {
 
 export default function Dashboard() {
   const { requireRefresh, user } = useLoaderData<typeof loader>();
-  const [data, setData] = useState<UserDetails | undefined>(!requireRefresh ? user : undefined);
+  const [data, setData] = useState<UserDetails | undefined>(
+    !requireRefresh ? user : undefined
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
     const handle = async () => {
       if (!requireRefresh) return;
 
-      console.log("defaulting to csr")
+      console.log("defaulting to csr");
       try {
         const rt = await Refresh();
         if (rt !== 200) throw new Error("Failed to refresh");
@@ -54,15 +56,20 @@ export default function Dashboard() {
   }, [requireRefresh, navigate]);
 
   return (
-    <div className="flex flex-col gap-5">
-      <h1>Welkom, {data?.username}!</h1>
-      <img
-        src={data?.profile_image_link}
-        alt="Profielfoto"
-        style={{ borderRadius: "50%", width: 100, height: 100 }}
-      />
-      {data?.email.String === "" ? null : <p>Email: {data?.email.String}</p>}
-    </div>
-    // <pre className="text-white">{JSON.stringify(data || user, null, 2)}</pre>
+    <>
+      <div className="flex h-full w-full flex-col gap-5">
+        <h1>Welkom, {data?.username}!</h1>
+        <img
+          src={data?.profile_image_link}
+          alt="Profielfoto"
+          style={{ borderRadius: "50%", width: 100, height: 100 }}
+        />
+        {data?.email.String === "" ? null : <p>Email: {data?.email.String}</p>}
+      </div>
+
+      <div className="h-screen w-full"></div>
+      <div className="h-screen w-full"></div>
+      <div className="h-screen w-full"></div>
+    </>
   );
 }

@@ -22,7 +22,6 @@ export const links: LinksFunction = () => [
   },
 ];
 
-
 // export function ErrorBoundary() {
 //   const error = useRouteError();
 
@@ -48,7 +47,6 @@ export const links: LinksFunction = () => [
 //   }
 // }
 
-
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -59,7 +57,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="bg-black text-white">
+      <body className="bg-black text-white overscroll-none">
         {children}
         <ScrollRestoration />
         <Scripts />

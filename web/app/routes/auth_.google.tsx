@@ -29,7 +29,7 @@ export default function GoogleHandler() {
           body: JSON.stringify({ tk }),
         });
 
-        navigate("/dashboard/marketplace");
+        navigate("/dashboard");
       } catch {
         navigate("/auth");
       }

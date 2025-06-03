@@ -1,3 +1,5 @@
-export default function ListingsPage() {
-  return <h2>Listings Page</h2>;
+export default function Listings() {
+  return <>
+  <p>nigger</p>
+  </>
 }

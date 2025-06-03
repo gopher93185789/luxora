@@ -30,7 +30,7 @@ export default function GithubHandler() {
           body: JSON.stringify({ tk }),
         });
 
-        navigate("/dashboard/marketplace");
+        navigate("/dashboard");
       } catch {
         navigate("/auth");
       }
