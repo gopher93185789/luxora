@@ -15,7 +15,6 @@ func (s *CoreAuthContext) handleGoogleOauthSignup(ctx context.Context, providerI
 		return "", "", err
 	}
 
-
 	accessToken, refreshToken, err = s.generateTokens(uid)
 	if err != nil {
 		s.Logger.Error(fmt.Sprintf("Failed to generate tokens: %v", err))

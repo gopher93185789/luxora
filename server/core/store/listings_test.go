@@ -2,10 +2,12 @@ package store
 
 import (
 	"context"
+	"os"
 	"testing"
 	"time"
 
 	"github.com/gopher93185789/luxora/server/database/postgres"
+	"github.com/gopher93185789/luxora/server/pkg/logger"
 	"github.com/gopher93185789/luxora/server/pkg/models"
 	"github.com/gopher93185789/luxora/server/pkg/testutils"
 	"github.com/shopspring/decimal"
@@ -22,6 +24,7 @@ func TestCreateNewListing(t *testing.T) {
 		Database: &postgres.Postgres{
 			Pool: conn,
 		},
+		Logger: logger.New(os.Stdout),
 	}
 
 	price, err := decimal.NewFromString("19.99")
@@ -80,6 +83,7 @@ func TestGetListings(t *testing.T) {
 		Database: &postgres.Postgres{
 			Pool: pool,
 		},
+		Logger: logger.New(os.Stdout),
 	}
 
 	id, err := c.Database.InsertOauthUser(ctx, "diddy", "github", "hwllo", "")

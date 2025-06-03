@@ -7,6 +7,5 @@ import (
 
 type CoreStoreContext struct {
 	Database database.Database
-	Logger *logger.Logger
-
+	Logger   *logger.Logger
 }

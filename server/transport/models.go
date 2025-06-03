@@ -12,7 +12,7 @@ type TransportConfig struct {
 	CoreAuth   *auth.CoreAuthContext
 	CoreStore  *store.CoreStoreContext
 	Middleware *middleware.AuthMiddleWareConfig
-	Logger *logger.Logger
+	Logger     *logger.Logger
 }
 
 type AccessTokenResponse struct {

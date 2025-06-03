@@ -1,10 +1,12 @@
 package store
 
 import (
+	"os"
 	"testing"
 
 	"github.com/google/uuid"
 	"github.com/gopher93185789/luxora/server/database/postgres"
+	"github.com/gopher93185789/luxora/server/pkg/logger"
 	"github.com/gopher93185789/luxora/server/pkg/models"
 	"github.com/gopher93185789/luxora/server/pkg/testutils"
 	"github.com/shopspring/decimal"
@@ -21,6 +23,7 @@ func TestCreateNewBid(t *testing.T) {
 		Database: &postgres.Postgres{
 			Pool: conn,
 		},
+		Logger: logger.New(os.Stdout),
 	}
 
 	price, err := decimal.NewFromString("19.99")
@@ -91,6 +94,7 @@ func TestGetHighestBid(t *testing.T) {
 		Database: &postgres.Postgres{
 			Pool: conn,
 		},
+		Logger: logger.New(os.Stdout),
 	}
 
 	price, err := decimal.NewFromString("19.99")
@@ -177,6 +181,7 @@ func TestGetBids(t *testing.T) {
 		Database: &postgres.Postgres{
 			Pool: pool,
 		},
+		Logger: logger.New(os.Stdout),
 	}
 
 	id, err := c.Database.InsertOauthUser(t.Context(), "diddy", "github", "hwllo", "")

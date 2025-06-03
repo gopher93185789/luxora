@@ -85,12 +85,12 @@ func main() {
 		},
 
 		CoreStore: &store.CoreStoreContext{
-			Logger: logger,
+			Logger:   logger,
 			Database: pool,
 		},
 
 		Middleware: mcf,
-		Logger: logger,
+		Logger:     logger,
 	}
 
 	scalPass := &docs.ScalarRoute{

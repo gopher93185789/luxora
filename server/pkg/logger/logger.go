@@ -6,7 +6,6 @@ import (
 	"io"
 	"sync"
 	"time"
-
 )
 
 type Logger struct {
@@ -21,6 +20,13 @@ type Logger struct {
 
 const (
 	DEFAULT_BUFFER_SIZE int = 1024
+
+	Reset   = "\033[0m"
+	Blue    = "\033[34m"
+	Cyan    = "\033[36m"
+	Yellow  = "\033[33m"
+	Red     = "\033[31m"
+	Magenta = "\033[35m"
 )
 
 type LoggerOpts struct {
@@ -97,46 +103,46 @@ func (l *Logger) Close() {
 }
 
 func (l *Logger) Info(msg string) {
+	level := fmt.Sprintf("%s[INFO]%s", Blue, Reset)
 	if l.isOpen {
-		l.ch <- fmt.Sprintf("%v - [INFO] - %v\n", time.Now(), msg)
+		l.ch <- fmt.Sprintf("%v - %v - %v\n", time.Now(), level, msg)
 		return
 	}
-
-	fmt.Printf("%v - [INFO] - %v\n", time.Now(), msg)
+	fmt.Printf("%v - %v - %v\n", time.Now(), level, msg)
 }
 
 func (l *Logger) Debug(msg string) {
+	level := fmt.Sprintf("%s[DEBUG]%s", Cyan, Reset)
 	if l.isOpen {
-		l.ch <- fmt.Sprintf("%v - [DEBUG] - %v\n", time.Now(), msg)
+		l.ch <- fmt.Sprintf("%v - %v - %v\n", time.Now(), level, msg)
 		return
 	}
-
-	fmt.Printf("%v - [DEBUG] - %v\n", time.Now(), msg)
+	fmt.Printf("%v - %v - %v\n", time.Now(), level, msg)
 }
 
 func (l *Logger) Warn(msg string) {
+	level := fmt.Sprintf("%s[WARN]%s", Yellow, Reset)
 	if l.isOpen {
-		l.ch <- fmt.Sprintf("%v - [WARN] - %v\n", time.Now(), msg)
+		l.ch <- fmt.Sprintf("%v - %v - %v\n", time.Now(), level, msg)
 		return
 	}
-
-	fmt.Printf("%v - [WARN] - %v\n", time.Now(), msg)
+	fmt.Printf("%v - %v - %v\n", time.Now(), level, msg)
 }
 
 func (l *Logger) Error(msg string) {
+	level := fmt.Sprintf("%s[ERROR]%s", Red, Reset)
 	if l.isOpen {
-		l.ch <- fmt.Sprintf("%v - [ERROR] - %v\n", time.Now(), msg)
+		l.ch <- fmt.Sprintf("%v - %v - %v\n", time.Now(), level, msg)
 		return
 	}
-
-	fmt.Printf("%v - [ERROR] - %v\n", time.Now(), msg)
+	fmt.Printf("%v - %v - %v\n", time.Now(), level, msg)
 }
 
 func (l *Logger) Fatal(msg string) {
+	level := fmt.Sprintf("%s[FATAL]%s", Magenta, Reset)
 	if l.isOpen {
-		l.ch <- fmt.Sprintf("%v - [FATAL] - %v\n", time.Now(), msg)
+		l.ch <- fmt.Sprintf("%v - %v - %v\n", time.Now(), level, msg)
 		return
 	}
-
-	fmt.Printf("%v - [FATAL] - %v\n", time.Now(), msg)
+	fmt.Printf("%v - %v - %v\n", time.Now(), level, msg)
 }
