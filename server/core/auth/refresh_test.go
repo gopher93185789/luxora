@@ -1,10 +1,12 @@
 package auth
 
 import (
+	"os"
 	"testing"
 	"time"
 
 	"github.com/gopher93185789/luxora/server/database/postgres"
+	"github.com/gopher93185789/luxora/server/pkg/logger"
 	"github.com/gopher93185789/luxora/server/pkg/testutils"
 	"github.com/gopher93185789/luxora/server/pkg/token"
 )
@@ -23,6 +25,7 @@ func TestRefreshToken(t *testing.T) {
 		TokenConfig: token.BstConfig{
 			SecretKey: []byte("skjvkfbvdkfhvjfvkjf"),
 		},
+		Logger: logger.New(os.Stdout),
 	}
 
 	uid, err := c.Database.InsertUser(t.Context(), "dffdf@dkjfdj.com", "sfksuhuv", "google", "")
