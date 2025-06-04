@@ -2,6 +2,8 @@ package postgres
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"github.com/google/uuid"
 	"github.com/gopher93185789/luxora/server/pkg/models"
@@ -57,4 +59,37 @@ func (p *Postgres) UpdateItemSoldViaCheckout(ctx context.Context, buyerID uuid.U
 	}
 
 	return tx.Commit(ctx)
+}
+
+func (p *Postgres) UpdateItemListing(ctx context.Context, userID uuid.UUID, update *models.UpdateProduct) (err error) {
+	var (
+		args                     = []any{}
+		queries                  = []string{}
+		builder *strings.Builder = &strings.Builder{}
+	)
+
+	builder.WriteString("UPDATE luxora_product SET ")
+
+	if update.Category != "" {
+		args = append(args, update.Category)
+		queries = append(queries, fmt.Sprintf(" category=$%v", len(args)))
+	}
+	if update.Description != "" {
+		args = append(args, update.Description)
+		queries = append(queries, fmt.Sprintf(" description=$%v", len(args)))
+	}
+	if update.Name != "" {
+		args = append(args, update.Name)
+		queries = append(queries, fmt.Sprintf(" name=$%v", len(args)))
+	}
+
+	builder.WriteString(strings.Join(queries, ","))
+	args = append(args, userID)
+	builder.WriteString(fmt.Sprintf(" WHERE item_id=$%v", len(args)))
+
+	fmt.Println(builder.String())
+
+	_, err = p.Pool.Exec(ctx, builder.String(), args...)
+
+	return
 }

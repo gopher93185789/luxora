@@ -217,3 +217,34 @@ func (t *TransportConfig) Checkout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// @Summary      Update a product listing
+// @Description  This endpoint allows users to update their product listings. The request body must contain the update details in JSON format.
+// @Tags         listings
+// @Accept       json
+// @Produce      json
+// @Param        product        body    models.UpdateProduct  true  "Product update details"
+// @Param        Authorization  header  string               true  "Access token"
+// @Success      200           {string} string              "Product updated successfully"
+// @Failure      422           {object} errs.ErrorResponse  "Unprocessable entity - invalid JSON payload"
+// @Failure      500           {object} errs.ErrorResponse  "Internal server error"
+// @Router       /listings [PATCH]
+func (t *TransportConfig) UpdateListing(w http.ResponseWriter, r *http.Request) {
+	var info models.UpdateProduct
+	if err := json.NewDecoder(r.Body).Decode(&info); err != nil {
+		errs.ErrorWithJson(w, http.StatusUnprocessableEntity, "failed to decode json payload")
+		return
+	}
+
+	uid, err := middleware.GetTokenFromRequest(r)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+		return
+	}
+
+	err = t.CoreStore.UpdateProduct(r.Context(), uid, &info)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+}

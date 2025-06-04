@@ -38,7 +38,7 @@ func Ping(w http.ResponseWriter, r *http.Request) {
 }
 
 //	@title			Luxora Marketplace API
-//	@version		0.8.0
+//	@version		1.2.1
 //	@description	Luxora is a secure, modern backend API for managing listings, bids, and authentication with OAuth2 providers. This API powers the Luxora marketplace platform, enabling seamless user authentication, listing management, and bidding workflows.
 //	@host	api.luxoras.nl
 //
@@ -57,7 +57,8 @@ func main() {
 	mcf := middleware.New(&token.BstConfig{SecretKey: []byte(config.TokenSigningKey)})
 
 	logger := logger.New(os.Stdout, &logger.LoggerOpts{
-		BufferSize: 2048,
+		BufferSize: 512,
+		ChanBuffer: 1000,
 	})
 
 	tx := &auth.TransportConfig{
@@ -117,6 +118,7 @@ func main() {
 	mux.HandleFunc("POST /listing/bid", mcf.AuthMiddleware(tx.CreateBid))
 	mux.HandleFunc("POST /listings", mcf.AuthMiddleware(tx.CreateNewListing))
 	mux.HandleFunc("GET /listings", mcf.AuthMiddleware(tx.GetListings))
+	mux.HandleFunc("PATCH /listings", mcf.AuthMiddleware(tx.UpdateListing))
 	mux.HandleFunc("DELETE /listings", mcf.AuthMiddleware(tx.DeleteListing))
 	mux.HandleFunc("GET /listings/highest-bid", mcf.AuthMiddleware(tx.GetHighestBid))
 	mux.HandleFunc("GET /listings/bids", mcf.AuthMiddleware(tx.GetBids))

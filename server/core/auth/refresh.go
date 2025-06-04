@@ -12,7 +12,6 @@ func (s *CoreAuthContext) RefreshToken(ctx context.Context, token string) (acces
 		return "", "", fmt.Errorf("no token provided")
 	}
 
-
 	userid, err := s.TokenConfig.VerifyToken(token, tk.REFRESH_TOKEN)
 	if err != nil {
 		s.Logger.Error(fmt.Sprintf("Token verification failed: %v", err))

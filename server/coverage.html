@@ -1,0 +1,2813 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>server: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/gopher93185789/luxora/server/cert_reload.go (0.0%)</option>
+				
+				<option value="file1">github.com/gopher93185789/luxora/server/config.go (0.0%)</option>
+				
+				<option value="file2">github.com/gopher93185789/luxora/server/core/auth/github.go (0.0%)</option>
+				
+				<option value="file3">github.com/gopher93185789/luxora/server/core/auth/google.go (0.0%)</option>
+				
+				<option value="file4">github.com/gopher93185789/luxora/server/core/auth/helpers.go (71.4%)</option>
+				
+				<option value="file5">github.com/gopher93185789/luxora/server/core/auth/profile.go (0.0%)</option>
+				
+				<option value="file6">github.com/gopher93185789/luxora/server/core/auth/refresh.go (57.1%)</option>
+				
+				<option value="file7">github.com/gopher93185789/luxora/server/core/store/bidding.go (65.5%)</option>
+				
+				<option value="file8">github.com/gopher93185789/luxora/server/core/store/listings.go (30.2%)</option>
+				
+				<option value="file9">github.com/gopher93185789/luxora/server/database/postgres/delete.go (54.5%)</option>
+				
+				<option value="file10">github.com/gopher93185789/luxora/server/database/postgres/insert.go (73.2%)</option>
+				
+				<option value="file11">github.com/gopher93185789/luxora/server/database/postgres/models.go (0.0%)</option>
+				
+				<option value="file12">github.com/gopher93185789/luxora/server/database/postgres/read.go (78.7%)</option>
+				
+				<option value="file13">github.com/gopher93185789/luxora/server/database/postgres/update.go (72.7%)</option>
+				
+				<option value="file14">github.com/gopher93185789/luxora/server/docs/scalar.go (0.0%)</option>
+				
+				<option value="file15">github.com/gopher93185789/luxora/server/main.go (0.0%)</option>
+				
+				<option value="file16">github.com/gopher93185789/luxora/server/pkg/compressions/zstd.go (83.3%)</option>
+				
+				<option value="file17">github.com/gopher93185789/luxora/server/pkg/error/helper.go (0.0%)</option>
+				
+				<option value="file18">github.com/gopher93185789/luxora/server/pkg/logger/logger.go (0.0%)</option>
+				
+				<option value="file19">github.com/gopher93185789/luxora/server/pkg/middleware/auth.go (0.0%)</option>
+				
+				<option value="file20">github.com/gopher93185789/luxora/server/pkg/middleware/cors.go (0.0%)</option>
+				
+				<option value="file21">github.com/gopher93185789/luxora/server/pkg/testutils/mockPostgres.go (0.0%)</option>
+				
+				<option value="file22">github.com/gopher93185789/luxora/server/pkg/token/token.go (0.0%)</option>
+				
+				<option value="file23">github.com/gopher93185789/luxora/server/transport/auth.go (0.0%)</option>
+				
+				<option value="file24">github.com/gopher93185789/luxora/server/transport/bidding.go (0.0%)</option>
+				
+				<option value="file25">github.com/gopher93185789/luxora/server/transport/listings.go (0.0%)</option>
+				
+				<option value="file26">github.com/gopher93185789/luxora/server/transport/redirect.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        "crypto/sha256"
+        "crypto/tls"
+        "io"
+        "log"
+        "os"
+        "slices"
+        "sync"
+        "time"
+)
+
+type CertReloader struct {
+        mu           sync.RWMutex
+        cert         *tls.Certificate
+        CertFileHash []byte
+        KeyFileHash  []byte
+}
+
+func NewCertReloader(certPath, keyPath string) (*CertReloader, error) <span class="cov0" title="0">{
+        cert, err := tls.LoadX509KeyPair(certPath, keyPath)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">ch, err := generateFileHash(certPath)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">kh, err := generateFileHash(keyPath)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;CertReloader{cert: &amp;cert, CertFileHash: ch, KeyFileHash: kh}, nil</span>
+}
+
+func (cr *CertReloader) GetCertificate(*tls.ClientHelloInfo) (*tls.Certificate, error) <span class="cov0" title="0">{
+        cr.mu.RLock()
+        defer cr.mu.RUnlock()
+        return cr.cert, nil
+}</span>
+
+func generateFileHash(filePath string) (hash []byte, err error) <span class="cov0" title="0">{
+        file, err := os.Open(filePath)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">defer file.Close()
+
+        hasher := sha256.New()
+
+        if _, err := io.Copy(hasher, file); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return hasher.Sum(nil), nil</span>
+
+}
+
+func (cr *CertReloader) WatchCertificate(certPath, keyPath string, interval time.Duration) <span class="cov0" title="0">{
+        go func() </span><span class="cov0" title="0">{
+                t := time.NewTicker(interval)
+
+                for range t.C </span><span class="cov0" title="0">{
+                        ch, err := generateFileHash(certPath)
+                        if err != nil </span><span class="cov0" title="0">{
+                                continue</span>
+                        }
+
+                        <span class="cov0" title="0">kh, err := generateFileHash(keyPath)
+                        if err != nil </span><span class="cov0" title="0">{
+                                continue</span>
+                        }
+
+                        <span class="cov0" title="0">if slices.Compare(ch, cr.CertFileHash) == 0 &amp;&amp; slices.Compare(kh, cr.KeyFileHash) == 0 </span><span class="cov0" title="0">{
+                                continue</span>
+                        }
+
+                        <span class="cov0" title="0">cert, err := tls.LoadX509KeyPair(certPath, keyPath)
+                        if err != nil </span><span class="cov0" title="0">{
+                                log.Printf("failed to reload cert: %v", err)
+                                continue</span>
+                        }
+
+                        <span class="cov0" title="0">cr.mu.Lock()
+                        cr.CertFileHash = ch
+                        cr.KeyFileHash = kh
+                        cr.cert = &amp;cert
+                        cr.mu.Unlock()
+                        log.Println("TLS certificate reloaded")</span>
+                }
+        }()
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package main
+
+import (
+        "fmt"
+        "os"
+)
+
+const (
+        DEV uint8 = iota
+        PROD
+)
+
+type Config struct {
+        Env                uint8
+        Port               string
+        DSN                string
+        TlsCertFilePath    string
+        TlsKeyFilePath     string
+        GithubClient       string
+        GithubSecret       string
+        GithubRedirect     string
+        GoogleClient       string
+        GoogleSecret       string
+        GoogleRedirect     string
+        TokenEncryptionKey string
+        TokenSigningKey    string
+        ScalarPassword     string
+        ScalarFilePath     string
+        AllowedOrigin      string
+}
+
+func GetServerConfig() (*Config, error) <span class="cov0" title="0">{
+        config := &amp;Config{}
+
+        envVars := map[string]*string{
+                "PORT":                 &amp;config.Port,
+                "TLS_CERT_FILE_PATH":   &amp;config.TlsCertFilePath,
+                "TLS_KEY_FILE_PATH":    &amp;config.TlsKeyFilePath,
+                "DSN":                  &amp;config.DSN,
+                "GITHUB_CLIENT_ID":     &amp;config.GithubClient,
+                "GITHUB_CLIENT_SECRET": &amp;config.GithubSecret,
+                "GITHUB_REDIRECT_URL":  &amp;config.GithubRedirect,
+                "GOOGLE_CLIENT_ID":     &amp;config.GoogleClient,
+                "GOOGLE_CLIENT_SECRET": &amp;config.GoogleSecret,
+                "GOOGLE_REDIRECT_URL":  &amp;config.GoogleRedirect,
+                "TOKEN_ENCRYPTION_KEY": &amp;config.TokenEncryptionKey,
+                "TOKEN_SIGNING_KEY":    &amp;config.TokenSigningKey,
+                "SCALAR_PASSWORD":      &amp;config.ScalarPassword,
+                "SCALAR_FILEPATH":      &amp;config.ScalarFilePath,
+                "ALLOWED_ORIGIN":       &amp;config.AllowedOrigin,
+        }
+
+        missingVars := []string{}
+
+        for key, ref := range envVars </span><span class="cov0" title="0">{
+                val := os.Getenv(key)
+                if val == "" </span><span class="cov0" title="0">{
+                        missingVars = append(missingVars, key)
+                }</span> else<span class="cov0" title="0"> {
+                        if key == "PORT" </span><span class="cov0" title="0">{
+                                *ref = ":" + val
+                        }</span> else<span class="cov0" title="0"> {
+                                *ref = val
+                        }</span>
+                }
+        }
+
+        <span class="cov0" title="0">if len(missingVars) &gt; 0 </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("missing environment variables: %v", missingVars)
+        }</span>
+
+        <span class="cov0" title="0">if config.Port == ":443" </span><span class="cov0" title="0">{
+                config.Env = PROD
+        }</span> else<span class="cov0" title="0"> {
+                config.Env = DEV
+        }</span>
+
+        <span class="cov0" title="0">return config, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package auth
+
+import (
+        "context"
+        "encoding/json"
+        "fmt"
+        "strconv"
+)
+
+func (s *CoreAuthContext) handleOauthSignup(ctx context.Context, username, providerID, profileImageLink string) (accessToken, refreshToken string, err error) <span class="cov0" title="0">{
+        if len(username) == 0 </span><span class="cov0" title="0">{
+                return "", "", fmt.Errorf("invalid username")
+        }</span>
+
+        <span class="cov0" title="0">uid, err := s.Database.InsertOauthUser(ctx, username, "github", providerID, profileImageLink)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Failed to insert OAuth user: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov0" title="0">accessToken, refreshToken, err = s.generateTokens(uid)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Failed to generate tokens: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov0" title="0">err = s.Database.UpdateRefreshToken(ctx, uid, refreshToken)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Failed to update refresh token: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov0" title="0">s.Logger.Info(fmt.Sprintf("Successfully completed OAuth signup for user: %s", username))
+        return accessToken, refreshToken, err</span>
+}
+
+func (s *CoreAuthContext) HandleGithubOauth(ctx context.Context, code string) (accessToken, refreshToken string, err error) <span class="cov0" title="0">{
+        if code == "" </span><span class="cov0" title="0">{
+                return "", "", fmt.Errorf("invalid exchange code")
+        }</span>
+
+        <span class="cov0" title="0">token, err := s.GithubConfig.Exchange(ctx, code)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("GitHub token exchange failed: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov0" title="0">client := s.GithubConfig.Client(context.Background(), token)
+        resp, err := client.Get("https://api.github.com/user")
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Failed to fetch GitHub user details: %v", err))
+                return "", "", err
+        }</span>
+        <span class="cov0" title="0">defer resp.Body.Close()
+
+        var user GithubUserDetails
+        if err := json.NewDecoder(resp.Body).Decode(&amp;user); err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Failed to decode GitHub user details: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov0" title="0">pidn := strconv.Itoa(user.ProviderID)
+        s.Logger.Debug(fmt.Sprintf("Looking up user with GitHub ID: %s", pidn))
+
+        id, err := s.Database.GetOauthUserIdByProviderID(ctx, pidn)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Info(fmt.Sprintf("User not found, starting OAuth signup flow for GitHub user: %s", user.Login))
+                accessToken, refreshToken, err = s.handleOauthSignup(ctx, user.Login, pidn, user.ProfileImageLink)
+                if err != nil </span><span class="cov0" title="0">{
+                        return "", "", err
+                }</span>
+
+                <span class="cov0" title="0">return accessToken, refreshToken, nil</span>
+        }
+
+        <span class="cov0" title="0">s.Logger.Debug(fmt.Sprintf("Generating new tokens for existing user: %s", id))
+        accessToken, refreshToken, err = s.generateTokens(id)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Failed to generate tokens: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov0" title="0">err = s.Database.UpdateRefreshToken(ctx, id, refreshToken)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Failed to update refresh token: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov0" title="0">s.Logger.Info(fmt.Sprintf("Successfully completed GitHub OAuth flow for user ID: %s", id))
+        return accessToken, refreshToken, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package auth
+
+import (
+        "context"
+        "encoding/json"
+        "fmt"
+
+        "github.com/google/uuid"
+)
+
+func (s *CoreAuthContext) handleGoogleOauthSignup(ctx context.Context, providerID, profileImageLink string) (accessToken, refreshToken string, err error) <span class="cov0" title="0">{
+        uid, err := s.Database.InsertOauthUser(ctx, "Anonymous"+uuid.New().String(), "github", providerID, profileImageLink)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Failed to insert Google OAuth user: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov0" title="0">accessToken, refreshToken, err = s.generateTokens(uid)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Failed to generate tokens: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov0" title="0">err = s.Database.UpdateRefreshToken(ctx, uid, refreshToken)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Failed to update refresh token: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov0" title="0">s.Logger.Info(fmt.Sprintf("Successfully completed Google OAuth signup for user: %s", uid))
+        return accessToken, refreshToken, err</span>
+}
+
+func (s *CoreAuthContext) HandleGoogleOauth(ctx context.Context, code string) (accessToken, refreshToken string, err error) <span class="cov0" title="0">{
+        if code == "" </span><span class="cov0" title="0">{
+                return "", "", fmt.Errorf("invalid exchange code")
+        }</span>
+
+        <span class="cov0" title="0">token, err := s.GoogleConfig.Exchange(ctx, code)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Google token exchange failed: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov0" title="0">client := s.GoogleConfig.Client(context.Background(), token)
+        resp, err := client.Get("https://www.googleapis.com/oauth2/v2/userinfo")
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Failed to fetch Google user details: %v", err))
+                return "", "", err
+        }</span>
+        <span class="cov0" title="0">defer resp.Body.Close()
+
+        var user GoogleUserDetails
+        if err := json.NewDecoder(resp.Body).Decode(&amp;user); err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Failed to decode Google user details: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov0" title="0">if !user.VerifiedEmail </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("User email not verified on Google: %s", user.Email))
+                return "", "", fmt.Errorf("user is not verified on google")
+        }</span>
+
+        <span class="cov0" title="0">s.Logger.Debug(fmt.Sprintf("Looking up user with Google ID: %s", user.ProviderID))
+        _, id, err := s.Database.GetIsUsernameAndIDByProviderID(ctx, user.ProviderID)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Info("User not found, starting Google OAuth signup flow")
+                accessToken, refreshToken, err = s.handleGoogleOauthSignup(ctx, user.ProviderID, user.Picture)
+                if err != nil </span><span class="cov0" title="0">{
+                        return "", "", err
+                }</span>
+
+                <span class="cov0" title="0">return accessToken, refreshToken, nil</span>
+        }
+
+        <span class="cov0" title="0">s.Logger.Debug(fmt.Sprintf("Generating new tokens for existing user: %s", id))
+        accessToken, refreshToken, err = s.generateTokens(id)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Failed to generate tokens: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov0" title="0">err = s.Database.UpdateRefreshToken(ctx, id, refreshToken)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Failed to update refresh token: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov0" title="0">s.Logger.Info(fmt.Sprintf("Successfully completed Google OAuth flow for user ID: %s", id))
+        return accessToken, refreshToken, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package auth
+
+import (
+        "time"
+
+        "github.com/google/uuid"
+        "github.com/gopher93185789/luxora/server/pkg/token"
+)
+
+func (s *CoreAuthContext) generateTokens(userID uuid.UUID) (accessToken, refreshToken string, err error) <span class="cov8" title="1">{
+        accessToken, err = s.TokenConfig.GenerateToken(userID, time.Now().Add(1*time.Hour), token.ACCESS_TOKEN)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", "", err
+        }</span>
+
+        <span class="cov8" title="1">refreshToken, err = s.TokenConfig.GenerateToken(userID, time.Now().Add(720*time.Hour), token.REFRESH_TOKEN)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", "", err
+        }</span>
+
+        <span class="cov8" title="1">return accessToken, refreshToken, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package auth
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/google/uuid"
+        "github.com/gopher93185789/luxora/server/pkg/models"
+)
+
+func (c *CoreAuthContext) GetUserInfo(ctx context.Context, userID uuid.UUID) (details models.UserDetails, err error) <span class="cov0" title="0">{
+        details, err = c.Database.GetUserDetails(ctx, userID)
+        if err != nil </span><span class="cov0" title="0">{
+                c.Logger.Error(fmt.Sprintf("Failed to get user details: %v", err))
+                return details, err
+        }</span>
+        <span class="cov0" title="0">return details, nil</span>
+}
+
+func (c *CoreAuthContext) Logout(ctx context.Context, userID uuid.UUID) (err error) <span class="cov0" title="0">{
+        err = c.Database.UpdateRefreshToken(ctx, userID, "")
+        if err != nil </span><span class="cov0" title="0">{
+                c.Logger.Error(fmt.Sprintf("Failed to clear refresh token during logout: %v", err))
+                return err
+        }</span>
+        <span class="cov0" title="0">c.Logger.Info(fmt.Sprintf("Successfully logged out user: %s", userID))
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package auth
+
+import (
+        "context"
+        "fmt"
+
+        tk "github.com/gopher93185789/luxora/server/pkg/token"
+)
+
+func (s *CoreAuthContext) RefreshToken(ctx context.Context, token string) (accessToken, refreshToken string, err error) <span class="cov8" title="1">{
+        if token == "" </span><span class="cov0" title="0">{
+                return "", "", fmt.Errorf("no token provided")
+        }</span>
+
+        <span class="cov8" title="1">userid, err := s.TokenConfig.VerifyToken(token, tk.REFRESH_TOKEN)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Token verification failed: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov8" title="1">dbtoken, err := s.Database.GetRefreshToken(ctx, userid)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Failed to get refresh token from database: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov8" title="1">if token != dbtoken </span><span class="cov0" title="0">{
+                return "", "", fmt.Errorf("tokens dont match")
+        }</span>
+
+        <span class="cov8" title="1">accessToken, refreshToken, err = s.generateTokens(userid)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", "", fmt.Errorf("failed to generate tokens")
+        }</span>
+
+        <span class="cov8" title="1">err = s.Database.UpdateRefreshToken(ctx, userid, refreshToken)
+        if err != nil </span><span class="cov0" title="0">{
+                s.Logger.Error(fmt.Sprintf("Failed to update refresh token in database: %v", err))
+                return "", "", err
+        }</span>
+
+        <span class="cov8" title="1">s.Logger.Info(fmt.Sprintf("Successfully refreshed tokens for user: %s", userid))
+        return</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package store
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/google/uuid"
+        "github.com/gopher93185789/luxora/server/pkg/models"
+        "github.com/shopspring/decimal"
+)
+
+func (c *CoreStoreContext) CreateBid(ctx context.Context, userId uuid.UUID, bid *models.Bid) (bidID uuid.UUID, err error) <span class="cov8" title="1">{
+        if decimal.Zero.IsNegative() </span><span class="cov0" title="0">{
+                c.Logger.Error("Bid creation failed: invalid bid amount (negative)")
+                return uuid.Nil, fmt.Errorf("invalid bid amount")
+        }</span>
+
+        <span class="cov8" title="1">if len(bid.Message) &gt; 255 </span><span class="cov0" title="0">{
+                c.Logger.Error("Bid creation failed: message exceeds 255 characters")
+                return uuid.Nil, fmt.Errorf("message is too long, max 255 characters")
+        }</span>
+
+        <span class="cov8" title="1">c.Logger.Info(fmt.Sprintf("Creating new bid for user %s on product %s", userId, bid.ProductID))
+        bidID, err = c.Database.InsertBid(ctx, userId, bid)
+        if err != nil </span><span class="cov0" title="0">{
+                c.Logger.Error(fmt.Sprintf("Failed to insert bid: %v", err))
+                return uuid.Nil, err
+        }</span>
+
+        <span class="cov8" title="1">c.Logger.Info(fmt.Sprintf("Successfully created bid %s", bidID))
+        return bidID, nil</span>
+}
+
+func (c *CoreStoreContext) GetHighestBid(ctx context.Context, userID uuid.UUID, productID uuid.UUID) (bid *models.BidDetails, err error) <span class="cov8" title="1">{
+        c.Logger.Debug(fmt.Sprintf("Fetching highest bid for product %s", productID))
+        bid, err = c.Database.GetHighestBid(ctx, userID, productID)
+        if err != nil </span><span class="cov0" title="0">{
+                c.Logger.Error(fmt.Sprintf("Failed to get highest bid: %v", err))
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return bid, nil</span>
+}
+
+func (c *CoreStoreContext) GetBids(ctx context.Context, userID uuid.UUID, productID uuid.UUID, limit, page int) (bids []models.BidDetails, err error) <span class="cov8" title="1">{
+        if limit &lt;= 0 || page &lt;= 0 </span><span class="cov8" title="1">{
+                c.Logger.Error(fmt.Sprintf("Invalid pagination parameters: limit=%d, page=%d", limit, page))
+                return nil, fmt.Errorf("invalid 'limit' or 'page' amount: minimum 1")
+        }</span>
+
+        <span class="cov8" title="1">c.Logger.Debug(fmt.Sprintf("Fetching bids for product %s (page %d, limit %d)", productID, page, limit))
+        bids, err = c.Database.GetBids(ctx, userID, productID, limit, limit*(page-1))
+        if err != nil </span><span class="cov0" title="0">{
+                c.Logger.Error(fmt.Sprintf("Failed to get bids: %v", err))
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">c.Logger.Debug(fmt.Sprintf("Retrieved %d bids for product %s", len(bids), productID))
+        return bids, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package store
+
+import (
+        "context"
+        "crypto/sha256"
+        "encoding/hex"
+        "fmt"
+
+        "github.com/google/uuid"
+        compression "github.com/gopher93185789/luxora/server/pkg/compressions"
+        "github.com/gopher93185789/luxora/server/pkg/models"
+        "github.com/shopspring/decimal"
+)
+
+func (c *CoreStoreContext) CreateNewListing(ctx context.Context, userID uuid.UUID, product *models.Product) (productID uuid.UUID, err error) <span class="cov8" title="1">{
+        if product.ItemName == "" </span><span class="cov0" title="0">{
+                c.Logger.Error("Failed to create listing: empty product name")
+                return uuid.Nil, fmt.Errorf("invalid product name")
+        }</span>
+
+        <span class="cov8" title="1">if product.Price.IsNegative() </span><span class="cov0" title="0">{
+                c.Logger.Error("Failed to create listing: negative price")
+                return uuid.Nil, err
+        }</span>
+
+        <span class="cov8" title="1">c.Logger.Debug(fmt.Sprintf("Processing %d images for listing", len(product.Images)))
+        for i := range product.Images </span><span class="cov8" title="1">{
+                img := []byte(product.Images[i].Image)
+                product.Images[i].CompressedImage, err = compression.CompressZSTD(img)
+                if err != nil </span><span class="cov0" title="0">{
+                        c.Logger.Error(fmt.Sprintf("Image compression failed: %v", err))
+                        return uuid.Nil, err
+                }</span>
+
+                <span class="cov8" title="1">hash := sha256.Sum256(img)
+                product.Images[i].Checksum = hex.EncodeToString(hash[:])</span>
+        }
+
+        <span class="cov8" title="1">c.Logger.Info(fmt.Sprintf("Creating new listing for user %s: %s", userID, product.ItemName))
+        productID, err = c.Database.InsertListing(ctx, userID, product)
+        if err != nil </span><span class="cov0" title="0">{
+                c.Logger.Error(fmt.Sprintf("Failed to insert listing: %v", err))
+                return uuid.Nil, err
+        }</span>
+
+        <span class="cov8" title="1">c.Logger.Info(fmt.Sprintf("Successfully created listing %s", productID))
+        return productID, nil</span>
+}
+
+func (c *CoreStoreContext) DeleteListing(ctx context.Context, userID uuid.UUID, productId uuid.UUID) (err error) <span class="cov0" title="0">{
+        c.Logger.Info(fmt.Sprintf("Deleting listing %s for user %s", productId, userID))
+        err = c.Database.DeleteListing(ctx, userID, productId)
+        if err != nil </span><span class="cov0" title="0">{
+                c.Logger.Error(fmt.Sprintf("Failed to delete listing: %v", err))
+                return err
+        }</span>
+        <span class="cov0" title="0">c.Logger.Info(fmt.Sprintf("Successfully deleted listing %s", productId))
+        return nil</span>
+}
+
+func (c *CoreStoreContext) SetItemsSoldViaBid(ctx context.Context, userId uuid.UUID, info *models.SellItemViaBid) (err error) <span class="cov0" title="0">{
+        if info.BidID == uuid.Nil </span><span class="cov0" title="0">{
+                c.Logger.Error("Invalid bid ID provided for sale")
+                return fmt.Errorf("invalid bid id")
+        }</span>
+
+        <span class="cov0" title="0">if info.ItemID == uuid.Nil </span><span class="cov0" title="0">{
+                c.Logger.Error("Invalid item ID provided for sale")
+                return fmt.Errorf("invalid item id")
+        }</span>
+
+        <span class="cov0" title="0">if userId == uuid.Nil </span><span class="cov0" title="0">{
+                c.Logger.Error("Invalid user ID provided for sale")
+                return fmt.Errorf("invalid user id")
+        }</span>
+
+        <span class="cov0" title="0">c.Logger.Info(fmt.Sprintf("Marking item %s as sold via bid %s", info.ItemID, info.BidID))
+        err = c.Database.UpdateItemSoldViaBid(ctx, userId, true, info.BidID, info.ItemID)
+        if err != nil </span><span class="cov0" title="0">{
+                c.Logger.Error(fmt.Sprintf("Failed to update item sold status: %v", err))
+                return err
+        }</span>
+
+        <span class="cov0" title="0">c.Logger.Info(fmt.Sprintf("Successfully marked item %s as sold", info.ItemID))
+        return nil</span>
+}
+
+func (c *CoreStoreContext) GetListings(ctx context.Context, userID uuid.UUID, category, searchQuery, startPriceStr, endPriceStr, createdByStr string, limit, page int) (products []models.ProductInfo, err error) <span class="cov8" title="1">{
+        if limit &lt; 1 || page &lt; 1 </span><span class="cov0" title="0">{
+                c.Logger.Error(fmt.Sprintf("Invalid pagination parameters: limit=%d, page=%d", limit, page))
+                return nil, fmt.Errorf("invalid limit or page param")
+        }</span>
+
+        <span class="cov8" title="1">var (
+                startPrice *decimal.Decimal = nil
+                endPrice   *decimal.Decimal = nil
+                ct         *string          = nil
+                createdBy  uuid.UUID        = uuid.Nil
+                searchWQ   *string          = nil
+        )
+
+        if startPriceStr != "" </span><span class="cov0" title="0">{
+                sp, err := decimal.NewFromString(startPriceStr)
+                if err != nil </span><span class="cov0" title="0">{
+                        c.Logger.Error(fmt.Sprintf("Invalid start price: %s - %v", startPriceStr, err))
+                        return nil, err
+                }</span>
+                <span class="cov0" title="0">startPrice = &amp;sp</span>
+        }
+
+        <span class="cov8" title="1">if endPriceStr != "" </span><span class="cov0" title="0">{
+                ep, err := decimal.NewFromString(endPriceStr)
+                if err != nil </span><span class="cov0" title="0">{
+                        c.Logger.Error(fmt.Sprintf("Invalid end price: %s - %v", endPriceStr, err))
+                        return nil, err
+                }</span>
+                <span class="cov0" title="0">endPrice = &amp;ep</span>
+        }
+
+        <span class="cov8" title="1">if category != "" </span><span class="cov0" title="0">{
+                ct = &amp;category
+        }</span>
+
+        <span class="cov8" title="1">if searchQuery != "" </span><span class="cov0" title="0">{
+                searchWQ = &amp;searchQuery
+        }</span>
+
+        <span class="cov8" title="1">if createdByStr != "" </span><span class="cov0" title="0">{
+                createdBy, err = uuid.Parse(createdByStr)
+                if err != nil </span><span class="cov0" title="0">{
+                        c.Logger.Error(fmt.Sprintf("Invalid creator ID: %s", createdByStr))
+                        return nil, fmt.Errorf("invalid userID")
+                }</span>
+        }
+
+        <span class="cov8" title="1">c.Logger.Debug(fmt.Sprintf("Fetching listings (page %d, limit %d, category %v, search %v)", page, limit, category, searchQuery))
+        products, err = c.Database.GetProducts(ctx, userID, createdBy, ct, searchWQ, startPrice, endPrice, limit, limit*(page-1))
+        if err != nil </span><span class="cov0" title="0">{
+                c.Logger.Error(fmt.Sprintf("Failed to get products: %v", err))
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">c.Logger.Debug(fmt.Sprintf("Decompressing images for %d products", len(products)))
+        for i := range products </span><span class="cov8" title="1">{
+                for j := range products[i].Images </span><span class="cov8" title="1">{
+                        decompressed, err := compression.DecompressZSTD(products[i].Images[j].CompressedImage)
+                        if err != nil </span><span class="cov0" title="0">{
+                                c.Logger.Error(fmt.Sprintf("Failed to decompress image %d for product index %d: %v", j, i, err))
+                                continue</span>
+                        }
+                        <span class="cov8" title="1">products[i].Images[j].Image = string(decompressed)</span>
+                }
+        }
+
+        <span class="cov8" title="1">c.Logger.Debug(fmt.Sprintf("Successfully retrieved %d products", len(products)))
+        return products, nil</span>
+}
+
+func (c *CoreStoreContext) Checkout(ctx context.Context, userID uuid.UUID, cart *models.CartItems) (err error) <span class="cov0" title="0">{
+        if err := uuid.Validate(userID.String()); err != nil </span><span class="cov0" title="0">{
+                c.Logger.Error(fmt.Sprintf("Invalid user ID for checkout: %s", userID))
+                return fmt.Errorf("invalid id")
+        }</span>
+
+        <span class="cov0" title="0">if len(cart.Products) == 0 </span><span class="cov0" title="0">{
+                c.Logger.Error("Attempted checkout with empty cart")
+                return fmt.Errorf("cannot process empty cart")
+        }</span>
+
+        <span class="cov0" title="0">c.Logger.Info(fmt.Sprintf("Processing checkout for user %s with %d items", userID, len(cart.Products)))
+        err = c.Database.UpdateItemSoldViaCheckout(ctx, userID, cart)
+        if err != nil </span><span class="cov0" title="0">{
+                c.Logger.Error(fmt.Sprintf("Checkout failed: %v", err))
+                return err
+        }</span>
+
+        <span class="cov0" title="0">c.Logger.Info(fmt.Sprintf("Successfully completed checkout for user %s", userID))
+        return nil</span>
+}
+
+func (c *CoreStoreContext) UpdateProduct(ctx context.Context, userID uuid.UUID, update *models.UpdateProduct) (err error) <span class="cov0" title="0">{
+        if userID == uuid.Nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("invalid user id")
+        }</span>
+
+        <span class="cov0" title="0">if update.Id == uuid.Nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("invalid product id")
+        }</span>
+
+        <span class="cov0" title="0">if update.Category == "" &amp;&amp; update.Name == "" &amp;&amp; update.Description == "" </span><span class="cov0" title="0">{
+                return fmt.Errorf("please provide a field to update")
+
+        }</span>
+
+        <span class="cov0" title="0">err = c.Database.UpdateItemListing(ctx, userID, update)
+        return</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package postgres
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/google/uuid"
+)
+
+func (p *Postgres) DeleteListing(ctx context.Context, userID uuid.UUID, productId uuid.UUID) (err error) <span class="cov8" title="1">{
+        tx, err := p.Pool.Begin(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">t, err := tx.Exec(ctx, "DELETE FROM luxora_product WHERE user_id=$1 AND item_id=$2", userID, productId)
+        if err != nil </span><span class="cov0" title="0">{
+                tx.Rollback(ctx)
+                return err
+        }</span>
+
+        <span class="cov8" title="1">if t.RowsAffected() != 1 </span><span class="cov0" title="0">{
+                tx.Rollback(ctx)
+                return fmt.Errorf("failed to delete listing")
+        }</span>
+
+        <span class="cov8" title="1">return tx.Commit(ctx)</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package postgres
+
+import (
+        "context"
+        "strings"
+
+        "github.com/google/uuid"
+        "github.com/gopher93185789/luxora/server/pkg/models"
+)
+
+func (p *Postgres) InsertUser(ctx context.Context, username, email, signupType, passwordHash string) (userID uuid.UUID, err error) <span class="cov8" title="1">{
+        tx, err := p.Pool.Begin(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return uuid.Nil, err
+        }</span>
+        <span class="cov8" title="1">var id uuid.UUID
+
+        err = tx.QueryRow(ctx, "INSERT INTO luxora_user (username, email, signup_type, password_hash)  VALUES ($1, $2, $3, $4) RETURNING id", username, strings.ToLower(email), signupType, passwordHash).Scan(&amp;id)
+        if err != nil </span><span class="cov8" title="1">{
+                tx.Rollback(ctx)
+                return uuid.Nil, err
+        }</span>
+
+        <span class="cov8" title="1">if err := tx.Commit(ctx); err != nil </span><span class="cov0" title="0">{
+                return uuid.Nil, err
+        }</span>
+
+        <span class="cov8" title="1">return id, nil</span>
+}
+
+func (p *Postgres) InsertOauthUser(ctx context.Context, username, provider, providerId, profileImageLink string) (userID uuid.UUID, err error) <span class="cov8" title="1">{
+        tx, err := p.Pool.Begin(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return uuid.Nil, err
+        }</span>
+        <span class="cov8" title="1">var id uuid.UUID
+
+        err = tx.QueryRow(ctx, "INSERT INTO luxora_user (username, provider, provider_user_id, profile_picture_link)  VALUES ($1, $2, $3, $4) RETURNING id", username, provider, providerId, profileImageLink).Scan(&amp;id)
+        if err != nil </span><span class="cov8" title="1">{
+                tx.Rollback(ctx)
+                return uuid.Nil, err
+        }</span>
+
+        <span class="cov8" title="1">if err := tx.Commit(ctx); err != nil </span><span class="cov0" title="0">{
+                return uuid.Nil, err
+        }</span>
+
+        <span class="cov8" title="1">return id, nil</span>
+}
+
+func (p *Postgres) InsertListing(ctx context.Context, userId uuid.UUID, product *models.Product) (productId uuid.UUID, err error) <span class="cov8" title="1">{
+        tx, err := p.Pool.Begin(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return uuid.Nil, err
+        }</span>
+
+        <span class="cov8" title="1">err = tx.QueryRow(ctx, "INSERT INTO luxora_product (user_id, name, category, description) VALUES ($1, $2, $3, $4) RETURNING item_id", userId, product.ItemName, product.Category, product.Description).Scan(&amp;productId)
+        if err != nil </span><span class="cov0" title="0">{
+                tx.Rollback(ctx)
+                return uuid.Nil, err
+        }</span>
+
+        <span class="cov8" title="1">_, err = tx.Exec(ctx, "INSERT INTO luxora_product_price_history (product_id, price) VALUES ($1, $2)", productId, product.Price)
+        if err != nil </span><span class="cov0" title="0">{
+                tx.Rollback(ctx)
+                return uuid.Nil, err
+        }</span>
+
+        <span class="cov8" title="1">for _, p := range product.Images </span><span class="cov8" title="1">{
+                _, err = tx.Exec(ctx, "INSERT INTO luxora_product_image (product_id, compressed_image, checksum, sort_order) VALUES ($1, $2, $3, $4)", productId, p.CompressedImage, p.Checksum, p.Order)
+                if err != nil </span><span class="cov0" title="0">{
+                        tx.Rollback(ctx)
+                        return uuid.Nil, err
+                }</span>
+        }
+
+        <span class="cov8" title="1">return productId, tx.Commit(ctx)</span>
+}
+
+func (p *Postgres) InsertBid(ctx context.Context, userID uuid.UUID, bid *models.Bid) (bidID uuid.UUID, err error) <span class="cov8" title="1">{
+        err = p.Pool.QueryRow(ctx, "INSERT INTO product_bid (item_id, user_id, bid_amount, message) VALUES ($1, $2, $3, $4) RETURNING bid_id", bid.ProductID, userID, bid.BidAmount, bid.Message).Scan(&amp;bidID)
+        return
+}</span>
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package postgres
+
+import (
+        "context"
+        "time"
+
+        "github.com/jackc/pgx/v5/pgxpool"
+)
+
+type Postgres struct {
+        Pool *pgxpool.Pool
+}
+
+func New(dsn string) (pool *Postgres, err error) <span class="cov0" title="0">{
+        conf, err := pgxpool.ParseConfig(dsn)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">conf.MaxConns = 30
+        conf.MaxConnLifetime = 30 * time.Minute
+        conf.MaxConnIdleTime = 5 * time.Minute
+
+        p, err := pgxpool.NewWithConfig(context.Background(), conf)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">err = p.Ping(context.Background())
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;Postgres{Pool: p}, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package postgres
+
+import (
+        "context"
+        "database/sql"
+
+        "fmt"
+        "strings"
+
+        "github.com/google/uuid"
+        "github.com/gopher93185789/luxora/server/pkg/models"
+        "github.com/shopspring/decimal"
+)
+
+func (p *Postgres) GetOauthUserIdByProviderID(ctx context.Context, pid string) (id uuid.UUID, err error) <span class="cov8" title="1">{
+        err = p.Pool.QueryRow(ctx, "SELECT id FROM luxora_user WHERE provider_user_id = $1", pid).Scan(&amp;id)
+        return
+}</span>
+
+func (p *Postgres) GetLastLogin(ctx context.Context, userID uuid.UUID) (LastLogin sql.NullTime, err error) <span class="cov8" title="1">{
+        err = p.Pool.QueryRow(ctx, "SELECT last_login FROM luxora_user WHERE id = $1", userID).Scan(&amp;LastLogin)
+        return
+}</span>
+
+func (p *Postgres) GetRefreshToken(ctx context.Context, userId uuid.UUID) (refreshToken string, err error) <span class="cov0" title="0">{
+        err = p.Pool.QueryRow(ctx, "SELECT refresh_token FROM luxora_user WHERE id=$1", userId).Scan(&amp;refreshToken)
+        return
+}</span>
+
+func (p *Postgres) GetIsUsernameAndIDByProviderID(ctx context.Context, providerID string) (username string, userID uuid.UUID, err error) <span class="cov8" title="1">{
+        err = p.Pool.QueryRow(ctx, "SELECT username, id FROM luxora_user WHERE provider_user_id=$1", providerID).Scan(&amp;username, &amp;userID)
+        return
+}</span>
+
+func (p *Postgres) GetHighestBid(ctx context.Context, userID uuid.UUID, productID uuid.UUID) (bid *models.BidDetails, err error) <span class="cov8" title="1">{
+        bid = &amp;models.BidDetails{}
+        err = p.Pool.QueryRow(ctx, "SELECT bid_id, bid_amount, bid_time, user_id, message FROM product_bid WHERE item_id=$1 ORDER BY bid_amount DESC LIMIT 1", productID).Scan(&amp;bid.BidID, &amp;bid.BidAmount, &amp;bid.CreatedAt, &amp;bid.CreatedBy, &amp;bid.Message)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">bid.ProductID = productID
+        return</span>
+}
+
+func (p *Postgres) GetBids(ctx context.Context, userID uuid.UUID, productID uuid.UUID, limit, offset int) (bids []models.BidDetails, err error) <span class="cov8" title="1">{
+        bids = make([]models.BidDetails, 0, limit)
+
+        rows, err := p.Pool.Query(ctx, "SELECT bid_id, bid_amount, bid_time, user_id, message FROM product_bid WHERE item_id=$1 ORDER BY bid_amount DESC LIMIT $2 OFFSET $3", productID, limit, offset)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">defer rows.Close()
+
+        for rows.Next() </span><span class="cov8" title="1">{
+                var bid = models.BidDetails{}
+                bid.ProductID = productID
+
+                err := rows.Scan(&amp;bid.BidID, &amp;bid.BidAmount, &amp;bid.CreatedAt, &amp;bid.CreatedBy, &amp;bid.Message)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+                <span class="cov8" title="1">bids = append(bids, bid)</span>
+        }
+
+        <span class="cov8" title="1">return</span>
+}
+
+func craftGetQuery(createdBy uuid.UUID, category, searchQuery *string, startPrice, endPrice *decimal.Decimal, limit, offset int) (query string, params []any) <span class="cov8" title="1">{
+        var builder = strings.Builder{}
+
+        builder.WriteString(`
+        WITH latest_prices AS (
+                SELECT DISTINCT ON (product_id)
+                  product_id,
+                  price,
+                  currency,
+                  created
+                FROM luxora_product_price_history
+                ORDER BY product_id, created DESC
+          )
+        SELECT 
+                lp.item_id,
+                lp.name,
+                lp.user_id,
+                lp.created_at,
+                lp.description,
+                lpp.price,
+                lpp.currency
+        FROM luxora_product lp
+        JOIN latest_prices lpp ON lp.item_id = lpp.product_id
+        `)
+
+        var filters []string
+        params = []any{}
+
+        if category != nil </span><span class="cov0" title="0">{
+                params = append(params, *category)
+                filters = append(filters, fmt.Sprintf(" lp.category = $%d ", len(params)))
+        }</span>
+
+        <span class="cov8" title="1">if startPrice != nil </span><span class="cov0" title="0">{
+                params = append(params, *startPrice)
+                filters = append(filters, fmt.Sprintf(" lpp.price &gt;= $%d ", len(params)))
+        }</span>
+
+        <span class="cov8" title="1">if endPrice != nil </span><span class="cov0" title="0">{
+                params = append(params, *endPrice)
+                filters = append(filters, fmt.Sprintf(" lpp.price &lt; $%d ", len(params)))
+        }</span>
+
+        <span class="cov8" title="1">if createdBy != uuid.Nil </span><span class="cov0" title="0">{
+                params = append(params, createdBy)
+                filters = append(filters, fmt.Sprintf(" lp.user_id = $%d ", len(params)))
+        }</span>
+
+        <span class="cov8" title="1">if searchQuery != nil </span><span class="cov8" title="1">{
+                filters = append(filters, fmt.Sprintf(" similarity(lp.name, '%v') &gt; 0.01 ORDER BY similarity(lp.name, '%v') DESC ", *searchQuery, *searchQuery))
+        }</span>
+
+        <span class="cov8" title="1">if len(filters) &gt; 0 </span><span class="cov8" title="1">{
+                builder.WriteString(" WHERE ")
+                builder.WriteString(strings.Join(filters, " AND "))
+        }</span>
+
+        <span class="cov8" title="1">if searchQuery == nil </span><span class="cov8" title="1">{
+                builder.WriteString(" ORDER BY lp.created_at DESC ")
+        }</span>
+
+        <span class="cov8" title="1">params = append(params, limit)
+        builder.WriteString(fmt.Sprintf(" LIMIT $%d ", len(params)))
+
+        params = append(params, offset)
+        builder.WriteString(fmt.Sprintf(" OFFSET $%d ", len(params)))
+
+        return builder.String(), params</span>
+}
+
+func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID, category, searchQuery *string, startPrice, endPrice *decimal.Decimal, limit, offset int) (products []models.ProductInfo, err error) <span class="cov8" title="1">{
+        tx, err := p.Pool.Begin(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">products = make([]models.ProductInfo, 0, limit)
+
+        query, params := craftGetQuery(createdBy, category, searchQuery, startPrice, endPrice, limit, offset)
+
+        rows, err := tx.Query(ctx, query, params...)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">for rows.Next() </span><span class="cov8" title="1">{
+                var product models.ProductInfo
+                if category != nil </span><span class="cov0" title="0">{
+                        product.Category = *category
+                }</span>
+
+                <span class="cov8" title="1">err = rows.Scan(&amp;product.ItemID, &amp;product.Name, &amp;product.CreatedBy, &amp;product.CreatedAt, &amp;product.Description, &amp;product.Price, &amp;product.Currency)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+
+                <span class="cov8" title="1">products = append(products, product)</span>
+        }
+        <span class="cov8" title="1">rows.Close()
+
+        for i := range products </span><span class="cov8" title="1">{
+                products[i].Images = []models.ProductImage{}
+
+                rows, err := tx.Query(ctx, "SELECT compressed_image, sort_order FROM luxora_product_image WHERE product_id=$1 ORDER BY sort_order ASC", products[i].ItemID)
+                if err != nil </span><span class="cov0" title="0">{
+                        continue</span>
+                }
+
+                <span class="cov8" title="1">for rows.Next() </span><span class="cov8" title="1">{
+                        var image = models.ProductImage{}
+                        err = rows.Scan(&amp;image.CompressedImage, &amp;image.Order)
+                        if err != nil </span><span class="cov0" title="0">{
+                                continue</span>
+                        }
+
+                        <span class="cov8" title="1">products[i].Images = append(products[i].Images, image)</span>
+                }
+                <span class="cov8" title="1">rows.Close()</span>
+        }
+
+        <span class="cov8" title="1">return products, nil</span>
+}
+
+func (p *Postgres) GetUserDetails(ctx context.Context, userID uuid.UUID) (details models.UserDetails, err error) <span class="cov8" title="1">{
+        details = models.UserDetails{}
+        err = p.Pool.QueryRow(ctx, "SELECT email, username, profile_picture_link FROM luxora_user WHERE id=$1", userID).Scan(&amp;details.Email, &amp;details.Username, &amp;details.ProfileImageLink)
+        details.UserID = userID
+        return
+}</span>
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package postgres
+
+import (
+        "context"
+        "fmt"
+        "strings"
+
+        "github.com/google/uuid"
+        "github.com/gopher93185789/luxora/server/pkg/models"
+        "github.com/shopspring/decimal"
+)
+
+func (p *Postgres) UpdateRefreshToken(ctx context.Context, userId uuid.UUID, refreshToken string) (err error) <span class="cov8" title="1">{
+        _, err = p.Pool.Exec(ctx, "UPDATE luxora_user SET refresh_token=$1 WHERE id=$2", refreshToken, userId)
+        return
+}</span>
+
+func (p *Postgres) UpdateItemSoldViaBid(ctx context.Context, userId uuid.UUID, sold bool, bidID, itemID uuid.UUID) (err error) <span class="cov8" title="1">{
+        tx, err := p.Pool.Begin(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">var (
+                soldPrice    decimal.Decimal
+                bidCreatedBy uuid.UUID
+        )
+        err = tx.QueryRow(ctx, "SELECT bid_amount, user_id FROM product_bid WHERE bid_id=$1 AND item_id=$2", bidID, itemID).Scan(&amp;soldPrice, &amp;bidCreatedBy)
+        if err != nil </span><span class="cov0" title="0">{
+                tx.Rollback(ctx)
+                return err
+        }</span>
+
+        <span class="cov8" title="1">_, err = tx.Exec(ctx, "UPDATE luxora_product SET sold=$1, sold_to_user_id=$2 WHERE item_id=$3 AND user_id=$4", sold, bidCreatedBy, itemID, userId)
+        if err != nil </span><span class="cov0" title="0">{
+                tx.Rollback(ctx)
+                return err
+        }</span>
+
+        <span class="cov8" title="1">_, err = tx.Exec(ctx, "INSERT INTO luxora_product_price_history (price, product_id) VALUES ($1, $2)", soldPrice, itemID)
+        if err != nil </span><span class="cov0" title="0">{
+                tx.Rollback(ctx)
+                return err
+        }</span>
+
+        <span class="cov8" title="1">return tx.Commit(ctx)</span>
+}
+
+func (p *Postgres) UpdateItemSoldViaCheckout(ctx context.Context, buyerID uuid.UUID, cart *models.CartItems) (err error) <span class="cov8" title="1">{
+        tx, err := p.Pool.Begin(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">_, err = tx.Exec(ctx, "UPDATE luxora_product SET sold=$1, sold_to_user_id=$2 WHERE item_id=ANY($3)", true, buyerID, cart.Products)
+        if err != nil </span><span class="cov0" title="0">{
+                tx.Rollback(ctx)
+                return err
+        }</span>
+
+        <span class="cov8" title="1">return tx.Commit(ctx)</span>
+}
+
+func (p *Postgres) UpdateItemListing(ctx context.Context, userID uuid.UUID, update *models.UpdateProduct) (err error) <span class="cov8" title="1">{
+        var (
+                args                     = []any{}
+                queries                  = []string{}
+                builder *strings.Builder = &amp;strings.Builder{}
+        )
+
+        builder.WriteString("UPDATE luxora_product SET ")
+
+        if update.Category != "" </span><span class="cov0" title="0">{
+                args = append(args, update.Category)
+                queries = append(queries, fmt.Sprintf(" category=$%v", len(args)))
+        }</span>
+        <span class="cov8" title="1">if update.Description != "" </span><span class="cov8" title="1">{
+                args = append(args, update.Description)
+                queries = append(queries, fmt.Sprintf(" description=$%v", len(args)))
+        }</span>
+        <span class="cov8" title="1">if update.Name != "" </span><span class="cov8" title="1">{
+                args = append(args, update.Name)
+                queries = append(queries, fmt.Sprintf(" name=$%v", len(args)))
+        }</span>
+
+        <span class="cov8" title="1">builder.WriteString(strings.Join(queries, ","))
+        args = append(args, userID)
+        builder.WriteString(fmt.Sprintf(" WHERE item_id=$%v", len(args)))
+
+        fmt.Println(builder.String())
+
+        _, err = p.Pool.Exec(ctx, builder.String(), args...)
+
+        return</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package docs
+
+import (
+        "fmt"
+        "net/http"
+
+        "github.com/MarceloPetrucio/go-scalar-api-reference"
+)
+
+type ScalarRoute struct {
+        Password string
+        FilePath string
+}
+
+func (s *ScalarRoute) RegisterScalarDocs(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        password := r.URL.Query().Get("password")
+
+        if password != s.Password </span><span class="cov0" title="0">{
+                w.WriteHeader(http.StatusUnauthorized)
+                return
+        }</span>
+
+        <span class="cov0" title="0">htmlContent, err := scalar.ApiReferenceHTML(&amp;scalar.Options{
+                SpecURL: s.FilePath,
+                CustomOptions: scalar.CustomOptions{
+                        PageTitle: "Luxora API",
+                },
+                DarkMode: true,
+        })
+
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                w.WriteHeader(http.StatusInternalServerError)
+                return
+        }</span>
+
+        <span class="cov0" title="0">fmt.Fprintln(w, htmlContent)</span>
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package main
+
+import (
+        "context"
+        "crypto/tls"
+        "errors"
+        "fmt"
+        "log"
+        "net/http"
+        "os"
+        "os/signal"
+        "strings"
+        "syscall"
+        "time"
+
+        coreAuth "github.com/gopher93185789/luxora/server/core/auth"
+        "github.com/gopher93185789/luxora/server/core/store"
+        "github.com/gopher93185789/luxora/server/database/postgres"
+        "github.com/gopher93185789/luxora/server/docs"
+        "github.com/gopher93185789/luxora/server/pkg/logger"
+        "github.com/gopher93185789/luxora/server/pkg/middleware"
+        "github.com/gopher93185789/luxora/server/pkg/token"
+        auth "github.com/gopher93185789/luxora/server/transport"
+        "golang.org/x/oauth2"
+        "golang.org/x/oauth2/github"
+        "golang.org/x/oauth2/google"
+)
+
+// @Summary                Healthcheck
+// @Description        Endpoint to check if the server is running
+// @Tags                        base
+// @Accept                        */*
+// @Produce                plain
+// @Success                200        {string}        string        "pong"
+// @Router                        /ping [get]
+func Ping(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        w.Write([]byte("pong"))
+}</span>
+
+//        @title                        Luxora Marketplace API
+//        @version                1.2.1
+//        @description        Luxora is a secure, modern backend API for managing listings, bids, and authentication with OAuth2 providers. This API powers the Luxora marketplace platform, enabling seamless user authentication, listing management, and bidding workflows.
+//        @host        api.luxoras.nl
+//
+// @schemes        https
+func main() <span class="cov0" title="0">{
+        config, err := GetServerConfig()
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalln("error in config: " + err.Error())
+        }</span>
+
+        <span class="cov0" title="0">pool, err := postgres.New(config.DSN)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalln("Failed to connect to database: " + err.Error())
+        }</span>
+
+        <span class="cov0" title="0">mcf := middleware.New(&amp;token.BstConfig{SecretKey: []byte(config.TokenSigningKey)})
+
+        logger := logger.New(os.Stdout, &amp;logger.LoggerOpts{
+                BufferSize: 512,
+                ChanBuffer: 1000,
+        })
+
+        tx := &amp;auth.TransportConfig{
+                CoreAuth: &amp;coreAuth.CoreAuthContext{
+                        Logger: logger,
+                        GithubConfig: &amp;oauth2.Config{
+                                ClientID:     config.GithubClient,
+                                ClientSecret: config.GithubSecret,
+                                Endpoint:     github.Endpoint,
+                                RedirectURL:  config.GithubRedirect,
+                                Scopes:       []string{"read:user"},
+                        },
+                        GoogleConfig: &amp;oauth2.Config{
+                                ClientID:     config.GoogleClient,
+                                ClientSecret: config.GoogleSecret,
+                                Endpoint:     google.Endpoint,
+                                RedirectURL:  config.GoogleRedirect,
+                                Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
+                        },
+                        TokenConfig: token.BstConfig{
+                                SecretKey: []byte(config.TokenSigningKey),
+                        },
+                        Database:   pool,
+                        OauthState: "w;iudfiuweiuvhw;hriujwiriwhre",
+                },
+
+                CoreStore: &amp;store.CoreStoreContext{
+                        Logger:   logger,
+                        Database: pool,
+                },
+
+                Middleware: mcf,
+                Logger:     logger,
+        }
+
+        scalPass := &amp;docs.ScalarRoute{
+                Password: config.ScalarPassword,
+                FilePath: config.ScalarFilePath,
+        }
+
+        mux := http.NewServeMux()
+        mux.HandleFunc("GET /ping", Ping)
+
+        mux.HandleFunc("GET /ref", scalPass.RegisterScalarDocs)
+
+        // auth
+        mux.HandleFunc("GET /auth/github", tx.GithubRedirect)
+        mux.HandleFunc("GET /auth/github/exchange", tx.GithubExchange)
+        mux.HandleFunc("GET /auth/google", tx.GoogleRedirect)
+        mux.HandleFunc("GET /auth/google/exchange", tx.GoogleExchange)
+        mux.HandleFunc("GET /auth/userinfo", mcf.AuthMiddleware(tx.GetUserInfo))
+        mux.HandleFunc("POST /auth/logout", mcf.AuthMiddleware(tx.Logout))
+        mux.HandleFunc("POST /auth/refresh", tx.RefreshToken)
+        mux.HandleFunc("GET /auth/verify", mcf.VerifyTokenEndpoint)
+
+        // listings
+        mux.HandleFunc("POST /listing/bid", mcf.AuthMiddleware(tx.CreateBid))
+        mux.HandleFunc("POST /listings", mcf.AuthMiddleware(tx.CreateNewListing))
+        mux.HandleFunc("GET /listings", mcf.AuthMiddleware(tx.GetListings))
+        mux.HandleFunc("PATCH /listings", mcf.AuthMiddleware(tx.UpdateListing))
+        mux.HandleFunc("DELETE /listings", mcf.AuthMiddleware(tx.DeleteListing))
+        mux.HandleFunc("GET /listings/highest-bid", mcf.AuthMiddleware(tx.GetHighestBid))
+        mux.HandleFunc("GET /listings/bids", mcf.AuthMiddleware(tx.GetBids))
+        mux.HandleFunc("PUT /listings/sold/bid", mcf.AuthMiddleware(tx.UpdateSoldViaBid))
+        mux.HandleFunc("POST /listings/checkout", mcf.AuthMiddleware(tx.Checkout))
+
+        cors := &amp;middleware.CorsConfig{
+                AllowedOrigins: strings.Split(strings.TrimSpace(config.AllowedOrigin), ","),
+        }
+
+        sig := make(chan os.Signal, 1)
+        signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
+
+        srv := http.Server{
+                Addr:         config.Port,
+                Handler:      cors.CORSMiddleware(mux),
+                ReadTimeout:  5 * time.Second,
+                WriteTimeout: 10 * time.Second,
+                IdleTimeout:  120 * time.Second,
+        }
+
+        go func() </span><span class="cov0" title="0">{
+                log.Println("listening on port " + config.Port)
+                if config.Env == DEV </span><span class="cov0" title="0">{
+                        if err := srv.ListenAndServe(); err != nil &amp;&amp; !errors.Is(err, http.ErrServerClosed) </span><span class="cov0" title="0">{
+                                log.Fatalf("failed to start server: %v", err)
+                        }</span>
+                } else<span class="cov0" title="0"> {
+                        go func() </span><span class="cov0" title="0">{
+                                http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) </span><span class="cov0" title="0">{
+                                        target := "https://" + r.Host + r.URL.RequestURI()
+                                        http.Redirect(w, r, target, http.StatusMovedPermanently)
+                                }</span>)
+                                <span class="cov0" title="0">if err := http.ListenAndServe(":80", nil); err != nil </span><span class="cov0" title="0">{
+                                        log.Fatalf("HTTP redirect server failed: %v", err)
+                                }</span>
+                        }()
+
+                        <span class="cov0" title="0">reloader, err := NewCertReloader(config.TlsCertFilePath, config.TlsKeyFilePath)
+                        if err != nil </span><span class="cov0" title="0">{
+                                log.Fatalln(err)
+                        }</span>
+
+                        <span class="cov0" title="0">reloader.WatchCertificate(config.TlsCertFilePath, config.TlsKeyFilePath, 24*time.Hour)
+
+                        srv.TLSConfig = &amp;tls.Config{
+                                MinVersion:             tls.VersionTLS12,
+                                SessionTicketsDisabled: false,
+                                NextProtos:             []string{"h2", "http/1.1"},
+                                GetCertificate:         reloader.GetCertificate,
+                        }
+
+                        if err := srv.ListenAndServeTLS("", ""); err != nil &amp;&amp; !errors.Is(err, http.ErrServerClosed) </span><span class="cov0" title="0">{
+                                log.Fatalf("failed to start server: %v", err)
+                        }</span>
+                }
+        }()
+
+        <span class="cov0" title="0">&lt;-sig
+        fmt.Println("shutdown signal received")
+        logger.Close()
+
+        ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+        defer cancel()
+
+        if err := srv.Shutdown(ctx); err != nil </span><span class="cov0" title="0">{
+                fmt.Println("failed to shutdown server: " + err.Error())
+        }</span> else<span class="cov0" title="0"> {
+                fmt.Println("shutdown server")
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package compression
+
+import (
+        "bytes"
+        "io"
+
+        "github.com/klauspost/compress/zstd"
+)
+
+func CompressZSTD(data []byte) ([]byte, error) <span class="cov8" title="1">{
+        var buf bytes.Buffer
+        encoder, err := zstd.NewWriter(&amp;buf)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">_, err = encoder.Write(data)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">encoder.Close()
+        return buf.Bytes(), err</span>
+}
+
+func DecompressZSTD(data []byte) ([]byte, error) <span class="cov8" title="1">{
+        b := bytes.NewBuffer(data)
+        decoder, err := zstd.NewReader(b)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">defer decoder.Close()
+
+        var out bytes.Buffer
+        if _, err = io.Copy(&amp;out, decoder); err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return out.Bytes(), nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package error
+
+import (
+        "encoding/json"
+        "net/http"
+)
+
+type ErrorResponse struct {
+        Code    int    `json:"code"`
+        Message string `json:"message"`
+}
+
+func ErrorWithJson(w http.ResponseWriter, code int, message string) <span class="cov0" title="0">{
+        w.Header().Set("Content-type", "application/json")
+        w.WriteHeader(code)
+        if err := json.NewEncoder(w).Encode(ErrorResponse{Code: code, Message: message}); err != nil </span><span class="cov0" title="0">{
+                w.Write([]byte(message))
+                return
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package logger
+
+import (
+        "bytes"
+        "fmt"
+        "io"
+        "sync"
+        "time"
+)
+
+type Logger struct {
+        ch         chan string
+        bufferSize int
+        buffer     *bytes.Buffer
+        writer     io.Writer
+        cancel     chan struct{}
+        wg         *sync.WaitGroup
+        isOpen     bool
+}
+
+const (
+        DEFAULT_BUFFER_SIZE int = 1024
+
+        Reset   = "\033[0m"
+        Blue    = "\033[34m"
+        Cyan    = "\033[36m"
+        Yellow  = "\033[33m"
+        Red     = "\033[31m"
+        Magenta = "\033[35m"
+)
+
+type LoggerOpts struct {
+        ChanBuffer uint
+        BufferSize int
+}
+
+func New(writer io.Writer, opts ...*LoggerOpts) *Logger <span class="cov0" title="0">{
+        var (
+                bufferSize = DEFAULT_BUFFER_SIZE
+                ch         chan string
+        )
+
+        if len(opts) &gt; 0 &amp;&amp; opts[0] != nil </span><span class="cov0" title="0">{
+                if opts[0].BufferSize &gt; 0 </span><span class="cov0" title="0">{
+                        bufferSize = opts[0].BufferSize
+                }</span>
+                <span class="cov0" title="0">if opts[0].ChanBuffer &gt; 0 </span><span class="cov0" title="0">{
+                        ch = make(chan string, opts[0].ChanBuffer)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if ch == nil </span><span class="cov0" title="0">{
+                ch = make(chan string)
+        }</span>
+
+        <span class="cov0" title="0">log := &amp;Logger{
+                ch:         ch,
+                bufferSize: bufferSize,
+                buffer:     bytes.NewBuffer(make([]byte, 0, bufferSize)),
+                writer:     writer,
+                cancel:     make(chan struct{}, 1),
+                wg:         &amp;sync.WaitGroup{},
+                isOpen:     true,
+        }
+
+        log.wg.Add(1)
+        go consumer(log)
+        return log</span>
+}
+
+func consumer(l *Logger) <span class="cov0" title="0">{
+        defer l.wg.Done()
+        for </span><span class="cov0" title="0">{
+                select </span>{
+                case &lt;-l.cancel:<span class="cov0" title="0">
+                        l.writer.Write(l.buffer.Bytes())
+                        return</span>
+                case log, ok := &lt;-l.ch:<span class="cov0" title="0">
+                        if !ok </span><span class="cov0" title="0">{
+                                return
+                        }</span>
+
+                        <span class="cov0" title="0">if l.buffer.Len() &gt;= l.bufferSize </span><span class="cov0" title="0">{
+                                l.writer.Write(l.buffer.Bytes())
+                                l.buffer.Reset()
+                        }</span>
+                        <span class="cov0" title="0">l.buffer.WriteString(log)</span>
+                }
+
+        }
+}
+
+func (l *Logger) Close() <span class="cov0" title="0">{
+        if !l.isOpen </span><span class="cov0" title="0">{
+                return
+        }</span>
+
+        <span class="cov0" title="0">close(l.ch)
+        l.cancel &lt;- struct{}{}
+        l.wg.Wait()
+        close(l.cancel)
+        l.isOpen = false</span>
+}
+
+func (l *Logger) Info(msg string) <span class="cov0" title="0">{
+        level := fmt.Sprintf("%s[INFO]%s", Blue, Reset)
+        if l.isOpen </span><span class="cov0" title="0">{
+                l.ch &lt;- fmt.Sprintf("%v - %v - %v\n", time.Now(), level, msg)
+                return
+        }</span>
+        <span class="cov0" title="0">fmt.Printf("%v - %v - %v\n", time.Now(), level, msg)</span>
+}
+
+func (l *Logger) Debug(msg string) <span class="cov0" title="0">{
+        level := fmt.Sprintf("%s[DEBUG]%s", Cyan, Reset)
+        if l.isOpen </span><span class="cov0" title="0">{
+                l.ch &lt;- fmt.Sprintf("%v - %v - %v\n", time.Now(), level, msg)
+                return
+        }</span>
+        <span class="cov0" title="0">fmt.Printf("%v - %v - %v\n", time.Now(), level, msg)</span>
+}
+
+func (l *Logger) Warn(msg string) <span class="cov0" title="0">{
+        level := fmt.Sprintf("%s[WARN]%s", Yellow, Reset)
+        if l.isOpen </span><span class="cov0" title="0">{
+                l.ch &lt;- fmt.Sprintf("%v - %v - %v\n", time.Now(), level, msg)
+                return
+        }</span>
+        <span class="cov0" title="0">fmt.Printf("%v - %v - %v\n", time.Now(), level, msg)</span>
+}
+
+func (l *Logger) Error(msg string) <span class="cov0" title="0">{
+        level := fmt.Sprintf("%s[ERROR]%s", Red, Reset)
+        if l.isOpen </span><span class="cov0" title="0">{
+                l.ch &lt;- fmt.Sprintf("%v - %v - %v\n", time.Now(), level, msg)
+                return
+        }</span>
+        <span class="cov0" title="0">fmt.Printf("%v - %v - %v\n", time.Now(), level, msg)</span>
+}
+
+func (l *Logger) Fatal(msg string) <span class="cov0" title="0">{
+        level := fmt.Sprintf("%s[FATAL]%s", Magenta, Reset)
+        if l.isOpen </span><span class="cov0" title="0">{
+                l.ch &lt;- fmt.Sprintf("%v - %v - %v\n", time.Now(), level, msg)
+                return
+        }</span>
+        <span class="cov0" title="0">fmt.Printf("%v - %v - %v\n", time.Now(), level, msg)</span>
+}
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package middleware
+
+import (
+        "encoding/json"
+        "fmt"
+        "net/http"
+        "time"
+
+        "github.com/google/uuid"
+        tk "github.com/gopher93185789/luxora/server/pkg/token"
+)
+
+type AuthMiddleWareConfig struct {
+        auth *tk.BstConfig
+}
+
+type ValidTokenResponse struct {
+        Expiry time.Time `json:"exp"`
+}
+
+func New(a *tk.BstConfig) *AuthMiddleWareConfig <span class="cov0" title="0">{
+        return &amp;AuthMiddleWareConfig{
+                auth: a,
+        }
+}</span>
+
+func (a *AuthMiddleWareConfig) AuthMiddleware(next http.HandlerFunc) http.HandlerFunc <span class="cov0" title="0">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov0" title="0">{
+                token := r.Header.Get("Authorization")
+                if len(token) == 0 </span><span class="cov0" title="0">{
+                        w.WriteHeader(http.StatusUnauthorized)
+                        return
+                }</span>
+
+                <span class="cov0" title="0">userID, err := a.auth.VerifyToken(token, tk.ACCESS_TOKEN)
+                if err != nil </span><span class="cov0" title="0">{
+                        w.WriteHeader(http.StatusUnauthorized)
+                        return
+                }</span>
+
+                <span class="cov0" title="0">r.Header.Set("USERID", userID.String())
+                next.ServeHTTP(w, r)</span>
+        }
+}
+
+func GetTokenFromRequest(r *http.Request) (userID uuid.UUID, err error) <span class="cov0" title="0">{
+        uidstr := r.Header.Get("USERID")
+        if uidstr == "" </span><span class="cov0" title="0">{
+                return uuid.Nil, fmt.Errorf("failed to retrieve user ID from context")
+        }</span>
+
+        <span class="cov0" title="0">uid, err := uuid.Parse(uidstr)
+        if err != nil </span><span class="cov0" title="0">{
+                return uuid.Nil, nil
+        }</span>
+
+        <span class="cov0" title="0">return uid, nil</span>
+}
+
+// @Summary      Verify access token
+// @Description  Verifies the provided access token and returns its expiry if valid.
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        token  query   string  true  "Access token to verify"
+// @Success      200    {object} ValidTokenResponse "Token is valid and expiry is returned"
+// @Failure      401    {string} string             "Unauthorized or invalid token"
+// @Failure      500    {string} string             "Internal server error"
+// @Router       /auth/verify [get]
+func (a *AuthMiddleWareConfig) VerifyTokenEndpoint(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        token := r.URL.Query().Get("token")
+        if token == "" </span><span class="cov0" title="0">{
+                w.WriteHeader(http.StatusUnauthorized)
+                return
+        }</span>
+
+        <span class="cov0" title="0">fields, err := a.auth.VerifyTokenAndGetFields(token, tk.ACCESS_TOKEN)
+        if err != nil </span><span class="cov0" title="0">{
+                w.WriteHeader(http.StatusUnauthorized)
+                return
+        }</span>
+
+        <span class="cov0" title="0">if err := json.NewEncoder(w).Encode(ValidTokenResponse{Expiry: fields.ExpiresAt.Time}); err != nil </span><span class="cov0" title="0">{
+                w.WriteHeader(http.StatusInternalServerError)
+                return
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package middleware
+
+import (
+        "net/http"
+        "slices"
+)
+
+type CorsConfig struct {
+        AllowedOrigins []string
+}
+
+func (c *CorsConfig) CORSMiddleware(next http.Handler) http.Handler <span class="cov0" title="0">{
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span><span class="cov0" title="0">{
+                origin := r.Header.Get("Origin")
+
+                // Check if the origin is allowed
+                if slices.Contains(c.AllowedOrigins, origin) </span><span class="cov0" title="0">{
+                        w.Header().Set("Access-Control-Allow-Origin", origin)
+                        w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+                        w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+                        w.Header().Set("Access-Control-Allow-Credentials", "true")
+                }</span>
+
+                // Handle preflight request (OPTIONS)
+                <span class="cov0" title="0">if r.Method == http.MethodOptions </span><span class="cov0" title="0">{
+                        w.WriteHeader(http.StatusOK)
+                        return
+                }</span>
+
+                // Proceed to the next handler
+                <span class="cov0" title="0">next.ServeHTTP(w, r)</span>
+        })
+}
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package testutils
+
+import (
+        "context"
+        "fmt"
+
+        "time"
+
+        "github.com/jackc/pgx/v5/pgxpool"
+        _ "github.com/lib/pq"
+        "github.com/testcontainers/testcontainers-go/modules/postgres"
+)
+
+var postgrestable = `
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+CREATE EXTENSION IF NOT EXISTS "pg_trgm";
+
+CREATE TABLE IF NOT EXISTS luxora_user (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    username VARCHAR(255) UNIQUE,
+    email VARCHAR(255) UNIQUE,
+    refresh_token TEXT,
+    last_login TIMESTAMP,
+    provider VARCHAR(50) CHECK (provider IN ('github', 'google', 'plain')),
+    provider_user_id TEXT UNIQUE,
+    profile_picture_link TEXT,
+    signup_type VARCHAR(50) CHECK (signup_type IN ('github', 'google', 'plain')),
+    password_hash TEXT
+);
+
+CREATE TABLE IF NOT EXISTS luxora_product (
+    user_id UUID REFERENCES luxora_user(id) ON DELETE CASCADE NOT NULL,
+    item_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL,
+    sold BOOLEAN DEFAULT false,
+    category VARCHAR(255),
+    sold_to_user_id UUID,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS luxora_product_price_history (
+    product_id UUID REFERENCES luxora_product(item_id) ON DELETE CASCADE NOT NULL,
+    price NUMERIC(10, 2) NOT NULL,
+    currency CHAR(3) DEFAULT 'EUR',
+    created TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS luxora_product_image (
+    image_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_id UUID  REFERENCES luxora_product(item_id) ON DELETE CASCADE,
+    compressed_image BYTEA,
+    checksum TEXT,
+    uploaded_at TIMESTAMP DEFAULT NOW(),
+    sort_order INTEGER NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS product_bid (
+    bid_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    message VARCHAR(255), 
+    item_id UUID REFERENCES luxora_product(item_id) ON DELETE CASCADE,
+    user_id UUID,
+    bid_amount NUMERIC(10, 2) NOT NULL,
+    currency CHAR(3) DEFAULT 'EUR',
+    bid_time TIMESTAMP DEFAULT NOW()
+);
+`
+
+func SetupTestPostgresDBConnStr(testData string) (string, func(), error) <span class="cov0" title="0">{
+        ctx := context.Background()
+
+        pgContainer, err := postgres.Run(ctx, "postgres:latest",
+                postgres.WithDatabase("testdb"),
+                postgres.WithUsername("testAdmin"),
+                postgres.WithPassword("pass1234"))
+        if err != nil </span><span class="cov0" title="0">{
+                return "", nil, fmt.Errorf("failed to start PostgreSQL container: %v", err)
+        }</span>
+
+        <span class="cov0" title="0">time.Sleep(3 * time.Second)
+
+        connStr, err := pgContainer.ConnectionString(ctx, "sslmode=disable")
+        if err != nil </span><span class="cov0" title="0">{
+                pgContainer.Terminate(ctx)
+                return "", nil, fmt.Errorf("failed to get PostgreSQL connection string: %v", err)
+        }</span>
+
+        <span class="cov0" title="0">conn, err := pgxpool.New(ctx, connStr)
+        if err != nil </span><span class="cov0" title="0">{
+                pgContainer.Terminate(ctx)
+                return "", nil, fmt.Errorf("failed to connect to PostgreSQL: %v", err)
+        }</span>
+
+        <span class="cov0" title="0">defer conn.Close()
+
+        _, err = conn.Exec(ctx, postgrestable)
+        if err != nil </span><span class="cov0" title="0">{
+                pgContainer.Terminate(ctx)
+                return "", nil, fmt.Errorf("failed to execute queries: %v", err)
+        }</span>
+
+        <span class="cov0" title="0">if testData != "" </span><span class="cov0" title="0">{
+                _, err = conn.Exec(ctx, postgrestable)
+                if err != nil </span><span class="cov0" title="0">{
+                        pgContainer.Terminate(ctx)
+                        return "", nil, fmt.Errorf("failed to insert test data: %v", err)
+                }</span>
+        }
+
+        <span class="cov0" title="0">clean := func() </span><span class="cov0" title="0">{
+                pgContainer.Terminate(ctx)
+        }</span>
+
+        <span class="cov0" title="0">return connStr, clean, nil</span>
+}
+
+func SetupTestPostgresDB(testData string) (*pgxpool.Pool, func(), error) <span class="cov0" title="0">{
+        ctx := context.Background()
+
+        pgContainer, err := postgres.Run(ctx, "postgres:latest", postgres.WithDatabase("testdb"), postgres.WithUsername("testAdmin"), postgres.WithPassword("pass1234"))
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, nil, fmt.Errorf("failed to start PostgreSQL container: %v", err)
+        }</span>
+
+        <span class="cov0" title="0">time.Sleep(3 * time.Second)
+
+        str, err := pgContainer.ConnectionString(ctx, "sslmode=disable")
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, nil, fmt.Errorf("failed to get PostgreSQL uri: %v", err)
+        }</span>
+
+        <span class="cov0" title="0">conn, err := pgxpool.New(context.Background(), str)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, nil, err
+        }</span>
+        <span class="cov0" title="0">clean := func() </span><span class="cov0" title="0">{
+                conn.Close()
+                pgContainer.Terminate(ctx)
+        }</span>
+
+        <span class="cov0" title="0">_, err = conn.Exec(ctx, postgrestable)
+
+        if err != nil </span><span class="cov0" title="0">{
+                clean()
+                return nil, nil, fmt.Errorf("failed to create table: %v", err)
+        }</span>
+
+        <span class="cov0" title="0">if testData != "" </span><span class="cov0" title="0">{
+                _, err = conn.Exec(ctx, testData)
+                if err != nil </span><span class="cov0" title="0">{
+                        clean()
+                        return nil, nil, fmt.Errorf("failed to create test data: %v", err)
+                }</span>
+        }
+
+        <span class="cov0" title="0">return conn, clean, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">package token
+
+import (
+        "errors"
+        "fmt"
+        "github.com/golang-jwt/jwt/v5"
+        "github.com/google/uuid"
+        "time"
+)
+
+type BstConfig struct {
+        SecretKey []byte // Secret used for signing JWTs
+}
+
+type TokenClaims struct {
+        UserID    uuid.UUID `json:"user_id"`
+        TokenType uint8     `json:"token_type"`
+        Payload   string    `json:"payload,omitempty"`
+        jwt.RegisteredClaims
+}
+
+// GenerateToken generates a standard JWT
+func (b *BstConfig) GenerateToken(userID uuid.UUID, exp time.Time, tokenType uint8) (string, error) <span class="cov0" title="0">{
+        claims := TokenClaims{
+                UserID:    userID,
+                TokenType: tokenType,
+                RegisteredClaims: jwt.RegisteredClaims{
+                        ExpiresAt: jwt.NewNumericDate(exp),
+                },
+        }
+
+        token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+        return token.SignedString(b.SecretKey)
+}</span>
+
+// GenerateTokenWithPayload generates a JWT with additional payload
+func (b *BstConfig) GenerateTokenWithPayload(userID uuid.UUID, exp time.Time, tokenType uint8, payload string) (string, error) <span class="cov0" title="0">{
+        claims := TokenClaims{
+                UserID:    userID,
+                TokenType: tokenType,
+                Payload:   payload,
+                RegisteredClaims: jwt.RegisteredClaims{
+                        ExpiresAt: jwt.NewNumericDate(exp),
+                },
+        }
+
+        token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+        return token.SignedString(b.SecretKey)
+}</span>
+
+// VerifyToken verifies the token and returns the userID
+func (b *BstConfig) VerifyToken(tokenStr string, tokenType uint8) (uuid.UUID, error) <span class="cov0" title="0">{
+        claims, err := b.parseToken(tokenStr)
+        if err != nil </span><span class="cov0" title="0">{
+                return uuid.Nil, err
+        }</span>
+
+        <span class="cov0" title="0">if claims.TokenType != tokenType </span><span class="cov0" title="0">{
+                return uuid.Nil, errors.New("invalid token type")
+        }</span>
+
+        <span class="cov0" title="0">return claims.UserID, nil</span>
+}
+
+// VerifyTokenAndGetFields verifies the token and returns the full claims
+func (b *BstConfig) VerifyTokenAndGetFields(tokenStr string, tokenType uint8) (*TokenClaims, error) <span class="cov0" title="0">{
+        claims, err := b.parseToken(tokenStr)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">if claims.TokenType != tokenType </span><span class="cov0" title="0">{
+                return nil, errors.New("invalid token type")
+        }</span>
+
+        <span class="cov0" title="0">return claims, nil</span>
+}
+
+// VerifyPayloadToken verifies a token and extracts payload
+func (b *BstConfig) VerifyPayloadToken(tokenStr string, tokenType uint8) (uuid.UUID, string, error) <span class="cov0" title="0">{
+        claims, err := b.parseToken(tokenStr)
+        if err != nil </span><span class="cov0" title="0">{
+                return uuid.Nil, "", err
+        }</span>
+
+        <span class="cov0" title="0">if claims.TokenType != tokenType </span><span class="cov0" title="0">{
+                return uuid.Nil, "", errors.New("invalid token type")
+        }</span>
+
+        <span class="cov0" title="0">return claims.UserID, claims.Payload, nil</span>
+}
+
+// parseToken parses and validates a JWT
+func (b *BstConfig) parseToken(tokenStr string) (*TokenClaims, error) <span class="cov0" title="0">{
+        token, err := jwt.ParseWithClaims(tokenStr, &amp;TokenClaims{}, func(token *jwt.Token) (interface{}, error) </span><span class="cov0" title="0">{
+                return b.SecretKey, nil
+        }</span>)
+
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("invalid token: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">claims, ok := token.Claims.(*TokenClaims)
+        if !ok || !token.Valid </span><span class="cov0" title="0">{
+                return nil, errors.New("invalid token claims")
+        }</span>
+
+        <span class="cov0" title="0">return claims, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package transport
+
+import (
+        "encoding/json"
+
+        errs "github.com/gopher93185789/luxora/server/pkg/error"
+        "github.com/gopher93185789/luxora/server/pkg/middleware"
+
+        "net/http"
+        "time"
+)
+
+func clearCookies(w http.ResponseWriter) <span class="cov0" title="0">{
+        http.SetCookie(w, &amp;http.Cookie{
+                Name:     "LRF",
+                Value:    "",
+                Path:     "/",
+                Domain:   "luxoras.nl",
+                Expires:  time.Unix(0, 0),
+                HttpOnly: true,
+                SameSite: http.SameSiteNoneMode,
+                Secure:   true,
+        })
+}</span>
+
+func setCookies(w http.ResponseWriter, refreshToken string) <span class="cov0" title="0">{
+        http.SetCookie(w, &amp;http.Cookie{
+                Name:     "LRF",
+                Value:    refreshToken,
+                Path:     "/",
+                Domain:   "luxoras.nl",
+                Expires:  time.Now().Add(720 * time.Hour),
+                HttpOnly: true,
+                SameSite: http.SameSiteNoneMode,
+                Secure:   true,
+        })
+}</span>
+
+// @Summary                Github Oauth exchange
+// @Description        Send a request to this endpoint to exchange the Github code you got from Github for an access token.
+// @Tags                        auth
+// @Accept                        */*
+// @Produce                json
+// @Success                200        {object}        AccessTokenResponse        "Access token response"
+// @Failure                401        {object}        errs.ErrorResponse        "Unauthorized error"
+// @Failure                500        {object}        errs.ErrorResponse        "Internal server error"
+// @Router                        /auth/github/exchange [get]
+// @Param                        code        query        string        true        "code"        Format(code)
+// @Param                        state        query        string        true        "state"        Format(state)
+func (t *TransportConfig) GithubExchange(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        defer r.Body.Close()
+        at, rt, err := t.CoreAuth.HandleGithubOauth(r.Context(), r.URL.Query().Get("code"))
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusUnauthorized, err.Error())
+                return
+        }</span>
+
+        <span class="cov0" title="0">if at == "" || rt == "" </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to generate tokens")
+                return
+        }</span>
+
+        <span class="cov0" title="0">setCookies(w, rt)
+
+        w.Header().Set("Content-type", "application/json")
+        if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode access token")
+                return
+        }</span>
+}
+
+// @Summary                Google Oauth exchange
+// @Description        Send a request to this endpoint to exchange the Google code you got from Google for an access token.
+// @Tags                        auth
+// @Accept                        */*
+// @Produce                json
+// @Success                200        {object}        AccessTokenResponse        "Access token response"
+// @Failure                401        {object}        errs.ErrorResponse        "Unauthorized error"
+// @Failure                500        {object}        errs.ErrorResponse        "Internal server error"
+// @Router                        /auth/google/exchange [get]
+// @Param                        code        query        string        true        "code"        Format(code)
+// @Param                        state        query        string        true        "state"        Format(state)
+func (t *TransportConfig) GoogleExchange(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        defer r.Body.Close()
+        at, rt, err := t.CoreAuth.HandleGoogleOauth(r.Context(), r.URL.Query().Get("code"))
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusUnauthorized, err.Error())
+                return
+        }</span>
+
+        <span class="cov0" title="0">if at == "" || rt == "" </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to generate tokens")
+                return
+        }</span>
+
+        <span class="cov0" title="0">setCookies(w, rt)
+
+        w.Header().Set("Content-type", "application/json")
+        if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode access token")
+                return
+        }</span>
+}
+
+// @Summary                Refresh Token
+// @Description        Refresh the access token using the refresh token stored in the cookie.
+// @Tags                        auth
+// @Accept                        */*
+// @Produce                json
+// @Success                200        {object}        AccessTokenResponse        "Access token response"
+// @Failure                400        {object}        errs.ErrorResponse        "Missing cookie error"
+// @Failure                401        {object}        errs.ErrorResponse        "Unauthorized error"
+// @Failure                500        {object}        errs.ErrorResponse        "Internal server error"
+// @Router                        /auth/refresh [post]
+func (t *TransportConfig) RefreshToken(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        defer r.Body.Close()
+
+        cookie, err := r.Cookie("LRF")
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusBadRequest, "missing cookie")
+                return
+        }</span>
+
+        <span class="cov0" title="0">at, rt, err := t.CoreAuth.RefreshToken(r.Context(), cookie.Value)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusUnauthorized, err.Error())
+                return
+        }</span>
+
+        <span class="cov0" title="0">setCookies(w, rt)
+
+        w.Header().Set("Content-type", "application/json")
+        if err := json.NewEncoder(w).Encode(AccessTokenResponse{AccessToken: at}); err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode access token")
+                return
+        }</span>
+}
+
+// @Summary      Get user info
+// @Description  Retrieves the authenticated user's profile information.
+// @Tags         auth
+// @Accept       */*
+// @Produce      json
+// @Param        Authorization  header  string  true  "Access token"
+// @Success      200  {object}  models.UserDetails "User profile details"
+// @Failure      401  {object}  errs.ErrorResponse  "Unauthorized error"
+// @Failure      500  {object}  errs.ErrorResponse  "Internal server error"
+// @Router       /auth/userinfo [get]
+func (t *TransportConfig) GetUserInfo(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        uid, err := middleware.GetTokenFromRequest(r)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+                return
+        }</span>
+
+        <span class="cov0" title="0">details, err := t.CoreAuth.GetUserInfo(r.Context(), uid)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user details: "+err.Error())
+                return
+        }</span>
+
+        <span class="cov0" title="0">w.Header().Set("Content-Type", "application/json")
+        if err := json.NewEncoder(w).Encode(details); err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode product id: "+err.Error())
+                return
+        }</span>
+}
+
+// @Summary      Logout user
+// @Description  Logs out the authenticated user and invalidates their tokens
+// @Tags         auth
+// @Accept       */*
+// @Produce      json
+// @Param        Authorization  header  string  true  "Access token"
+// @Success      200  {object}  nil  "Successfully logged out"
+// @Failure      401  {object}  errs.ErrorResponse  "Unauthorized error"
+// @Failure      500  {object}  errs.ErrorResponse  "Internal server error"
+// @Router       /auth/logout [post]
+func (t *TransportConfig) Logout(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        uid, err := middleware.GetTokenFromRequest(r)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+                return
+        }</span>
+
+        <span class="cov0" title="0">err = t.CoreAuth.Logout(r.Context(), uid)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to log user out")
+                return
+        }</span>
+
+        <span class="cov0" title="0">clearCookies(w)</span>
+}
+</pre>
+		
+		<pre class="file" id="file24" style="display: none">package transport
+
+import (
+        "encoding/json"
+        "net/http"
+        "strconv"
+
+        "github.com/google/uuid"
+        errs "github.com/gopher93185789/luxora/server/pkg/error"
+        "github.com/gopher93185789/luxora/server/pkg/middleware"
+        "github.com/gopher93185789/luxora/server/pkg/models"
+)
+
+// @Summary                Create a bid
+// @Description        This endpoint allows users to create bids on product listings. The request body must contain the bid details in JSON format.
+// @Tags                        bidding
+// @Accept                        json
+// @Produce                json
+// @Param                        bid                                body                models.Bid                                        true        "Bid details"
+// @Param                        Authorization        header                string                                                true        "Access token"
+// @Success                200                                {object}        models.CreateBidResponse        "Bid created successfully with the bid ID"
+// @Failure                400                                {object}        errs.ErrorResponse                        "Bad request - invalid input or missing fields"
+// @Failure                422                                {object}        errs.ErrorResponse                        "Unprocessable entity - failed to decode JSON payload"
+// @Failure                500                                {object}        errs.ErrorResponse                        "Internal server error"
+// @Router                        /listings/bid [POST]
+func (t *TransportConfig) CreateBid(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        defer r.Body.Close()
+
+        var bid models.Bid
+        if err := json.NewDecoder(r.Body).Decode(&amp;bid); err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusUnprocessableEntity, "failed to decode json payload")
+                return
+        }</span>
+
+        <span class="cov0" title="0">uid, err := middleware.GetTokenFromRequest(r)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+                return
+        }</span>
+
+        <span class="cov0" title="0">bidID, err := t.CoreStore.CreateBid(r.Context(), uid, &amp;bid)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusBadRequest, "failed to create bid: "+err.Error())
+                return
+        }</span>
+
+        <span class="cov0" title="0">w.Header().Set("Content-Type", "application/json")
+        if err := json.NewEncoder(w).Encode(models.CreateBidResponse{BidID: bidID}); err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode product id: "+err.Error())
+                return
+        }</span>
+}
+
+// @Summary                Get highest bid
+// @Description        This endpoint retrieves the highest bid for a specific product listing. The product ID must be provided as a query parameter.
+// @Tags                        bidding
+// @Accept                        */*
+// @Produce                json
+// @Param                        productid                query                string                                true        "Product ID"
+// @Param                        Authorization        header                string                                true        "Access token"
+// @Success                200                                {object}        models.Bid                        "Highest bid details"
+// @Failure                400                                {object}        errs.ErrorResponse        "Bad request - invalid or missing product ID"
+// @Failure                404                                {object}        errs.ErrorResponse        "Not found - product ID not provided"
+// @Failure                500                                {object}        errs.ErrorResponse        "Internal server error"
+// @Router                        /listings/highest-bid [GET]
+func (t *TransportConfig) GetHighestBid(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        defer r.Body.Close()
+
+        productIdStr := r.URL.Query().Get("productid")
+        if productIdStr == "" </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusNotFound, "missing 'productid' URL parameter")
+                return
+        }</span>
+
+        <span class="cov0" title="0">productId, err := uuid.Parse(productIdStr)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusBadRequest, "invalid 'productid' URL parameter")
+                return
+        }</span>
+
+        <span class="cov0" title="0">uid, err := middleware.GetTokenFromRequest(r)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+                return
+        }</span>
+
+        <span class="cov0" title="0">bid, err := t.CoreStore.GetHighestBid(r.Context(), uid, productId)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusBadRequest, "failed to get highest bid: "+err.Error())
+                return
+        }</span>
+
+        <span class="cov0" title="0">w.Header().Set("Content-Type", "application/json")
+        if err := json.NewEncoder(w).Encode(bid); err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode product id: "+err.Error())
+                return
+        }</span>
+}
+
+// @Summary                Get bids for a product listing
+// @Description        Retrieves a paginated list of bids for a specific product listing. The product ID, limit, and page number must be provided as query parameters.
+// @Tags                        bidding
+// @Accept                        */*
+// @Produce                json
+// @Param                        productid                query                string                                true        "The unique identifier of the product listing"
+// @Param                        limit                        query                int                                        true        "The maximum number of bids to retrieve per page"
+// @Param                        page                        query                int                                        true        "The page number to retrieve"
+// @Param                        Authorization        header                string                                true        "Access token"
+// @Success                200                                {array}                models.Bid                        "A list of bids for the specified product listing"
+// @Failure                400                                {object}        errs.ErrorResponse        "Bad request - invalid or missing query parameters"
+// @Failure                404                                {object}        errs.ErrorResponse        "Not found - product ID not provided"
+// @Failure                500                                {object}        errs.ErrorResponse        "Internal server error"
+// @Router                        /listings/bids [GET]
+func (t *TransportConfig) GetBids(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        defer r.Body.Close()
+
+        productIdStr := r.URL.Query().Get("productid")
+        if productIdStr == "" </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusNotFound, "missing 'productid' URL parameter")
+                return
+        }</span>
+
+        <span class="cov0" title="0">productId, err := uuid.Parse(productIdStr)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusNotFound, "invalid 'productid' URL parameter")
+                return
+        }</span>
+
+        <span class="cov0" title="0">limitStr := r.URL.Query().Get("limit")
+        if limitStr == "" </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusBadRequest, "missing 'limit' URL parameter")
+                return
+        }</span>
+
+        <span class="cov0" title="0">pageStr := r.URL.Query().Get("page")
+        if pageStr == "" </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusBadRequest, "missing 'page' URL parameter")
+                return
+        }</span>
+
+        <span class="cov0" title="0">limit, err := strconv.Atoi(limitStr)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusBadRequest, "invalid 'limit' URL parameter")
+        }</span>
+
+        <span class="cov0" title="0">page, err := strconv.Atoi(pageStr)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusBadRequest, "invalid 'page' URL parameter")
+        }</span>
+
+        <span class="cov0" title="0">uid, err := middleware.GetTokenFromRequest(r)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+                return
+        }</span>
+
+        <span class="cov0" title="0">bids, err := t.CoreStore.GetBids(r.Context(), uid, productId, limit, page)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusBadRequest, "failed to get highest bid: "+err.Error())
+                return
+        }</span>
+
+        <span class="cov0" title="0">w.Header().Set("Content-Type", "application/json")
+        if err := json.NewEncoder(w).Encode(bids); err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode bids: "+err.Error())
+                return
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file25" style="display: none">package transport
+
+import (
+        "encoding/json"
+        "net/http"
+        "strconv"
+        "sync"
+
+        "github.com/google/uuid"
+        errs "github.com/gopher93185789/luxora/server/pkg/error"
+        "github.com/gopher93185789/luxora/server/pkg/middleware"
+        "github.com/gopher93185789/luxora/server/pkg/models"
+)
+
+var ProductPool = sync.Pool{
+        New: func() any <span class="cov0" title="0">{
+                return &amp;models.Product{}
+        }</span>,
+}
+
+//        @Summary                Create new listing
+//        @Description        This endpoint allows users to create new product listings.
+//
+// The request body must contain the product details in JSON format.
+//
+//        @Tags                        listings
+//        @Accept                        json
+//        @Produce                json
+//        @Param                        product                        body                models.Product                        true        "Product details"
+//        @Param                        Authorization        header                string                                        true        "Access token"
+//        @Success                200                                {object}        CreateListingResponse        "Create listing response containing the product ID"
+//        @Failure                422                                {object}        errs.ErrorResponse                "Unprocessable entity - invalid JSON payload"
+//        @Failure                500                                {object}        errs.ErrorResponse                "Internal server error"
+//        @Router                        /listings [POST]
+func (t *TransportConfig) CreateNewListing(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        defer r.Body.Close()
+
+        var product = ProductPool.Get().(*models.Product)
+        defer ProductPool.Put(product)
+        if err := json.NewDecoder(r.Body).Decode(&amp;product); err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusUnprocessableEntity, "failed to decode json payload")
+                return
+        }</span>
+
+        <span class="cov0" title="0">uid, err := middleware.GetTokenFromRequest(r)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+                return
+        }</span>
+
+        <span class="cov0" title="0">productId, err := t.CoreStore.CreateNewListing(r.Context(), uid, product)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to create new listing: "+err.Error())
+                return
+        }</span>
+
+        <span class="cov0" title="0">w.Header().Set("Content-Type", "application/json")
+        if err := json.NewEncoder(w).Encode(CreateListingResponse{ProductID: productId}); err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode product id: "+err.Error())
+                return
+        }</span>
+}
+
+//        @Summary                Delete a listing
+//        @Description        This endpoint allows users to delete product listings.
+//
+// The request must include the product ID as a query parameter.
+//
+//        @Tags                        listings
+//        @Accept                        */*
+//        @Produce                */*
+//        @Param                        id                                query                string                                true        "Product ID"
+//        @Param                        Authorization        header                string                                true        "Access token"
+//        @Success                200                                {string}        string                                "Listing deleted successfully"
+//        @Failure                404                                {object}        errs.ErrorResponse        "Product ID not found"
+//        @Failure                500                                {object}        errs.ErrorResponse        "Internal server error"
+//        @Router                        /listings/ [DELETE]
+func (t *TransportConfig) DeleteListing(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        defer r.Body.Close()
+
+        pidstr := r.URL.Query().Get("id")
+        pid, err := uuid.Parse(pidstr)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusNotFound, "could not find 'id' URL parameter")
+                return
+        }</span>
+
+        <span class="cov0" title="0">uid, err := middleware.GetTokenFromRequest(r)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+                return
+        }</span>
+
+        <span class="cov0" title="0">if err := t.CoreStore.DeleteListing(r.Context(), uid, pid); err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to delete listing: "+err.Error())
+                return
+        }</span>
+}
+
+// @Summary                Update sold status via bid
+// @Description        This endpoint updates the sold status of a product based on a successful bid. The request body must contain the bid details in JSON format.
+// @Tags                        listings
+// @Accept                        json
+// @Produce                json
+// @Param                        bid                                body                models.SellItemViaBid        true        "Details of the bid used to mark the item as sold"
+// @Param                        Authorization        header                string                                        true        "Access token"
+// @Success                200                                {string}        string                                        "Item marked as sold successfully"
+// @Failure                422                                {object}        errs.ErrorResponse                "Unprocessable entity - invalid JSON payload"
+// @Failure                500                                {object}        errs.ErrorResponse                "Internal server error"
+// @Router                        /listings/sold/bid [PUT]
+func (t *TransportConfig) UpdateSoldViaBid(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        uid, err := middleware.GetTokenFromRequest(r)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+                return
+        }</span>
+
+        <span class="cov0" title="0">var info models.SellItemViaBid
+        if err := json.NewDecoder(r.Body).Decode(&amp;info); err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusUnprocessableEntity, "failed to decode json payload")
+                return
+        }</span>
+
+        <span class="cov0" title="0">err = t.CoreStore.SetItemsSoldViaBid(r.Context(), uid, &amp;info)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to update sold on item: "+err.Error())
+                return
+        }</span>
+}
+
+// @Summary                Get product listings
+// @Description        Retrieves a paginated list of product listings for the authenticated user. Supports optional filtering by category and price range.
+// @Tags                        listings
+// @Accept                        json
+// @Produce                json
+// @Param                        limit                        query                int                                        true        "Number of listings per page"
+// @Param                        page                        query                int                                        true        "Page number to retrieve"
+// @Param                        category                query                string                                false        "Category to filter listings"
+// @Param                        startprice                query                string                                false        "Minimum price filter"
+// @Param                        searchquery                query                string                                false        "search query"
+// @Param                        endprice                query                string                                false        "Maximum price filter"
+// @Param                        creator                        query                string                                false        "the person who created the listing"
+// @Param                        Authorization        header                string                                true        "Access token"
+// @Success                200                                {array}                models.Product                "List of product listings"
+// @Failure                400                                {object}        errs.ErrorResponse        "Bad request - missing or invalid parameters"
+// @Failure                500                                {object}        errs.ErrorResponse        "Internal server error"
+// @Router                        /listings [GET]
+func (t *TransportConfig) GetListings(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        uid, err := middleware.GetTokenFromRequest(r)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+                return
+        }</span>
+
+        <span class="cov0" title="0">limitStr := r.URL.Query().Get("limit")
+        if limitStr == "" </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusBadRequest, "missing 'limit' URL parameter")
+                return
+        }</span>
+
+        <span class="cov0" title="0">pageStr := r.URL.Query().Get("page")
+        if pageStr == "" </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusBadRequest, "missing 'page' URL parameter")
+                return
+        }</span>
+
+        <span class="cov0" title="0">limit, err := strconv.Atoi(limitStr)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusBadRequest, "invalid 'limit' URL parameter")
+        }</span>
+
+        <span class="cov0" title="0">page, err := strconv.Atoi(pageStr)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusBadRequest, "invalid 'page' URL parameter")
+        }</span>
+
+        <span class="cov0" title="0">products, err := t.CoreStore.GetListings(r.Context(), uid, r.URL.Query().Get("category"), r.URL.Query().Get("searchquery"), r.URL.Query().Get("startprice"), r.URL.Query().Get("endprice"), r.URL.Query().Get("creator"), limit, page)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, err.Error())
+                return
+        }</span>
+
+        <span class="cov0" title="0">w.Header().Set("Content-Type", "application/json")
+        if err := json.NewEncoder(w).Encode(products); err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode products "+err.Error())
+                return
+        }</span>
+}
+
+// @Summary      Checkout cart
+// @Description  Processes the checkout for the authenticated user's cart. The request body must contain the cart items in JSON format.
+// @Tags         listings
+// @Accept       json
+// @Produce      json
+// @Param        cartItems      body    models.CartItems     true  "Cart items to checkout"
+// @Param        Authorization  header  string               true  "Access token"
+// @Success      200            {string} string              "Checkout successful"
+// @Failure      422            {object} errs.ErrorResponse  "Unprocessable entity - invalid JSON payload"
+// @Failure      500            {object} errs.ErrorResponse  "Internal server error"
+// @Router       /listings/checkout [POST]
+func (t *TransportConfig) Checkout(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        var products models.CartItems
+        if err := json.NewDecoder(r.Body).Decode(&amp;products); err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusUnprocessableEntity, "failed to decode json payload")
+                return
+        }</span>
+
+        <span class="cov0" title="0">uid, err := middleware.GetTokenFromRequest(r)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+                return
+        }</span>
+
+        <span class="cov0" title="0">err = t.CoreStore.Checkout(r.Context(), uid, &amp;products)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, err.Error())
+                return
+        }</span>
+}
+
+// @Summary      Update a product listing
+// @Description  This endpoint allows users to update their product listings. The request body must contain the update details in JSON format.
+// @Tags         listings
+// @Accept       json
+// @Produce      json
+// @Param        product        body    models.UpdateProduct  true  "Product update details"
+// @Param        Authorization  header  string               true  "Access token"
+// @Success      200           {string} string              "Product updated successfully"
+// @Failure      422           {object} errs.ErrorResponse  "Unprocessable entity - invalid JSON payload"
+// @Failure      500           {object} errs.ErrorResponse  "Internal server error"
+// @Router       /listings [PATCH]
+func (t *TransportConfig) UpdateListing(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        var info models.UpdateProduct
+        if err := json.NewDecoder(r.Body).Decode(&amp;info); err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusUnprocessableEntity, "failed to decode json payload")
+                return
+        }</span>
+
+        <span class="cov0" title="0">uid, err := middleware.GetTokenFromRequest(r)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+                return
+        }</span>
+
+        <span class="cov0" title="0">err = t.CoreStore.UpdateProduct(r.Context(), uid, &amp;info)
+        if err != nil </span><span class="cov0" title="0">{
+                errs.ErrorWithJson(w, http.StatusInternalServerError, err.Error())
+                return
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file26" style="display: none">package transport
+
+import (
+        "golang.org/x/oauth2"
+        "net/http"
+)
+
+// @Summary                Github Oauth redirect
+// @Description        redirect to Github for Oauth authentication.
+// @Tags                        auth
+// @Accept                        */*
+// @Router                        /auth/github [get]
+func (t *TransportConfig) GithubRedirect(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        defer r.Body.Close()
+        a := t.CoreAuth.GithubConfig.AuthCodeURL(t.CoreAuth.OauthState, oauth2.AccessTypeOffline)
+        http.Redirect(w, r, a, http.StatusPermanentRedirect)
+}</span>
+
+// @Summary                Google Oauth redirect
+// @Description        redirect to Google for Oauth authentication.
+// @Tags                        auth
+// @Accept                        */*
+// @Router                        /auth/google [get]
+func (t *TransportConfig) GoogleRedirect(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        defer r.Body.Close()
+        a := t.CoreAuth.GoogleConfig.AuthCodeURL(t.CoreAuth.OauthState, oauth2.AccessTypeOffline)
+        http.Redirect(w, r, a, http.StatusPermanentRedirect)
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

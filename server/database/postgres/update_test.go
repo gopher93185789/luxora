@@ -204,3 +204,43 @@ func TestUpdateItemSoldViaCheckout(t *testing.T) {
 		}
 	}
 }
+
+func TestUpdateItemListing(t *testing.T) {
+	ctx := context.Background()
+	pool, clean, err := testutils.SetupTestPostgresDB("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer clean()
+
+	db := Postgres{Pool: pool}
+	id, err := db.InsertOauthUser(t.Context(), "diddy", "github", "hwllo", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	price := decimal.NewFromInt(100)
+
+	product := models.Product{
+		ItemName:    "rizz hat",
+		Category:    "fashion",
+		Description: "A stylish rizz hat",
+		Price:       price,
+		Images:      []models.ProductImage{{Image: "img1", Order: 0, Checksum: "chk1", CompressedImage: make([]byte, 10)}},
+	}
+
+	pid, err := db.InsertListing(ctx, id, &product)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = db.UpdateItemListing(ctx, id, &models.UpdateProduct{
+		Id:          pid,
+		Description: "hai huzz",
+		Name:        "rizz",
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+}

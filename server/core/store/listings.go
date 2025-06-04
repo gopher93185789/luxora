@@ -177,3 +177,21 @@ func (c *CoreStoreContext) Checkout(ctx context.Context, userID uuid.UUID, cart 
 	c.Logger.Info(fmt.Sprintf("Successfully completed checkout for user %s", userID))
 	return nil
 }
+
+func (c *CoreStoreContext) UpdateProduct(ctx context.Context, userID uuid.UUID, update *models.UpdateProduct) (err error) {
+	if userID == uuid.Nil {
+		return fmt.Errorf("invalid user id")
+	}
+
+	if update.Id == uuid.Nil {
+		return fmt.Errorf("invalid product id")
+	}
+
+	if update.Category == "" && update.Name == "" && update.Description == "" {
+		return fmt.Errorf("please provide a field to update")
+
+	}
+
+	err = c.Database.UpdateItemListing(ctx, userID, update)
+	return
+}

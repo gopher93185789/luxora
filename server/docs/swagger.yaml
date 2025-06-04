@@ -67,6 +67,17 @@ definitions:
       item_id:
         type: string
     type: object
+  models.UpdateProduct:
+    properties:
+      category:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
   models.UserDetails:
     properties:
       email:
@@ -96,7 +107,7 @@ info:
     platform, enabling seamless user authentication, listing management, and bidding
     workflows.
   title: Luxora Marketplace API
-  version: 0.8.0
+  version: 1.2.1
 paths:
   /auth/github:
     get:
@@ -363,6 +374,41 @@ paths:
           schema:
             $ref: '#/definitions/error.ErrorResponse'
       summary: Get product listings
+      tags:
+      - listings
+    patch:
+      consumes:
+      - application/json
+      description: This endpoint allows users to update their product listings. The
+        request body must contain the update details in JSON format.
+      parameters:
+      - description: Product update details
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateProduct'
+      - description: Access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product updated successfully
+          schema:
+            type: string
+        "422":
+          description: Unprocessable entity - invalid JSON payload
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      summary: Update a product listing
       tags:
       - listings
     post:
