@@ -1,7 +1,6 @@
-import { Link, Outlet, useNavigate, useNavigation } from "@remix-run/react";
+import {  Outlet, useNavigate } from "@remix-run/react";
 import { useEffect } from "react";
 import { Sidebar } from "~/components/navigation/sidebar";
-import { useUserInfo } from "~/hooks/use-user-info";
 import { Refresh, VerifyToken } from "~/pkg/api/auth";
 import { GetTokenFromLocalStorage } from "~/pkg/helpers/tokenHandling";
 
