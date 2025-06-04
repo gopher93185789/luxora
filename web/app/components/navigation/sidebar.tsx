@@ -7,7 +7,6 @@ import { useState } from "react";
 const navLinks = [
     { to: "/dashboard", label: "Dashboard" },
     { to: "/dashboard/listings", label: "Listings"},
-    { to: "/dashboard/profile", label: "Profile"},
 ];
 
 const sidebarVariants = {
@@ -27,7 +26,7 @@ export function Sidebar() {
 
     return (
       <motion.div
-        className="w-64 bg-primary select-none text-text-primary h-screen p-4"
+        className="w-64 select-none text-text-primary h-screen p-10  sticky top-0 z-50"
         initial="hidden"
         animate="visible"
         variants={sidebarVariants}

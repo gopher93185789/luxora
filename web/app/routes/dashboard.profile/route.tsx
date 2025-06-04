@@ -60,9 +60,9 @@ export default function Dashboard() {
       <div className="flex h-full w-full flex-col gap-5">
         <h1>Welkom, {data?.username}!</h1>
         <img
-          src={data?.profile_image_link}
-          alt="Profielfoto"
-          style={{ borderRadius: "50%", width: 100, height: 100 }}
+          className="h-32 w-32 rounded-full"
+          src={data?.profile_image_link || "/images/default-avatar.png"}
+          alt="User Avatar"
         />
         {data?.email.String === "" ? null : <p>Email: {data?.email.String}</p>}
       </div>
