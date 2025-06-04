@@ -26,7 +26,7 @@ export function Sidebar() {
 
     return (
       <motion.div
-        className="w-64 select-none text-text-primary h-screen p-10  sticky top-0 z-50"
+        className="w-64 select-none text-text-primary h-screen p-10 pt-5  sticky top-0 z-50"
         initial="hidden"
         animate="visible"
         variants={sidebarVariants}

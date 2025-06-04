@@ -35,17 +35,9 @@ export default function DashboardLayout() {
 
   return (
     <div className="flex w-full h-screen">
-        <motion.p
-          className="text-white font-bold text-2xl md:text-4xl lg:text-2xl z-10 absolute top-3 left-1/2 -translate-x-1/2"
-          initial={{ opacity: 0, y: -40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-        >
-          Luxoras
-        </motion.p>
         <UserButton />
       <Sidebar />
-        <div className="w-[calc(100vw-256px)] h-full overflow-auto p-10">
+        <div className="w-[calc(100vw-256px)] h-full overflow-auto p-5">
           <Outlet />
       </div>
     </div>
