@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { ProductGrid, ProductFilters } from "~/components/ProductGrid";
 import type { GetProductsParams } from "~/pkg/api/products";
 
 export default function Marketplace() {
@@ -24,18 +23,6 @@ export default function Marketplace() {
           Discover exclusive luxury items from verified sellers
         </p>
       </div>
-
-      <ProductFilters
-        params={filterParams}
-        onParamsChange={setFilterParams}
-        categories={categories}
-      />
-
-      <ProductGrid
-        initialParams={filterParams}
-        showDeleteButtons={false}
-        className="min-h-screen"
-      />
     </main>
   );
 }
