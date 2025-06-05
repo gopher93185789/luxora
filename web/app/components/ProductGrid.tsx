@@ -221,23 +221,6 @@ export function ProductFilters({ params, onParamsChange, categories = [] }: Prod
       )}
 
       <div>
-        <h4 className="text-sm font-medium text-text-primary mb-2">Price Range</h4>
-        <div className="flex gap-2">
-          <input
-            type="number"
-            placeholder="Min price"
-            value={params.startprice || ""}
-            onChange={(e) => handlePriceRangeChange(e.target.value, params.endprice)}
-            className="flex-1 bg-input-bg border border-border/20 rounded px-3 py-2 text-text-primary placeholder-text-primary/50"
-          />
-          <input
-            type="number"
-            placeholder="Max price"
-            value={params.endprice || ""}
-            onChange={(e) => handlePriceRangeChange(params.startprice, e.target.value)}
-            className="flex-1 bg-input-bg border border-border/20 rounded px-3 py-2 text-text-primary placeholder-text-primary/50"
-          />
-        </div>
       </div>
     </div>
   );

@@ -21,9 +21,6 @@ export default function Listings() {
     <main className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-text-primary">My Listings</h1>
-        <button className="bg-secondary hover:bg-secondary/80 text-accent py-2 px-4 rounded-lg transition-colors font-medium">
-          Create New Listing
-        </button>
       </div>
 
       <ProductFilters

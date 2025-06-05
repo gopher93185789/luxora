@@ -138,6 +138,7 @@ export function ProductCard({
             <button
               onClick={() => setShowDeleteConfirm(true)}
               className="bg-red-500/80 hover:bg-red-600 text-white p-2 rounded-full transition-colors backdrop-blur-sm"
+              title="Delete Product"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14zM10 11v6M14 11v6"/>
@@ -173,7 +174,7 @@ export function ProductCard({
           >
             View Details
           </Link>
-          <button className="bg-accent/10 hover:bg-accent/20 text-accent p-2 rounded transition-colors">
+          <button className="bg-accent/10 hover:bg-accent/20 text-accent p-2 rounded transition-colors" title="Favorite Product">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
             </svg>
