@@ -1,29 +1,28 @@
 import { useState } from "react";
 import { ProductGrid, ProductFilters } from "~/components/ProductGrid";
-import { useUserInfo } from "~/hooks/use-user-info";
 import type { GetProductsParams } from "~/pkg/api/products";
 
-export default function Listings() {
-  const user = useUserInfo();
+export default function Marketplace() {
   const [filterParams, setFilterParams] = useState<GetProductsParams>({
     limit: 12,
-    page: 1,
-    creator: user.user?.username
+    page: 1
   });
 
   const categories = [
     "Art",
     "Jewelry",
-    "Vehicles"
+    "Vehicles",
   ];
 
   return (
-    <main className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-text-primary">My Listings</h1>
-        <button className="bg-secondary hover:bg-secondary/80 text-accent py-2 px-4 rounded-lg transition-colors font-medium">
-          Create New Listing
-        </button>
+    <main className="max-w-7xl mx-auto px-4 py-8 space-y-6">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold text-text-primary mb-2">
+          Luxora Marketplace
+        </h1>
+        <p className="text-text-primary/70 text-lg">
+          Discover exclusive luxury items from verified sellers
+        </p>
       </div>
 
       <ProductFilters
@@ -34,7 +33,7 @@ export default function Listings() {
 
       <ProductGrid
         initialParams={filterParams}
-        showDeleteButtons={true}
+        showDeleteButtons={false}
         className="min-h-screen"
       />
     </main>
