@@ -15,6 +15,7 @@ export const meta: MetaFunction = () => {
 
 export default function HomePage() {
   return (
+    <div className="w-full overflow-hidden flex flex-col">
     <main className="bg w-screen h-screen relative overflow-hidden">
       <DropdownMenu />
       <div className="pointer-events-none absolute top-0 left-0 w-full h-64 z-10 bg-gradient-to-b from-black/70 to-transparent" />
@@ -68,6 +69,13 @@ export default function HomePage() {
           </motion.button>
         </Link>
       </motion.div>
+
     </main>
+
+
+    <div className="h-[100vh] bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-blue-950 via-black to-blue-900 [--tw-gradient-stops:from_blue-950,via_black,to_blue-900] relative overflow-hidden [background-size:200%_200%] before:content-[''] before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_20%_30%,rgba(100,149,237,0.2)_0%,transparent_40%)] after:content-[''] after:absolute after:inset-0 after:bg-[linear-gradient(135deg,rgba(30,58,138,0.3)_0%,transparent_30%,transparent_70%,rgba(30,58,138,0.3)_100%)]">
+    
+    </div>
+    </div>
   );
 }
