@@ -1,5 +1,6 @@
 import { GetTokenFromLocalStorage } from "../helpers/tokenHandling";
 import { withRefresh } from "../helpers/api";
+import { getApiUrl } from "../config/api";
 import type { ErrorResponse, Product, CreateListingResponse } from "../models/api";
 
 export interface ProductInfo {
@@ -33,9 +34,6 @@ export interface GetProductsParams {
 
 export async function GetProducts(params: GetProductsParams): Promise<ProductInfo[] | ErrorResponse> {
   const token = GetTokenFromLocalStorage();
-  if (token === "") {
-    return { code: 401, message: "no token found" } as ErrorResponse;
-  }
 
   const searchParams = new URLSearchParams({
     limit: params.limit.toString(),
@@ -49,18 +47,28 @@ export async function GetProducts(params: GetProductsParams): Promise<ProductInf
   if (params.creator) searchParams.append("creator", params.creator);
 
   const req = async (): Promise<Response> => {
-    return await fetch(`https://api.luxoras.nl/listings?${searchParams.toString()}`, {
+    const headers: Record<string, string> = {};
+    
+    if (token && token !== "") {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    return await fetch(getApiUrl(`/listings?${searchParams.toString()}`), {
       method: "GET",
       credentials: "include",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers,
     });
   };
 
   try {
-    const resp = await withRefresh(req);
-    if (!resp) return { code: 500, message: "failed to refresh token" } as ErrorResponse;
+    let resp: Response | undefined;
+    
+    if (token && token !== "") {
+      resp = await withRefresh(req);
+      if (!resp) return { code: 500, message: "failed to refresh token" } as ErrorResponse;
+    } else {
+      resp = await req();
+    }
 
     if (resp.ok) {
       const products = await resp.json();
@@ -81,7 +89,7 @@ export async function CreateListing(product: Product): Promise<CreateListingResp
   }
 
   const req = async (): Promise<Response> => {
-    return await fetch("https://api.luxoras.nl/listings", {
+    return await fetch(getApiUrl("/listings"), {
       method: "POST",
       credentials: "include",
       headers: {
@@ -114,7 +122,7 @@ export async function DeleteListing(productId: string): Promise<void | ErrorResp
   }
 
   const req = async (): Promise<Response> => {
-    return await fetch(`https://api.luxoras.nl/listings?id=${productId}`, {
+    return await fetch(getApiUrl(`/listings?id=${productId}`), {
       method: "DELETE",
       credentials: "include",
       headers: {

@@ -2,6 +2,7 @@ import {
   GetTokenFromLocalStorage,
   SetTokenInLocalStorage,
 } from "../helpers/tokenHandling";
+import { getApiUrl } from "../config/api";
 import { AccessTokenResponse, ErrorResponse, UserDetails } from "../models/api";
 
 export async function OauthExchange(
@@ -14,7 +15,7 @@ export async function OauthExchange(
 
   try {
     const resp = await fetch(
-      `https://api.luxoras.nl/auth/${provider}/exchange?code=${code}&state=${state}`,
+      getApiUrl(`/auth/${provider}/exchange?code=${code}&state=${state}`),
       {
         method: "GET", 
         credentials: "include",
@@ -39,7 +40,7 @@ export async function VerifyToken(): Promise<number> {
 
   const req = async (): Promise<Response> => {
     const resp = await fetch(
-      `https://api.luxoras.nl/auth/verify?token=${token}`,
+      getApiUrl(`/auth/verify?token=${token}`),
       {
         method: "GET",
         credentials: "include",
@@ -67,7 +68,7 @@ export async function Refresh(): Promise<number> {
   if (token === "") return 403;
 
   try {
-    const resp = await fetch(`https://api.luxoras.nl/auth/refresh`, {
+    const resp = await fetch(getApiUrl("/auth/refresh"), {
       method: "POST",
       credentials: "include",
     });
@@ -87,7 +88,7 @@ export async function GetUserDetails(token: string): Promise<UserDetails | Error
     return { code: 403, message: "missing auth token" } as ErrorResponse;
 
   const req = async (): Promise<Response> => {
-    const resp = await fetch(`https://api.luxoras.nl/auth/userinfo`, {
+    const resp = await fetch(getApiUrl("/auth/userinfo"), {
       method: "GET",
       headers: {
         Authorization: token,
