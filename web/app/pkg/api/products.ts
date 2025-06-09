@@ -47,10 +47,10 @@ export async function GetProducts(params: GetProductsParams): Promise<ProductInf
   if (params.creator) searchParams.append("creator", params.creator);
 
   const req = async (): Promise<Response> => {
-    const headers: Record<string, string> = {};
+    const headers: Record<string, string> = {}; 
     
     if (token && token !== "") {
-      headers.Authorization = `Bearer ${token}`;
+      headers.Authorization = token;
     }
 
     return await fetch(getApiUrl(`/listings?${searchParams.toString()}`), {
