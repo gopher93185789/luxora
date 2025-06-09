@@ -9,8 +9,7 @@ const isDevelopment = typeof window !== 'undefined' &&
   (window.location.hostname === 'localhost' || 
    window.location.hostname.includes('github.dev') ||
    window.location.hostname.includes('gitpod.io') ||
-   window.location.port === '5173' ||
-   window.location.port === '5174');
+   window.location.port === '5173');
 
 export const apiConfig: ApiConfig = {
   baseUrl: isDevelopment 

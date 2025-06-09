@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ProductGrid } from "~/components/ProductGrid";
 import type { GetProductsParams } from "~/pkg/api/products";
 
 export default function Marketplace() {
@@ -32,14 +33,6 @@ export default function Marketplace() {
           Discover exclusive luxury items from verified sellers
         </p>
       </div>
-<<<<<<< HEAD
-=======
-
-      <ProductFilters
-        params={filterParams}
-        onParamsChange={setFilterParams}
-        categories={categories}
-      />
 
       <ProductGrid
         key={JSON.stringify(filterParams)} 
@@ -47,7 +40,6 @@ export default function Marketplace() {
         showDeleteButtons={false}
         className="min-h-screen"
       />
->>>>>>> c3d30c5 (feat: refactor API calls to use getApiUrl for consistency and improve ProductGrid functionality)
     </main>
   );
 }
