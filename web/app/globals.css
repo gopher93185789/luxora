@@ -1,5 +1,16 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Cantata+One&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+@font-face {
+  font-family: 'Trajan Pro';
+  src: url('/fonts/TrajanPro-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Trajan Pro', serif;
+};
+
 
 @theme {
   --color-primary: #070707;
@@ -15,8 +26,10 @@
   --color-button-border: rgba(255, 255, 255, 0.1);
   --color-button-hover-text: #004221;
   --color-button-active-bg: rgba(255, 255, 255, 0.2);
+  --color-luxora: #B7955C;
   --font-family: 'Montserrat', sans-serif;
 }
+
 
 @keyframes shine {
   0% {

@@ -94,7 +94,7 @@ export async function CreateListing(product: Product): Promise<CreateListingResp
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: token,
       },
       body: JSON.stringify(product),
     });
