@@ -112,3 +112,22 @@ export async function GetUserDetails(token: string): Promise<UserDetails | Error
     } as ErrorResponse;
   }
 }
+export async function Logout(): Promise<void> {
+  const token = GetTokenFromLocalStorage();
+  if (token === "") return;
+
+  try {
+    await fetch(getApiUrl("/auth/logout"),{
+      method: "POST",
+      credentials: "include",
+      headers: {
+        Authorization: token,
+      },
+
+    })
+  } catch {
+  } finally {
+    SetTokenInLocalStorage("")
+  }
+}
+
