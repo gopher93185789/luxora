@@ -10,38 +10,22 @@ export default function Marketplace() {
     page: 1
   });
 
-  const categories = [
-    "Electronics",
-    "Fashion", 
-    "Home & Garden",
-    "Sports",
-    "Books",
-    "Art",
-    "Jewelry",
-    "Vehicles",
-    "Beauty",
-    "Gaming",
-    "Music",
-    "Travel"
-  ];
-
   return (
-    <main className="max-w-7xl mx-auto px-4 py-8 space-y-6">
-    
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-text-primary mb-2">
-          Luxora Marketplace
-        </h1>
-        <p className="text-text-primary/70 text-lg">
-          Discover exclusive luxury items from verified sellers
-        </p>
+    <main className="">
+
+      <div className="flex w-full h-full" >
+        <Sidebar />
+        <div className="w-screen h-full overflow-auto p-5">
+          <ProductGrid
+            
+            key={JSON.stringify(filterParams)} 
+            initialParams={filterParams}
+            showDeleteButtons={false}
+            className="min-h-screen "
+          />
+        </div>
+
       </div>
-      <ProductGrid
-        key={JSON.stringify(filterParams)} 
-        initialParams={filterParams}
-        showDeleteButtons={false}
-        className="min-h-screen"
-      />
     </main>
     
   );
