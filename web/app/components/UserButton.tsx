@@ -8,8 +8,20 @@ export function UserButton() {
   const toggleDropdown = () => setIsOpen(prev => !prev)
   const user = useUserInfo()
 
+  const userVariants = {
+    hidden: { y: -80, opacity: 0 },
+    visible: { y: 0, opacity: 1,},
+    exit: { y: -80, opacity: 0 },
+  }
+
   return (
-    <div className="absolute top-5 right-5 inline-block text-left z-50">
+    <motion.div className="absolute bottom-9 left-7 inline-block text-left z-[100]"
+    initial="hidden"
+    animate="visible"
+    exit="exit"
+    variants={userVariants}
+      aria-label="User menu"
+    >
       <button onClick={toggleDropdown} className="focus:outline-none">
         <img
           src={user.user?.profile_image_link || "/images/default-avatar.png"}
@@ -21,14 +33,14 @@ export function UserButton() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -10 }}
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+            exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-primary ring-1 ring-black"
+            className="absolute left-0 bottom-20 mt-2 w-43 rounded-md shadow-lg bg-primary ring-1 ring-black"
             aria-label="User menu"
           >
-            <ul className="p-4 flex flex-col gap-1 ">
+            <ul className="p-2 flex flex-col gap-1 ">
             <li className="p-2 bg-primary rounded-md  hover:bg-accent/20" >
             <Link
                         to="/dashboard/profile"
@@ -53,6 +65,6 @@ export function UserButton() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   )
 }

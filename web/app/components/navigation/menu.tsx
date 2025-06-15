@@ -12,6 +12,7 @@ export function DropdownMenu() {
             <button
                 onClick={() => setOpen((prev) => !prev)}
                 className="z-50 relative"
+                title='Toggle Menu'
             >
                 <motion.div 
                     animate={{ rotate: open ? 90 : 0, opacity: 1, y: 0, scale: 1 }}
