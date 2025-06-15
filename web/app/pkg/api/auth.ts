@@ -112,22 +112,25 @@ export async function GetUserDetails(token: string): Promise<UserDetails | Error
     } as ErrorResponse;
   }
 }
-export async function Logout(): Promise<void> {
+export async function Logout(): Promise<number> {
   const token = GetTokenFromLocalStorage();
-  if (token === "") return;
+  if (token === "") return 403;
 
   try {
-    await fetch(getApiUrl("/auth/logout"),{
+    const response = await fetch(getApiUrl("/auth/logout"), {
       method: "POST",
       credentials: "include",
       headers: {
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
+    });
 
-    })
+    if (!response.ok) return response.status;
+    return 200;
   } catch {
+    return 500;
   } finally {
-    SetTokenInLocalStorage("")
+    SetTokenInLocalStorage("");
   }
 }
 

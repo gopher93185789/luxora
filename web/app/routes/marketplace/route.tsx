@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { DashboardButton } from "~/components/DashButton";
+import { Sidebar } from "~/components/navigation/sidebar";
 import { ProductGrid } from "~/components/ProductGrid";
 import type { GetProductsParams } from "~/pkg/api/products";
 
@@ -26,7 +27,7 @@ export default function Marketplace() {
 
   return (
     <main className="max-w-7xl mx-auto px-4 py-8 space-y-6">
-      <DashboardButton />
+    
       <div className="text-center">
         <h1 className="text-4xl font-bold text-text-primary mb-2">
           Luxora Marketplace
@@ -35,7 +36,6 @@ export default function Marketplace() {
           Discover exclusive luxury items from verified sellers
         </p>
       </div>
-
       <ProductGrid
         key={JSON.stringify(filterParams)} 
         initialParams={filterParams}
@@ -43,5 +43,6 @@ export default function Marketplace() {
         className="min-h-screen"
       />
     </main>
+    
   );
 }

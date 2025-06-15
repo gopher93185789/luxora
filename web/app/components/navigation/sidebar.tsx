@@ -1,12 +1,16 @@
 import { Link } from "@remix-run/react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useHref } from "@remix-run/react";
 import { useState } from "react";
+import { ArrowBigRight } from "lucide-react";
 
 
 const navLinks = [
-    { to: "/dashboard", label: "Dashboard" },
+    { to: "/", label: "Home" },
     { to: "/dashboard/listings", label: "Listings"},
+    { to: "/marketplace", label: "Marketplace", },
+    { to: "/dashboard", label: "Dashboard" },
+    { to: "/dashboard/profile", label: "Profile" },
 ];
 
 const sidebarVariants = {
@@ -49,6 +53,7 @@ export function Sidebar() {
               </motion.li>
             ))}
           </ul>
+          
         </nav>
       </motion.div>
     );

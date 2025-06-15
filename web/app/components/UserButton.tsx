@@ -2,6 +2,9 @@ import { useState } from "react"
 import { useUserInfo } from "~/hooks/use-user-info"
 import { Link } from "@remix-run/react"
 import { motion, AnimatePresence } from "framer-motion"
+import { User } from "lucide-react"
+import { LogoutButton } from "./LogoutButton"
+
 
 export function UserButton() {
   const [isOpen, setIsOpen] = useState(false)
@@ -15,7 +18,7 @@ export function UserButton() {
   }
 
   return (
-    <motion.div className="absolute bottom-9 left-7 inline-block text-left z-[100]"
+    <motion.div className="absolute bottom-9 left-5 inline-block text-left z-[100]"
     initial="hidden"
     animate="visible"
     exit="exit"
@@ -24,7 +27,7 @@ export function UserButton() {
     >
       <button onClick={toggleDropdown} className="focus:outline-none">
         <img
-          src={user.user?.profile_image_link || "/images/default-avatar.png"}
+          src={user.user?.profile_image_link}
           alt="User Profile"
           className="h-14 w-14 rounded-md"
         />
@@ -60,6 +63,14 @@ export function UserButton() {
                     >
                         Listings
                     </Link>
+                </li>
+                <li className="p-2 bg-primary rounded-md hover:bg-accent/20">
+                  <LogoutButton
+                    className="block text-sm text-accent font-family w-full text-left"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Logout
+                  </LogoutButton>
                 </li>
             </ul>
           </motion.div>

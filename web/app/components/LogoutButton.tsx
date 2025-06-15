@@ -1,20 +1,27 @@
 import React from "react";
-import { Link } from "@remix-run/react";
+import { Logout } from "~/pkg/api/auth";
 
 interface LogoutButtonProps {
-  href: string;
   icon?: React.ReactElement;
-  children?: React.ReactNode
+  children?: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
 }
 
-export function LogoutButton({ href, icon }: LogoutButtonProps) {
+export function LogoutButton({ icon, children, className, onClick }: LogoutButtonProps) {
+  const handleLogout = async () => {
+    await Logout();
+    onClick?.();
+    window.location.href = "/";
+  };
+
   return (
-    <Link
-      to={href}
-      className="w-full font-thin items-center border hover:bg-white/15 justify-center border-border/10 flex flex-row gap-2 hover:cursor-pointer duration-200 text-text-primary  rounded p-2"
+    <button
+      onClick={handleLogout}
+      className={className}
     >
       {icon}
-      
-    </Link>
+      {children}
+    </button>
   );
 }
