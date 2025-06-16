@@ -11,22 +11,18 @@ export default function Marketplace() {
   });
 
   return (
-    <main className="">
-
-      <div className="flex w-full h-full" >
-        <Sidebar />
-        <div className="w-screen h-full overflow-auto p-5">
+    <main className="min-h-screen flex">
+      <Sidebar />
+      <div className="flex-1 px-64 pl-5 p-5 flex justify-center">
+        <div className="max-w-7xl w-full">
           <ProductGrid
-            
             key={JSON.stringify(filterParams)} 
             initialParams={filterParams}
             showDeleteButtons={false}
-            className="min-h-screen "
+            className="min-h-[80vh]"
           />
         </div>
-
       </div>
     </main>
-    
   );
 }

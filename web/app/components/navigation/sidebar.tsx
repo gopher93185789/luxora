@@ -54,7 +54,7 @@ export function Sidebar() {
       )}
 
       {isMarketplace && (
-        <div className="flex flex-col gap-2 h-full justify-center items-start">
+        <div className="flex flex-col pl-5 gap-2 h-full justify-center items-start">
           <nav className="flex flex-col gap-2 h-full justify-between items-center">
           <ul className="flex flex-col gap-2 h-full justify-center items-start">
             {navLinks
