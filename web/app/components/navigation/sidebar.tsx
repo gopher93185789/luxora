@@ -34,7 +34,6 @@ export function Sidebar() {
         <nav className="flex flex-col gap-2 h-full justify-between items-center">
           <ul className="flex flex-col gap-2 h-full justify-center items-start">
             {navLinks
-              .filter(link => link.to.startsWith("/dashboard"))
               .map(link => (
                 <motion.li key={link.to} variants={itemVariants}>
                   <Link
@@ -58,7 +57,6 @@ export function Sidebar() {
           <nav className="flex flex-col gap-2 h-full justify-between items-center">
           <ul className="flex flex-col gap-2 h-full justify-center items-start">
             {navLinks
-              .filter(link => link.to.startsWith("/marketplace"))
               .map(link => (
                 <motion.li key={link.to} variants={itemVariants}>
                   <Link

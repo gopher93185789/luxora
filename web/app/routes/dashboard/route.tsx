@@ -30,16 +30,18 @@ export default function DashboardLayout() {
         navigate("/auth");
       }
     };
-    handle()
+    handle();
   });
 
   return (
-    <div className="flex w-full h-screen">
-        <UserButton />
+    <main className="min-h-screen flex">
       <Sidebar />
-        <div className="w-[calc(100vw-256px)] h-full overflow-auto p-5">
+      <div className="flex-1 px-64 p-5">
+        <UserButton />
+        <div className="w-full">
           <Outlet />
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

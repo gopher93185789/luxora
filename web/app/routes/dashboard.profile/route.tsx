@@ -56,20 +56,26 @@ export default function Dashboard() {
   }, [requireRefresh, navigate]);
 
   return (
-    <>
-      <div className="flex h-full w-full flex-col gap-5">
-        <h1>Welkom, {data?.username}!</h1>
-        <img
-          className="h-32 w-32 rounded-full"
-          src={data?.profile_image_link || "/images/default-avatar.png"}
-          alt="User Avatar"
-        />
-        {data?.email.String === "" ? null : <p>Email: {data?.email.String}</p>}
+    <div className="flex flex-col gap-8 items-start">
+      <div className="bg-primary border border-border/10 rounded-lg p-8 w-full">
+        <div className="flex items-center gap-6">
+          <img
+            className="h-24 w-24 rounded-full border-2 border-accent/20"
+            src={data?.profile_image_link || "/images/default-avatar.png"}
+            alt="User Avatar"
+          />
+          <div className="flex flex-col gap-2">
+            <h1 className="text-3xl font-bold text-text-primary">
+              Welcome, {data?.username}!
+            </h1>
+            {data?.email.String && (
+              <p className="text-text-primary/70">
+                Email: {data?.email.String}
+              </p>
+            )}
+          </div>
+        </div>
       </div>
-
-      <div className="h-screen w-full"></div>
-      <div className="h-screen w-full"></div>
-      <div className="h-screen w-full"></div>
-    </>
+    </div>
   );
 }
