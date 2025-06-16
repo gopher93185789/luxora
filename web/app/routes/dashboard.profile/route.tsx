@@ -48,7 +48,7 @@ export default function Dashboard() {
 
         setData(userData);
       } catch {
-        navigate("/auth");
+        // navigate("/auth");
       }
     };
 

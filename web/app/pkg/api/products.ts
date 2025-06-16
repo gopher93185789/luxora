@@ -126,7 +126,7 @@ export async function DeleteListing(productId: string): Promise<void | ErrorResp
       method: "DELETE",
       credentials: "include",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: token,
       },
     });
   };

@@ -85,10 +85,13 @@ export function ProductGrid({
           </svg>
         </div>
         <h3 className="text-lg font-semibold text-text-primary mb-2">
-          No products found
+          {showDeleteButtons ? "No listings yet" : "No products found"}
         </h3>
         <p className="text-text-primary/70">
-          Try adjusting your search criteria or check back later.
+          {showDeleteButtons 
+            ? "Start selling by creating your first listing!"
+            : "Try adjusting your search criteria or check back later."
+          }
         </p>
       </div>
     );

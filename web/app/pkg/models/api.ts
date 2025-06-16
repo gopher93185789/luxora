@@ -18,17 +18,15 @@ export interface CreateBidResponse {
 }
 
 export interface Product {
+  name: string;
   category: string;
   description: string;
-  name: string;
   price: number;
   product_images: ProductImage[];
 }
 
 export interface ProductImage {
-  base_64_image: string;
-  checksum: string;
-  compressedImage: number[];
+  image: string;
   order: number;
 }
 

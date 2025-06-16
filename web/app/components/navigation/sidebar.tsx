@@ -5,7 +5,7 @@ const navLinks = [
   { to: "/", label: "Home" },
   { to: "/dashboard/listings", label: "Listings" },
   { to: "/marketplace", label: "Marketplace" },
-  { to: "/dashboard", label: "Dashboard" },
+  { to: "/dashboard/profile", label: "Profile" },
 ];
 
 const sidebarVariants = {

@@ -9,6 +9,7 @@ import { UserButton } from "~/components/UserButton";
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
+  
   useEffect(() => {
     const handle = async () => {
       try {
@@ -27,7 +28,7 @@ export default function DashboardLayout() {
           body: JSON.stringify({ tk }),
         });
       } catch {
-        navigate("/auth");
+        // navigate("/auth");
       }
     };
     handle();
