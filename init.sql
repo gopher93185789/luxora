@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS luxora_product (
 
 CREATE TABLE IF NOT EXISTS luxora_product_price_history (
     product_id UUID REFERENCES luxora_product(item_id) ON DELETE CASCADE NOT NULL,
-    price NUMERIC(10, 2) NOT NULL,
+    price NUMERIC(14, 2) NOT NULL,
     currency CHAR(3) DEFAULT 'EUR',
     created TIMESTAMP DEFAULT NOW()
 );
