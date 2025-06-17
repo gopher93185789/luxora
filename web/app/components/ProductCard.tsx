@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "@remix-run/react";
 import type { ProductInfo } from "~/pkg/api/products";
 
 interface ProductCardProps {
@@ -47,11 +48,12 @@ export function ProductCard({ product, onDelete, showDeleteButton = false }: Pro
   const primaryImage = product.product_images?.find(img => img.order === 0) || product.product_images?.[0];
 
   return (
-    <motion.div
-      className="bg-primary border border-border/10 rounded-lg overflow-hidden hover:border-border/20 transition-all duration-300 group"
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.2 }}
-    >
+    <Link to={`/product/${product.id}`} className="block">
+      <motion.div
+        className="bg-primary border border-border/10 rounded-lg overflow-hidden hover:border-border/20 transition-all duration-300 group cursor-pointer"
+        whileHover={{ y: -4 }}
+        transition={{ duration: 0.2 }}
+      >
       <div className="relative aspect-square overflow-hidden bg-primary/50">
         {primaryImage && !imageError ? (
           <>
@@ -133,5 +135,6 @@ export function ProductCard({ product, onDelete, showDeleteButton = false }: Pro
 
       <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
     </motion.div>
+    </Link>
   );
 }

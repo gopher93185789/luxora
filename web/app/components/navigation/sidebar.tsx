@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 const navLinks = [
   { to: "/", label: "Home" },
   { to: "/dashboard/listings", label: "Listings" },
+  { to: "/dashboard/biddings", label: "Biddings" },
   { to: "/marketplace", label: "Marketplace" },
   { to: "/dashboard/profile", label: "Profile" },
 ];
@@ -21,6 +22,7 @@ const itemVariants = {
 export function Sidebar() {
   const location = useLocation();
   const isMarketplace = location.pathname.startsWith("/marketplace");
+  const isProduct = location.pathname.startsWith("/product");
   const isDashboard = location.pathname.startsWith("/dashboard");
 
   return (
@@ -30,10 +32,12 @@ export function Sidebar() {
       animate="visible"
       variants={sidebarVariants}
     >
-      {isDashboard && (
+      {(isDashboard || isMarketplace || isProduct) && (
         <nav className="flex flex-col gap-2 h-full justify-between items-center">
           <ul className="flex flex-col gap-2 h-full justify-center items-start">
             {navLinks
+              .filter(link => !isMarketplace || (link.to !== "/dashboard/listings" && link.to !== "/dashboard/biddings"))
+              .filter(link => !isProduct || (link.to !== "/dashboard/listings" && link.to !== "/dashboard/biddings"))
               .map(link => (
                 <motion.li key={link.to} variants={itemVariants}>
                   <Link
@@ -57,6 +61,7 @@ export function Sidebar() {
           <nav className="flex flex-col gap-2 h-full justify-between items-center">
           <ul className="flex flex-col gap-2 h-full justify-center items-start">
             {navLinks
+              .filter(link => link.to !== "/dashboard/listings" && link.to !== "/dashboard/biddings")
               .map(link => (
                 <motion.li key={link.to} variants={itemVariants}>
                   <Link
