@@ -5,6 +5,7 @@ export interface ApiConfig {
   timeout: number;
 }
 
+// wtf is this overcomplicated and unnecesary code nigga?
 const isDevelopment = typeof window !== 'undefined' && 
   (window.location.hostname === 'localhost' || 
    window.location.hostname.includes('github.dev') ||

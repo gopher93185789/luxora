@@ -5,15 +5,18 @@ import { motion } from "framer-motion";
 import { GetProduct, type ProductInfo } from "~/pkg/api/products";
 import type { ErrorResponse } from "~/pkg/models/api";
 import { Sidebar } from "~/components/navigation/sidebar";
+import { getTokenFromServerSideCaller } from "~/pkg/helpers/server";
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  const { productId } = params;
+export async function loader(lfa: LoaderFunctionArgs) {
+  const { productId } = lfa.params;
   
   if (!productId) {
     throw new Response("Product ID is required", { status: 400 });
   }
 
-  const result = await GetProduct(productId);
+  const token = await getTokenFromServerSideCaller(lfa)
+
+  const result = await GetProduct(productId, token);
   
   if ("code" in result) {
     throw new Response(result.message, { status: result.code });
