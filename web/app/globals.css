@@ -1,5 +1,15 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Cantata+One&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+@font-face {
+  font-family: 'Trajan Pro';
+  src: url('/fonts/TrajanPro-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+};
+
 
 @theme {
   --color-primary: #070707;
@@ -15,8 +25,10 @@
   --color-button-border: rgba(255, 255, 255, 0.1);
   --color-button-hover-text: #004221;
   --color-button-active-bg: rgba(255, 255, 255, 0.2);
+  --color-luxora: #B7955C;
   --font-family: 'Montserrat', sans-serif;
 }
+
 
 @keyframes shine {
   0% {
@@ -29,4 +41,40 @@
 
 .animate-shine {
   animation: shine 5s linear infinite
+}
+
+body{
+  scroll-behavior: smooth;
+}
+
+body::-webkit-scrollbar {
+display: none;
+
+}
+html {
+scroll-behavior: smooth;
+}
+
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
 }

@@ -3,9 +3,12 @@ import { useEffect } from "react";
 import { Sidebar } from "~/components/navigation/sidebar";
 import { Refresh, VerifyToken } from "~/pkg/api/auth";
 import { GetTokenFromLocalStorage } from "~/pkg/helpers/tokenHandling";
+import { motion } from "framer-motion";
+import { UserButton } from "~/components/UserButton";
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
+  
   useEffect(() => {
     const handle = async () => {
       try {
@@ -24,18 +27,21 @@ export default function DashboardLayout() {
           body: JSON.stringify({ tk }),
         });
       } catch {
-        navigate("/auth");
+        // navigate("/auth");
       }
     };
-    handle()
+    handle();
   });
 
   return (
-    <div className="flex w-full h-screen">
+    <main className="min-h-screen flex">
       <Sidebar />
-      <div className="w-[calc(100vw-256px)] h-full overflow-auto p-5">
-        <Outlet />
+      <div className="flex-1 px-64 p-5">
+        <UserButton />
+        <div className="w-full">
+          <Outlet />
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

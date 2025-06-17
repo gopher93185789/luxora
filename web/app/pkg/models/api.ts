@@ -9,6 +9,19 @@ export interface Bid {
   product_id: string;
 }
 
+export interface BidDetails {
+  bid_id: string;
+  message: string;
+  created_by: string;
+  amount: number;
+  product_id: string;
+  created_at: string;
+  product_name?: string;
+  product_image?: string;
+  current_highest_bid?: number;
+  bid_status?: 'active' | 'outbid' | 'winning' | 'won' | 'lost';
+}
+
 export interface CartItems {
   products: string[];
 }
@@ -18,17 +31,15 @@ export interface CreateBidResponse {
 }
 
 export interface Product {
+  name: string;
   category: string;
   description: string;
-  name: string;
   price: number;
   product_images: ProductImage[];
 }
 
 export interface ProductImage {
-  base_64_image: string;
-  checksum: string;
-  compressedImage: number[];
+  image: string;
   order: number;
 }
 
