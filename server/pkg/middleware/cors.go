@@ -9,6 +9,7 @@ type CorsConfig struct {
 	AllowedOrigins []string
 }
 
+// fuck cors 
 func (c *CorsConfig) CORSMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		origin := r.Header.Get("Origin")
