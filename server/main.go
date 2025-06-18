@@ -135,8 +135,8 @@ func main() {
 	srv := http.Server{
 		Addr:         config.Port,
 		Handler:      cors.CORSMiddleware(mux),
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
+		ReadTimeout:  30 * time.Second,
+		WriteTimeout: 60 * time.Second,
 		IdleTimeout:  120 * time.Second,
 	}
 
@@ -165,9 +165,7 @@ func main() {
 			reloader.WatchCertificate(config.TlsCertFilePath, config.TlsKeyFilePath, 24*time.Hour)
 
 			srv.TLSConfig = &tls.Config{
-				MinVersion:             tls.VersionTLS12,
 				SessionTicketsDisabled: false,
-				NextProtos:             []string{"h2", "http/1.1"},
 				GetCertificate:         reloader.GetCertificate,
 			}
 
