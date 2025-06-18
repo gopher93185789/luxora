@@ -37,9 +37,8 @@ export default function DashboardLayout() {
   return (
     <main className="min-h-screen flex">
       <Sidebar />
-      <div className="flex-1 px-64 p-5">
-        <UserButton />
-        <div className="w-full">
+      <div className="flex-1 px-64 pl-5 p-5 justify-center" >
+        <div className=" w-full">
           <Outlet />
         </div>
       </div>

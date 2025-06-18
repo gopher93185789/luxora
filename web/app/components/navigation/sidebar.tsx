@@ -26,7 +26,7 @@ export function BackButton() {
   return (
     <button
       onClick={() => navigate(-1)}
-      className="block px-6 py-2 text-2xl bg-primary rounded-lg hover:bg-accent/20 transition-colors duration-200 flex items-center gap-2 font-family"
+      className="block px-6 py-2 text-2xl bg-primary rounded-lg text-text-primary/50 hover:text-text-primary hover:bg-accent/20 transition-colors duration-200 flex items-center gap-2 font-family"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
