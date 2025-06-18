@@ -106,7 +106,6 @@ export async function GetProduct(
       headers.Authorization = token;
     }
 
-    // getApiUrl is so bad
     return await fetch(getApiUrl(`/listings/${productId}`), {
       method: "GET",
       credentials: "include",
@@ -147,6 +146,8 @@ export async function CreateListing(
   if (token === "") {
     return { code: 401, message: "no token found" } as ErrorResponse;
   }
+  
+  
 
   const req = async (): Promise<Response> => {
     return await fetch(getApiUrl("/listings"), {

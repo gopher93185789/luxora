@@ -63,7 +63,7 @@ export function ProductCard({ product, onDelete, showDeleteButton = false }: Pro
               </div>
             )}
             <img
-              src={`data:image/jpeg;base64,${primaryImage.base_64_image}`}
+              src={`data:image/jpg;base64,${primaryImage.base_64_image}`}
               alt={product.name}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               onLoad={handleImageLoad}

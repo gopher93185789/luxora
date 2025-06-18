@@ -121,7 +121,7 @@ export async function Logout(): Promise<number> {
       method: "POST",
       credentials: "include",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: token,
       },
     });
 
