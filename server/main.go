@@ -137,8 +137,16 @@ func main() {
 		Handler:      cors.CORSMiddleware(mux),
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 5 * time.Second,
-		IdleTimeout:  30 * time.Second,
+		IdleTimeout:  15 * time.Second,
 	}
+
+	go func() {
+		t := time.NewTicker(30 * time.Second)
+		for range t.C {
+			stats := pool.Pool.Stat()
+			log.Printf("PG pool stats: total=%d idle=%d inUse=%d", stats.TotalConns(), stats.IdleConns(), stats.AcquiredConns())
+		}
+	}()
 
 	go func() {
 		log.Println("listening on port " + config.Port)

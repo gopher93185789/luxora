@@ -18,10 +18,10 @@ func New(dsn string) (pool *Postgres, err error) {
 	}
 
 
-	conf.MaxConns = 100
-	conf.MinConns = 1
+	conf.MaxConns = 50
+	conf.MinConns = 10
 	conf.MaxConnLifetime = 15 * time.Minute
-	conf.MaxConnIdleTime = 5 * time.Minute
+	conf.MaxConnIdleTime = 30 * time.Second
 	conf.HealthCheckPeriod = 30 * time.Second
 	conf.ConnConfig.ConnectTimeout = 5 * time.Second
 
