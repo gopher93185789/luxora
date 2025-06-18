@@ -58,7 +58,7 @@ func main() {
 
 	logger := logger.New(os.Stdout, &logger.LoggerOpts{
 		BufferSize: 512,
-		ChanBuffer: 1000,
+		ChanBuffer: 1_000_000,
 	})
 
 	tx := &auth.TransportConfig{
@@ -136,8 +136,8 @@ func main() {
 		Addr:         config.Port,
 		Handler:      cors.CORSMiddleware(mux),
 		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 30 * time.Second,
-		IdleTimeout:  120 * time.Second,
+		WriteTimeout: 5 * time.Second,
+		IdleTimeout:  30 * time.Second,
 	}
 
 	go func() {
