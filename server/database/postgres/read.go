@@ -156,7 +156,13 @@ func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID,
 	if err != nil {
 		return nil, err
 	}
-	defer tx.Rollback(ctx)
+	defer func () {
+		if err != nil {
+			tx.Rollback(ctx)
+		}else {
+			tx.Commit(ctx)
+		}
+	}()
 
 	products = make([]models.ProductInfo, 0, limit)
 
@@ -203,7 +209,7 @@ func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID,
 		rows.Close()
 	}
 
-	return products, tx.Commit(ctx)
+	return products, nil
 }
 
 func (p *Postgres) GetUserDetails(ctx context.Context, userID uuid.UUID) (details models.UserDetails, err error) {
