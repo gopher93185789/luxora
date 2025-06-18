@@ -135,8 +135,8 @@ func main() {
 	srv := http.Server{
 		Addr:         config.Port,
 		Handler:      cors.CORSMiddleware(mux),
-		ReadTimeout:  30 * time.Second,
-		WriteTimeout: 60 * time.Second,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 30 * time.Second,
 		IdleTimeout:  120 * time.Second,
 	}
 

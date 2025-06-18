@@ -84,13 +84,13 @@ func TestInsertListing(t *testing.T) {
 				Image:           "wlieblwelkjhe",
 				Order:           0,
 				Checksum:        "slkdfkljsfd",
-				CompressedImage: make([]byte, 10),
+				CompressedImage: []byte("khwbvlifblvlejljv"),
 			},
 			{
 				Image:           "sdvsrtvs",
 				Order:           1,
 				Checksum:        "slkdfksgvsljsfd",
-				CompressedImage: make([]byte, 10),
+				CompressedImage: []byte("khwbvlifblvlejljv"),
 			},
 		},
 	}

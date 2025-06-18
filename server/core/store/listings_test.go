@@ -98,8 +98,8 @@ func TestGetListings(t *testing.T) {
 		Description: "knaye the goat",
 		Price:       price,
 		Images: []models.ProductImage{
-			{Image: "img1", Order: 0, Checksum: "chk1", CompressedImage: make([]byte, 10)},
-			{Image: "img2", Order: 1, Checksum: "chk2", CompressedImage: make([]byte, 10)},
+			{Image: "img1", Order: 0},
+			{Image: "img2", Order: 1},
 		},
 	}
 
@@ -119,5 +119,58 @@ func TestGetListings(t *testing.T) {
 
 	if prods[0].Images[0].Image != product.Images[0].Image {
 		t.Fatal("incorrect product image fetched", prods)
+	}
+}
+
+func TestCreateNewListingWithImageCompression(t *testing.T) {
+	conn, clean, err := testutils.SetupTestPostgresDB("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer clean()
+
+	c := &CoreStoreContext{
+		Database: &postgres.Postgres{
+			Pool: conn,
+		},
+		Logger: logger.New(os.Stdout),
+	}
+
+	uid, err := c.Database.InsertOauthUser(t.Context(), "jack", "google", "skofk", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	testImage := "Hello, this is a test image content!"
+	product := &models.Product{
+		ItemName:    "test item",
+		Category:    "products",
+		Description: "test description",
+		Price:       decimal.NewFromInt(100),
+		Images: []models.ProductImage{
+			{
+				Image: testImage,
+				Order: 0,
+			},
+		},
+	}
+
+	pid, err := c.CreateNewListing(t.Context(), uid, product)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var compressedImage []byte
+	err = conn.QueryRow(t.Context(), "SELECT compressed_image FROM luxora_product_image WHERE product_id=$1", pid).Scan(&compressedImage)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(compressedImage) == 0 {
+		t.Fatal("compressed image is empty")
+	}
+
+	if len(compressedImage) == len(testImage) {
+		t.Fatal("image doesn't appear to be compressed")
 	}
 }

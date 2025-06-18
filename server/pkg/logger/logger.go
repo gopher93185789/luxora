@@ -69,12 +69,16 @@ func New(writer io.Writer, opts ...*LoggerOpts) *Logger {
 }
 
 func consumer(l *Logger) {
+	t := time.NewTicker(1 * time.Minute)
 	defer l.wg.Done()
 	for {
 		select {
 		case <-l.cancel:
 			l.writer.Write(l.buffer.Bytes())
+			t.Stop()
 			return
+		case <-t.C:
+			l.writer.Write(l.buffer.Bytes())
 		case log, ok := <-l.ch:
 			if !ok {
 				return
