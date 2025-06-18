@@ -141,14 +141,6 @@ func main() {
 	}
 
 	go func() {
-		t := time.NewTicker(30 * time.Second)
-		for range t.C {
-			stats := pool.Pool.Stat()
-			log.Printf("PG pool stats: total=%d idle=%d inUse=%d", stats.TotalConns(), stats.IdleConns(), stats.AcquiredConns())
-		}
-	}()
-
-	go func() {
 		log.Println("listening on port " + config.Port)
 		if config.Env == DEV {
 			if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {

@@ -9,7 +9,7 @@ import (
 
 func main() {
 	url := "https://api.luxoras.nl/listings?limit=12&page=1"
-	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOGI0YzdjNWYtYjk0OC00MjBlLWJlNTctN2M3ZTA3MjYzYWY0IiwidG9rZW5fdHlwZSI6MCwiZXhwIjoxNzUwMjU1NTc4fQ.M2EzU8oGm5EpoUKNLEjRUuRRyEcPSrb8pShREpPWi-c"
+	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOGI0YzdjNWYtYjk0OC00MjBlLWJlNTctN2M3ZTA3MjYzYWY0IiwidG9rZW5fdHlwZSI6MCwiZXhwIjoxNzUwMjc4MDU5fQ.Jj8cfgF7Xmop7FpAPHpQyFKmPEq_gMWv_Br8gUJ_9ik"
 
 
 	counter := 1
