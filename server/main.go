@@ -165,7 +165,9 @@ func main() {
 			reloader.WatchCertificate(config.TlsCertFilePath, config.TlsKeyFilePath, 24*time.Hour)
 
 			srv.TLSConfig = &tls.Config{
+				MinVersion:             tls.VersionTLS12,
 				SessionTicketsDisabled: false,
+				NextProtos:             []string{"h2", "http/1.1", "http/1.0"},
 				GetCertificate:         reloader.GetCertificate,
 			}
 
