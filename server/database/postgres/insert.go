@@ -3,12 +3,16 @@ package postgres
 import (
 	"context"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/gopher93185789/luxora/server/pkg/models"
 )
 
 func (p *Postgres) InsertUser(ctx context.Context, username, email, signupType, passwordHash string) (userID uuid.UUID, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
+	defer cancel()
+
 	tx, err := p.Pool.Begin(ctx)
 	if err != nil {
 		return uuid.Nil, err
@@ -29,6 +33,8 @@ func (p *Postgres) InsertUser(ctx context.Context, username, email, signupType, 
 }
 
 func (p *Postgres) InsertOauthUser(ctx context.Context, username, provider, providerId, profileImageLink string) (userID uuid.UUID, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
+	defer cancel()
 	tx, err := p.Pool.Begin(ctx)
 	if err != nil {
 		return uuid.Nil, err
@@ -49,6 +55,8 @@ func (p *Postgres) InsertOauthUser(ctx context.Context, username, provider, prov
 }
 
 func (p *Postgres) InsertListing(ctx context.Context, userId uuid.UUID, product *models.Product) (productId uuid.UUID, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
+	defer cancel()
 	tx, err := p.Pool.Begin(ctx)
 	if err != nil {
 		return uuid.Nil, err
@@ -78,6 +86,8 @@ func (p *Postgres) InsertListing(ctx context.Context, userId uuid.UUID, product 
 }
 
 func (p *Postgres) InsertBid(ctx context.Context, userID uuid.UUID, bid *models.Bid) (bidID uuid.UUID, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
+	defer cancel()
 	err = p.Pool.QueryRow(ctx, "INSERT INTO product_bid (item_id, user_id, bid_amount, message) VALUES ($1, $2, $3, $4) RETURNING bid_id", bid.ProductID, userID, bid.BidAmount, bid.Message).Scan(&bidID)
 	return
 }

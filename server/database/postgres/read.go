@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"time"
 
 	"fmt"
 	"strings"
@@ -13,26 +14,36 @@ import (
 )
 
 func (p *Postgres) GetOauthUserIdByProviderID(ctx context.Context, pid string) (id uuid.UUID, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 500*time.Millisecond)
+	defer cancel()
 	err = p.Pool.QueryRow(ctx, "SELECT id FROM luxora_user WHERE provider_user_id = $1", pid).Scan(&id)
 	return
 }
 
 func (p *Postgres) GetLastLogin(ctx context.Context, userID uuid.UUID) (LastLogin sql.NullTime, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 500*time.Millisecond)
+	defer cancel()
 	err = p.Pool.QueryRow(ctx, "SELECT last_login FROM luxora_user WHERE id = $1", userID).Scan(&LastLogin)
 	return
 }
 
 func (p *Postgres) GetRefreshToken(ctx context.Context, userId uuid.UUID) (refreshToken string, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 500*time.Millisecond)
+	defer cancel()
 	err = p.Pool.QueryRow(ctx, "SELECT refresh_token FROM luxora_user WHERE id=$1", userId).Scan(&refreshToken)
 	return
 }
 
 func (p *Postgres) GetIsUsernameAndIDByProviderID(ctx context.Context, providerID string) (username string, userID uuid.UUID, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 500*time.Millisecond)
+	defer cancel()
 	err = p.Pool.QueryRow(ctx, "SELECT username, id FROM luxora_user WHERE provider_user_id=$1", providerID).Scan(&username, &userID)
 	return
 }
 
 func (p *Postgres) GetHighestBid(ctx context.Context, userID uuid.UUID, productID uuid.UUID) (bid *models.BidDetails, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
+	defer cancel()
 	bid = &models.BidDetails{}
 	err = p.Pool.QueryRow(ctx, "SELECT bid_id, bid_amount, bid_time, user_id, message FROM product_bid WHERE item_id=$1 ORDER BY bid_amount DESC LIMIT 1", productID).Scan(&bid.BidID, &bid.BidAmount, &bid.CreatedAt, &bid.CreatedBy, &bid.Message)
 	if err != nil {
@@ -44,6 +55,8 @@ func (p *Postgres) GetHighestBid(ctx context.Context, userID uuid.UUID, productI
 }
 
 func (p *Postgres) GetBids(ctx context.Context, userID uuid.UUID, productID uuid.UUID, limit, offset int) (bids []models.BidDetails, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
+	defer cancel()
 	bids = make([]models.BidDetails, 0, limit)
 
 	rows, err := p.Pool.Query(ctx, "SELECT bid_id, bid_amount, bid_time, user_id, message FROM product_bid WHERE item_id=$1 ORDER BY bid_amount DESC LIMIT $2 OFFSET $3", productID, limit, offset)
@@ -137,6 +150,8 @@ func craftGetQuery(createdBy uuid.UUID, category, searchQuery *string, startPric
 }
 
 func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID, category, searchQuery *string, startPrice, endPrice *decimal.Decimal, limit, offset int) (products []models.ProductInfo, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
+	defer cancel()
 	tx, err := p.Pool.Begin(ctx)
 	if err != nil {
 		return nil, err
@@ -190,6 +205,8 @@ func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID,
 }
 
 func (p *Postgres) GetUserDetails(ctx context.Context, userID uuid.UUID) (details models.UserDetails, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 500*time.Millisecond)
+	defer cancel()
 	details = models.UserDetails{}
 	err = p.Pool.QueryRow(ctx, "SELECT email, username, profile_picture_link FROM luxora_user WHERE id=$1", userID).Scan(&details.Email, &details.Username, &details.ProfileImageLink)
 	details.UserID = userID

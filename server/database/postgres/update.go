@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/gopher93185789/luxora/server/pkg/models"
@@ -11,11 +12,15 @@ import (
 )
 
 func (p *Postgres) UpdateRefreshToken(ctx context.Context, userId uuid.UUID, refreshToken string) (err error) {
+	ctx, cancel := context.WithTimeout(ctx, 500*time.Millisecond)
+	defer cancel()
 	_, err = p.Pool.Exec(ctx, "UPDATE luxora_user SET refresh_token=$1 WHERE id=$2", refreshToken, userId)
 	return
 }
 
 func (p *Postgres) UpdateItemSoldViaBid(ctx context.Context, userId uuid.UUID, sold bool, bidID, itemID uuid.UUID) (err error) {
+	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
+	defer cancel()
 	tx, err := p.Pool.Begin(ctx)
 	if err != nil {
 		return err
@@ -47,6 +52,8 @@ func (p *Postgres) UpdateItemSoldViaBid(ctx context.Context, userId uuid.UUID, s
 }
 
 func (p *Postgres) UpdateItemSoldViaCheckout(ctx context.Context, buyerID uuid.UUID, cart *models.CartItems) (err error) {
+	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
+	defer cancel()
 	tx, err := p.Pool.Begin(ctx)
 	if err != nil {
 		return err
@@ -62,6 +69,8 @@ func (p *Postgres) UpdateItemSoldViaCheckout(ctx context.Context, buyerID uuid.U
 }
 
 func (p *Postgres) UpdateItemListing(ctx context.Context, userID uuid.UUID, update *models.UpdateProduct) (err error) {
+	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
+	defer cancel()
 	var (
 		args                     = []any{}
 		queries                  = []string{}

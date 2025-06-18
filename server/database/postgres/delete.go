@@ -3,11 +3,15 @@ package postgres
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 )
 
 func (p *Postgres) DeleteListing(ctx context.Context, userID uuid.UUID, productId uuid.UUID) (err error) {
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+	
 	tx, err := p.Pool.Begin(ctx)
 	if err != nil {
 		return err
