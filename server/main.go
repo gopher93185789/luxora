@@ -38,7 +38,7 @@ func Ping(w http.ResponseWriter, r *http.Request) {
 }
 
 //	@title			Luxora Marketplace API
-//	@version		1.2.1
+//	@version		1.2.5
 //	@description	Luxora is a secure, modern backend API for managing listings, bids, and authentication with OAuth2 providers. This API powers the Luxora marketplace platform, enabling seamless user authentication, listing management, and bidding workflows.
 //	@host	api.luxoras.nl
 //
