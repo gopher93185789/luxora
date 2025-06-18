@@ -1,10 +1,12 @@
 package transport
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"strconv"
 	"sync"
+	"time"
 
 	"github.com/google/uuid"
 	errs "github.com/gopher93185789/luxora/server/pkg/error"
@@ -35,6 +37,10 @@ var ProductPool = sync.Pool{
 func (t *TransportConfig) CreateNewListing(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
+	// Create a context with timeout
+	ctx, cancel := context.WithTimeout(r.Context(), 30*time.Second)
+	defer cancel()
+
 	var product = ProductPool.Get().(*models.Product)
 	defer ProductPool.Put(product)
 	if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
@@ -48,7 +54,7 @@ func (t *TransportConfig) CreateNewListing(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	productId, err := t.CoreStore.CreateNewListing(r.Context(), uid, product)
+	productId, err := t.CoreStore.CreateNewListing(ctx, uid, product)
 	if err != nil {
 		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to create new listing: "+err.Error())
 		return
