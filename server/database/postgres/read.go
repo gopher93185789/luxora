@@ -156,6 +156,7 @@ func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID,
 	if err != nil {
 		return nil, err
 	}
+	defer tx.Rollback(ctx)
 
 	products = make([]models.ProductInfo, 0, limit)
 
@@ -165,6 +166,7 @@ func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID,
 	if err != nil {
 		return nil, err
 	}
+	
 
 	for rows.Next() {
 		var product models.ProductInfo
@@ -174,7 +176,7 @@ func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID,
 
 		err = rows.Scan(&product.ItemID, &product.Name, &product.CreatedBy, &product.CreatedAt, &product.Description, &product.Price, &product.Currency)
 		if err != nil {
-			return nil, err
+			continue
 		}
 
 		products = append(products, product)
@@ -201,7 +203,7 @@ func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID,
 		rows.Close()
 	}
 
-	return products, nil
+	return products, tx.Commit(ctx)
 }
 
 func (p *Postgres) GetUserDetails(ctx context.Context, userID uuid.UUID) (details models.UserDetails, err error) {
