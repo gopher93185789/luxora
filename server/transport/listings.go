@@ -1,6 +1,7 @@
 package transport
 
 import (
+	"compress/gzip"
 	"context"
 	"encoding/json"
 	"net/http"
@@ -173,11 +174,13 @@ func (t *TransportConfig) GetListings(w http.ResponseWriter, r *http.Request) {
 	limit, err := strconv.Atoi(limitStr)
 	if err != nil {
 		errs.ErrorWithJson(w, http.StatusBadRequest, "invalid 'limit' URL parameter")
+		return
 	}
 
 	page, err := strconv.Atoi(pageStr)
 	if err != nil {
 		errs.ErrorWithJson(w, http.StatusBadRequest, "invalid 'page' URL parameter")
+		return
 	}
 
 	products, err := t.CoreStore.GetListings(r.Context(), uid, r.URL.Query().Get("category"), r.URL.Query().Get("searchquery"), r.URL.Query().Get("startprice"), r.URL.Query().Get("endprice"), r.URL.Query().Get("creator"), limit, page)
@@ -186,11 +189,18 @@ func (t *TransportConfig) GetListings(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(products); err != nil {
+	w.Header().Set("Content-Encoding", "gzip")
+    w.Header().Set("Content-Type", "application/json")
+    gz := gzip.NewWriter(w)
+    defer gz.Close()
+
+	body, err := json.Marshal(products)
+	if err != nil {
 		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode products "+err.Error())
 		return
 	}
+
+	gz.Write(body)
 }
 
 // @Summary      Checkout cart

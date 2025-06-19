@@ -19,9 +19,9 @@ CREATE TABLE IF NOT EXISTS luxora_product (
     item_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     sold BOOLEAN DEFAULT false,
-    category VARCHAR(255),
+    category VARCHAR(255) NOT NULL,
     sold_to_user_id UUID,
-    description TEXT,
+    description TEXT NOT,
     created_at TIMESTAMP DEFAULT NOW()
 );
 
