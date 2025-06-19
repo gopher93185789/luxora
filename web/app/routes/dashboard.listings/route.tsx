@@ -5,6 +5,7 @@ import type { GetProductsParams } from "~/pkg/api/products";
 import { ProductGrid } from "~/components/ProductGrid";
 import { CreateListingForm } from "~/components/CreateListingForm";
 import { motion } from "framer-motion";
+import ShinyText from "~/components/ShinyText";
 
 export default function Listings() {
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -13,7 +14,7 @@ export default function Listings() {
 
   const handleListingCreated = () => {
     setShowCreateForm(false);
-    setRefreshKey(prev => prev + 1); // Force refresh of listings
+    setRefreshKey(prev => prev + 1);
   };
 
   const userListingsParams: GetProductsParams = {
@@ -22,7 +23,6 @@ export default function Listings() {
     creator: user?.id || ""
   };
 
-  // Don't render the ProductGrid until we have the user ID
   if (userLoading || !user?.id) {
     return (
       <div className="space-y-6">
@@ -30,13 +30,14 @@ export default function Listings() {
           <h1 className="text-3xl font-bold text-text-primary">My Listings</h1>
         </div>
         <div className="flex items-center justify-center min-h-64">
-          <div className="animate-spin h-8 w-8 border-2 border-text-primary/30 border-t-text-primary rounded-full"></div>
+          <ShinyText text="Loading your listings ..." speed={1} />
         </div>
       </div>
     );
   }
 
-  return (      <div className="space-y-6">
+  return (      
+  <div className="space-y-6">
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-3xl font-bold text-text-primary">My Listings</h1>

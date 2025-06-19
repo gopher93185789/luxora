@@ -1,7 +1,11 @@
 import { GetTokenFromLocalStorage } from "../helpers/tokenHandling";
 import { withRefresh } from "../helpers/api";
 import { getApiUrl } from "../config/api";
-import type { ErrorResponse, Product, CreateListingResponse } from "../models/api";
+import type {
+  ErrorResponse,
+  Product,
+  CreateListingResponse,
+} from "../models/api";
 
 export interface ProductInfo {
   id: string;
@@ -32,7 +36,9 @@ export interface GetProductsParams {
   creator?: string;
 }
 
-export async function GetProducts(params: GetProductsParams): Promise<ProductInfo[] | ErrorResponse> {
+export async function GetProducts(
+  params: GetProductsParams
+): Promise<ProductInfo[] | ErrorResponse> {
   const token = GetTokenFromLocalStorage();
 
   const searchParams = new URLSearchParams({
@@ -43,12 +49,13 @@ export async function GetProducts(params: GetProductsParams): Promise<ProductInf
   if (params.category) searchParams.append("category", params.category);
   if (params.startprice) searchParams.append("startprice", params.startprice);
   if (params.endprice) searchParams.append("endprice", params.endprice);
-  if (params.searchquery) searchParams.append("searchquery", params.searchquery);
+  if (params.searchquery)
+    searchParams.append("searchquery", params.searchquery);
   if (params.creator) searchParams.append("creator", params.creator);
 
   const req = async (): Promise<Response> => {
-    const headers: Record<string, string> = {}; 
-    
+    const headers: Record<string, string> = {};
+
     if (token && token !== "") {
       headers.Authorization = token;
     }
@@ -62,10 +69,14 @@ export async function GetProducts(params: GetProductsParams): Promise<ProductInf
 
   try {
     let resp: Response | undefined;
-    
+
     if (token && token !== "") {
       resp = await withRefresh(req);
-      if (!resp) return { code: 500, message: "failed to refresh token" } as ErrorResponse;
+      if (!resp)
+        return {
+          code: 500,
+          message: "failed to refresh token",
+        } as ErrorResponse;
     } else {
       resp = await req();
     }
@@ -82,17 +93,23 @@ export async function GetProducts(params: GetProductsParams): Promise<ProductInf
   }
 }
 
-export async function GetProduct(productId: string): Promise<ProductInfo | ErrorResponse> {
-  const token = GetTokenFromLocalStorage();
 
+export async function GetProduct(
+  productId: string,
+  token: string
+): Promise<ProductInfo | ErrorResponse> {
   const req = async (): Promise<Response> => {
-    const headers: Record<string, string> = {}; 
-    
+    const headers: Record<string, string> = {};
+
     if (token && token !== "") {
       headers.Authorization = token;
     }
 
-    return await fetch(getApiUrl(`/listings/${productId}`), {
+    const url = getApiUrl(`listings/${productId}`);
+    console.log("GetProduct - API URL:", url);
+    console.log("GetProduct - Has token:", !!token);
+
+    return await fetch(url, {
       method: "GET",
       credentials: "include",
       headers,
@@ -101,31 +118,60 @@ export async function GetProduct(productId: string): Promise<ProductInfo | Error
 
   try {
     let resp: Response | undefined;
-    
+
     if (token && token !== "") {
       resp = await withRefresh(req);
-      if (!resp) return { code: 500, message: "failed to refresh token" } as ErrorResponse;
+      if (!resp) {
+        console.error("Failed to refresh token");
+        return {
+          code: 500,
+          message: "failed to refresh token",
+        } as ErrorResponse;
+      }
     } else {
+      console.log("Making request without token");
       resp = await req();
     }
 
+    console.log("GetProduct - Response status:", resp.status);
+
     if (resp.ok) {
       const product = await resp.json();
+      console.log("GetProduct - Success, product ID:", product.id);
       return product as ProductInfo;
     } else {
-      const error = await resp.json();
-      return error as ErrorResponse;
+      let errorMessage = `HTTP ${resp.status}`;
+      try {
+        const error = await resp.json();
+        errorMessage = error.message || error.error || errorMessage;
+        console.error("GetProduct - API Error:", error);
+        return error as ErrorResponse;
+      } catch (jsonError) {
+        console.error("GetProduct - Failed to parse error response:", jsonError);
+        return {
+          code: resp.status,
+          message: errorMessage,
+        } as ErrorResponse;
+      }
     }
   } catch (error) {
-    return { code: 500, message: "network error" } as ErrorResponse;
+    console.error("GetProduct - Network error:", error);
+    return { 
+      code: 500, 
+      message: error instanceof Error ? error.message : "network error" 
+    } as ErrorResponse;
   }
 }
 
-export async function CreateListing(product: Product): Promise<CreateListingResponse | ErrorResponse> {
+export async function CreateListing(
+  product: Product
+): Promise<CreateListingResponse | ErrorResponse> {
   const token = GetTokenFromLocalStorage();
   if (token === "") {
     return { code: 401, message: "no token found" } as ErrorResponse;
   }
+  
+  
 
   const req = async (): Promise<Response> => {
     return await fetch(getApiUrl("/listings"), {
@@ -141,7 +187,8 @@ export async function CreateListing(product: Product): Promise<CreateListingResp
 
   try {
     const resp = await withRefresh(req);
-    if (!resp) return { code: 500, message: "failed to refresh token" } as ErrorResponse;
+    if (!resp)
+      return { code: 500, message: "failed to refresh token" } as ErrorResponse;
 
     const result = await resp.json();
     if (resp.ok) {
@@ -154,7 +201,9 @@ export async function CreateListing(product: Product): Promise<CreateListingResp
   }
 }
 
-export async function DeleteListing(productId: string): Promise<void | ErrorResponse> {
+export async function DeleteListing(
+  productId: string
+): Promise<void | ErrorResponse> {
   const token = GetTokenFromLocalStorage();
   if (token === "") {
     return { code: 401, message: "no token found" } as ErrorResponse;
@@ -172,7 +221,8 @@ export async function DeleteListing(productId: string): Promise<void | ErrorResp
 
   try {
     const resp = await withRefresh(req);
-    if (!resp) return { code: 500, message: "failed to refresh token" } as ErrorResponse;
+    if (!resp)
+      return { code: 500, message: "failed to refresh token" } as ErrorResponse;
 
     if (!resp.ok) {
       const error = await resp.json();

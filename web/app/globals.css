@@ -12,11 +12,11 @@ body {
 
 
 @theme {
-  --color-primary: #070707;
-  --color-secondary: #004221;
-  --color-accent: #ffffff;
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #33e26c;
+  --color-primary: #070707; /* Unchanged */
+  --color-secondary: #18181c; /* Deep onyx for sophistication */
+  --color-accent: #c2b280; /* Refined pale gold */
+  --color-text-primary: #ececec; /* Soft pearl white */
+  --color-text-secondary: #a3a3b2; /* Subtle silver gray */
   --color-border: rgba(255, 255, 255);
   --color-input-bg: transparent;
   --color-button-bg: #004221;

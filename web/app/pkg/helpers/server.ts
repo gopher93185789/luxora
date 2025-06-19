@@ -3,9 +3,21 @@ import { authCookie } from "~/routes/auth_.cookie";
 
 export async function getTokenFromServerSideCaller(
   r: LoaderFunctionArgs
-): Promise<string> {
-  const cookieHeader = r.request.headers.get("Cookie");
-  const token = await authCookie.parse(cookieHeader);
-
-  return token;
+): Promise<string | null> {
+  try {
+    const cookieHeader = r.request.headers.get("Cookie");
+    
+    if (!cookieHeader) {
+      console.log("No cookie header found");
+      return null;
+    }
+    
+    const token = await authCookie.parse(cookieHeader);
+    console.log("Parsed token exists:", !!token);
+    
+    return token || null;
+  } catch (error) {
+    console.error("Error parsing auth cookie:", error);
+    return null;
+  }
 }
