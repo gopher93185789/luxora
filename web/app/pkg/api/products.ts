@@ -93,8 +93,7 @@ export async function GetProducts(
   }
 }
 
-// dit was fout want je ging de token van localstorage nemen but the caller od the func was on the server where local storage doesnt exist
-// keep thi in mind for future requests
+
 export async function GetProduct(
   productId: string,
   token: string

@@ -7,6 +7,7 @@ import { GetUserBids } from "~/pkg/api/bidding";
 import { getTokenFromServerSideCaller } from "~/pkg/helpers/server";
 import { GetTokenFromLocalStorage } from "~/pkg/helpers/tokenHandling";
 import { UserDetails, BidDetails } from "~/pkg/models/api";
+import ShinyText from "~/components/ShinyText";
 
 export async function loader(lfa: LoaderFunctionArgs) {
   const token = await getTokenFromServerSideCaller(lfa);
@@ -198,8 +199,7 @@ export default function BiddingsDashboard() {
       <div className="bg-primary rounded-lg p-8 w-full">
         {loadingBids ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
-            <span className="ml-3 text-text-primary/70">Loading your bids...</span>
+            <ShinyText text="Loading your bids ..." speed={1} />
           </div>
         ) : filteredBids.length === 0 ? (
           <div className="text-center py-12">
