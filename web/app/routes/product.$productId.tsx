@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate, Link } from "@remix-run/react";
+import { useLoaderData, useNavigate, Link, useRouteError, isRouteErrorResponse } from "@remix-run/react";
 import { json, type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -8,21 +8,38 @@ import { Sidebar } from "~/components/navigation/sidebar";
 import { getTokenFromServerSideCaller } from "~/pkg/helpers/server";
 
 export async function loader(lfa: LoaderFunctionArgs) {
-  const { productId } = lfa.params;
-  
-  if (!productId) {
-    throw new Response("Product ID is required", { status: 400 });
+  try {
+    const { productId } = lfa.params;
+    
+    if (!productId) {
+      throw new Response("Product ID is required", { status: 400 });
+    }
+
+    // Get token with proper error handling
+    const token = await getTokenFromServerSideCaller(lfa);
+    
+    console.log("Loader - productId:", productId);
+    console.log("Loader - token exists:", !!token);
+
+    const result = await GetProduct(productId, token || "");
+    
+    if ("code" in result) {
+      console.error("API Error:", result.message, "Code:", result.code);
+      throw new Response(result.message, { status: result.code });
+    }
+
+    return json({ product: result });
+  } catch (error) {
+    console.error("Loader error:", error);
+    
+    // If it's already a Response, re-throw it
+    if (error instanceof Response) {
+      throw error;
+    }
+    
+    // Otherwise, create a generic 500 error
+    throw new Response("Internal server error", { status: 500 });
   }
-
-  const token = await getTokenFromServerSideCaller(lfa)
-
-  const result = await GetProduct(productId, token);
-  
-  if ("code" in result) {
-    throw new Response(result.message, { status: result.code });
-  }
-
-  return json({ product: result });
 }
 
 export default function ProductPage() {
@@ -30,6 +47,8 @@ export default function ProductPage() {
   const navigate = useNavigate();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [imageError, setImageError] = useState(false);
+
+  console.log("ProductPage - Product loaded:", product?.id, product?.name);
 
   const formatPrice = (price: number, currency: string) => {
     return new Intl.NumberFormat('en-US', {
@@ -191,6 +210,83 @@ export default function ProductPage() {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  
+  if (isRouteErrorResponse(error)) {
+    return (
+      <main className="min-h-screen flex">
+        <Sidebar />
+        <div className="flex-1 px-64 pl-5 p-5">
+          <div className="max-w-7xl w-full mx-auto">
+            <div className="flex flex-col items-center justify-center min-h-96 text-center">
+              <div className="text-red-500 mb-4">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M15 9l-6 6M9 9l6 6"/>
+                </svg>
+              </div>
+              <h1 className="text-2xl font-bold text-text-primary mb-2">
+                {error.status === 404 ? "Product Not Found" : "Something Went Wrong"}
+              </h1>
+              <p className="text-text-primary/70 mb-6">
+                {error.status === 404 
+                  ? "The product you're looking for doesn't exist or has been removed."
+                  : error.data || "An unexpected error occurred while loading the product."
+                }
+              </p>
+              <div className="space-y-3">
+                <Link
+                  to="/marketplace"
+                  className="inline-block bg-accent hover:bg-accent/90 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                >
+                  Back to Marketplace
+                </Link>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="block bg-primary border border-border/20 hover:border-border/40 text-text-primary font-semibold py-3 px-6 rounded-lg transition-colors w-full"
+                >
+                  Try Again
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+  
+  return (
+    <main className="min-h-screen flex">
+      <Sidebar />
+      <div className="flex-1 px-64 pl-5 p-5">
+        <div className="max-w-7xl w-full mx-auto">
+          <div className="flex flex-col items-center justify-center min-h-96 text-center">
+            <div className="text-red-500 mb-4">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M15 9l-6 6M9 9l6 6"/>
+              </svg>
+            </div>
+            <h1 className="text-2xl font-bold text-text-primary mb-2">
+              Unexpected Error
+            </h1>
+            <p className="text-text-primary/70 mb-6">
+              An unexpected error occurred. Please try again later.
+            </p>
+            <Link
+              to="/marketplace"
+              className="bg-accent hover:bg-accent/90 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+            >
+              Back to Marketplace
+            </Link>
           </div>
         </div>
       </div>

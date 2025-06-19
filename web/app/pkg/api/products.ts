@@ -105,7 +105,11 @@ export async function GetProduct(
       headers.Authorization = token;
     }
 
-    return await fetch(getApiUrl(`/listings/${productId}`), {
+    const url = getApiUrl(`listings/${productId}`);
+    console.log("GetProduct - API URL:", url);
+    console.log("GetProduct - Has token:", !!token);
+
+    return await fetch(url, {
       method: "GET",
       credentials: "include",
       headers,
@@ -117,24 +121,45 @@ export async function GetProduct(
 
     if (token && token !== "") {
       resp = await withRefresh(req);
-      if (!resp)
+      if (!resp) {
+        console.error("Failed to refresh token");
         return {
           code: 500,
           message: "failed to refresh token",
         } as ErrorResponse;
+      }
     } else {
+      console.log("Making request without token");
       resp = await req();
     }
 
+    console.log("GetProduct - Response status:", resp.status);
+
     if (resp.ok) {
       const product = await resp.json();
+      console.log("GetProduct - Success, product ID:", product.id);
       return product as ProductInfo;
     } else {
-      const error = await resp.json();
-      return error as ErrorResponse;
+      let errorMessage = `HTTP ${resp.status}`;
+      try {
+        const error = await resp.json();
+        errorMessage = error.message || error.error || errorMessage;
+        console.error("GetProduct - API Error:", error);
+        return error as ErrorResponse;
+      } catch (jsonError) {
+        console.error("GetProduct - Failed to parse error response:", jsonError);
+        return {
+          code: resp.status,
+          message: errorMessage,
+        } as ErrorResponse;
+      }
     }
   } catch (error) {
-    return { code: 500, message: "network error" } as ErrorResponse;
+    console.error("GetProduct - Network error:", error);
+    return { 
+      code: 500, 
+      message: error instanceof Error ? error.message : "network error" 
+    } as ErrorResponse;
   }
 }
 
