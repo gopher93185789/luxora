@@ -57,12 +57,11 @@ export function Sidebar() {
       animate="visible"
       variants={sidebarVariants}
     >
-      {(isDashboard || isMarketplace || isProduct) && (
+      {(isDashboard || isProduct) && (
         <nav className="flex flex-col gap-2 h-full justify-between items-center">
           <ul className="flex flex-col gap-2 h-full justify-center items-start">
             <BackButton />
             {navLinks
-              .filter(link => !isMarketplace || (link.to !== "/dashboard/listings" && link.to !== "/dashboard/biddings"))
               .filter(link => !isProduct || (link.to !== "/dashboard/listings" && link.to !== "/dashboard/biddings"))
               .map(link => (
                 <motion.li key={link.to} variants={itemVariants}>
@@ -89,6 +88,7 @@ export function Sidebar() {
         <div className="flex flex-col pl-5 gap-2 h-full justify-center items-start">
           <nav className="flex flex-col gap-2 h-full justify-between items-center">
           <ul className="flex flex-col gap-2 h-full justify-center items-start">
+            <BackButton />
             {navLinks
               .filter(link => link.to !== "/dashboard/listings" && link.to !== "/dashboard/biddings")
               .map(link => (
