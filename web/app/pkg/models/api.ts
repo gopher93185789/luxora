@@ -39,7 +39,7 @@ export interface Product {
 }
 
 export interface ProductImage {
-  image: string;
+  base_64_image: string;
   order: number;
 }
 

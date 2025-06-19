@@ -156,10 +156,11 @@ func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID,
 	if err != nil {
 		return nil, err
 	}
-	defer func () {
+
+	defer func() {
 		if err != nil {
 			tx.Rollback(ctx)
-		}else {
+		} else {
 			tx.Commit(ctx)
 		}
 	}()
@@ -172,7 +173,6 @@ func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID,
 	if err != nil {
 		return nil, err
 	}
-	
 
 	for rows.Next() {
 		var product models.ProductInfo

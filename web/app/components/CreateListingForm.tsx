@@ -54,10 +54,13 @@ export function CreateListingForm({ onClose, onSuccess }: CreateListingFormProps
         description: formData.description,
         price: parseFloat(formData.price),
         product_images: formData.images.map((image, index) => ({
-          image: image.split(',')[1],
+          base_64_image: image.split(',')[1],
           order: index
         }))
       };
+
+
+      console.log(productData)
 
       const result = await CreateListing(productData);
       
