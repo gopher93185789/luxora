@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "@remix-run/react";
 import { DashboardButton } from "~/components/DashButton";
 import SearchBar from "~/components/navigation/searchBar";
-import { SearchFilters } from "~/components/navigation/searchFilters";
 import { Sidebar } from "~/components/navigation/sidebar";
 import { ProductGrid } from "~/components/ProductGrid";
 import type { GetProductsParams } from "~/pkg/api/products";

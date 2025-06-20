@@ -52,7 +52,7 @@ export default function SearchBar({
   }, [searchParams]);
 
   return (
-    <div className={`relative w-full sticky top-5 ${className}`}>
+    <div className={`relative w-full sticky top-0 z-40 bg-primary/95 backdrop-blur-sm border-b border-border/10 pb-4 pt-4 ${className}`}>
       <form onSubmit={handleSubmit} className="relative">
         <div className="relative">
           <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-text-primary/50">
