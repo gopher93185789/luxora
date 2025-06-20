@@ -46,24 +46,11 @@ export default function Marketplace() {
     <main className="min-h-screen flex">
       <Sidebar />
       <div className="flex-1 flex flex-col">
-        {/* Sticky Search Header */}
-        <div className="w-full">
-          <div className="px-64 pl-5">
-            <SearchBar onSearch={handleSearch} />
-          </div>
-        </div>
-        
-        {/* Main Content */}
+
         <div className="flex-1 px-64 pl-5 p-5">
-          <div className="w-full max-w-4xl mx-auto mb-6">
-            <SearchFilters 
-              params={filterParams} 
-              onParamsChange={handleFiltersChange} 
-            />
-          </div>
-          
+
           <div className="max-w-7xl w-full mx-auto">
-            {/* Search Results Header */}
+        <SearchBar onSearch={handleSearch} />
             {filterParams.searchquery && (
               <div className="mb-6">
                 <h2 className="text-2xl font-bold text-text-primary mb-2">
@@ -74,28 +61,6 @@ export default function Marketplace() {
                 </p>
               </div>
             )}
-
-            {/* Active Filters Summary */}
-            {(filterParams.category || filterParams.startprice || filterParams.endprice) && (
-              <div className="mb-6 flex flex-wrap gap-2">
-                {filterParams.category && (
-                  <span className="px-3 py-1 bg-secondary/20 text-secondary rounded-full text-sm">
-                    Category: {filterParams.category}
-                  </span>
-                )}
-                {filterParams.startprice && (
-                  <span className="px-3 py-1 bg-secondary/20 text-secondary rounded-full text-sm">
-                    Min: ${filterParams.startprice}
-                  </span>
-                )}
-                {filterParams.endprice && (
-                  <span className="px-3 py-1 bg-secondary/20 text-secondary rounded-full text-sm">
-                    Max: ${filterParams.endprice}
-                  </span>
-                )}
-              </div>
-            )}
-
             <ProductGrid
               key={JSON.stringify(filterParams)} 
               initialParams={filterParams}
