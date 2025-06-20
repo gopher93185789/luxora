@@ -7,7 +7,7 @@
         "description": "Luxora is a secure, modern backend API for managing listings, bids, and authentication with OAuth2 providers. This API powers the Luxora marketplace platform, enabling seamless user authentication, listing management, and bidding workflows.",
         "title": "Luxora Marketplace API",
         "contact": {},
-        "version": "1.2.1"
+        "version": "1.2.5"
     },
     "host": "api.luxoras.nl",
     "paths": {
@@ -840,6 +840,50 @@
                     },
                     "422": {
                         "description": "Unprocessable entity - invalid JSON payload",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/listings/{id}": {
+            "get": {
+                "description": "Fetches listing information associated with a specific product UUID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "listings"
+                ],
+                "summary": "Retrieve product listings by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product UUID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of product listings",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Product"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request - invalid or missing product ID",
                         "schema": {
                             "$ref": "#/definitions/error.ErrorResponse"
                         }

@@ -231,10 +231,10 @@ func (p *Postgres) GetProductById(ctx context.Context, productID uuid.UUID) (pro
 		return product, err
 	}
 
-	defer func ()  {
+	defer func() {
 		if err != nil {
 			tx.Rollback(ctx)
-		}else {
+		} else {
 			tx.Commit(ctx)
 		}
 	}()

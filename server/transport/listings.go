@@ -190,9 +190,9 @@ func (t *TransportConfig) GetListings(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Encoding", "gzip")
-    w.Header().Set("Content-Type", "application/json")
-    gz := gzip.NewWriter(w)
-    defer gz.Close()
+	w.Header().Set("Content-Type", "application/json")
+	gz := gzip.NewWriter(w)
+	defer gz.Close()
 
 	body, err := json.Marshal(products)
 	if err != nil {
@@ -263,4 +263,43 @@ func (t *TransportConfig) UpdateListing(w http.ResponseWriter, r *http.Request) 
 		errs.ErrorWithJson(w, http.StatusInternalServerError, err.Error())
 		return
 	}
+}
+
+// GetListingsById retrieves product listings based on a given product ID.
+//
+// @Summary      Retrieve product listings by ID
+// @Description  Fetches listing information associated with a specific product UUID.
+// @Tags         listings
+// @Produce      json
+// @Param        id      path     string                true  "Product UUID"
+// @Success      200     {array}  models.Product        "List of product listings"
+// @Failure      400     {object} errs.ErrorResponse    "Bad request - invalid or missing product ID"
+// @Failure      500     {object} errs.ErrorResponse    "Internal server error"
+// @Router       /listings/{id} [get]
+func (t *TransportConfig) GetListingsById(w http.ResponseWriter, r *http.Request) {
+	pidStr := r.PathValue("id")
+	pid, err := uuid.Parse(pidStr)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusBadRequest, "invalid product id")
+		return
+	}
+
+	products, err := t.CoreStore.GetListingByid(r.Context(), pid)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	w.Header().Set("Content-Encoding", "gzip")
+	w.Header().Set("Content-Type", "application/json")
+	gz := gzip.NewWriter(w)
+	defer gz.Close()
+
+	body, err := json.Marshal(products)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode products "+err.Error())
+		return
+	}
+
+	gz.Write(body)
 }

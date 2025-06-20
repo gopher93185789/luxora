@@ -107,7 +107,7 @@ info:
     platform, enabling seamless user authentication, listing management, and bidding
     workflows.
   title: Luxora Marketplace API
-  version: 1.2.1
+  version: 1.2.5
 paths:
   /auth/github:
     get:
@@ -477,6 +477,36 @@ paths:
           schema:
             $ref: '#/definitions/error.ErrorResponse'
       summary: Delete a listing
+      tags:
+      - listings
+  /listings/{id}:
+    get:
+      description: Fetches listing information associated with a specific product
+        UUID.
+      parameters:
+      - description: Product UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of product listings
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+        "400":
+          description: Bad request - invalid or missing product ID
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      summary: Retrieve product listings by ID
       tags:
       - listings
   /listings/bid:
