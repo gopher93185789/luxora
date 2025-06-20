@@ -121,3 +121,55 @@ func TestGetListings(t *testing.T) {
 		t.Fatal("incorrect product image fetched", prods)
 	}
 }
+
+func TestGetListingsById(t *testing.T) {
+	ctx, cancel := context.WithTimeout(t.Context(), 10*time.Second)
+	defer cancel()
+
+	pool, _, err := testutils.SetupTestPostgresDB("")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	c := &CoreStoreContext{
+		Database: &postgres.Postgres{
+			Pool: pool,
+		},
+		Logger: logger.New(os.Stdout),
+	}
+
+	id, err := c.Database.InsertOauthUser(ctx, "diddy", "github", "hwllo", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	price := decimal.NewFromInt(0)
+	product := &models.Product{
+		ItemName:    "rizz",
+		Category:    "rozz",
+		Description: "knaye the goat",
+		Price:       price,
+		Images: []models.ProductImage{
+			{Image: "img1", Order: 0, Checksum: "chk1", CompressedImage: make([]byte, 10)},
+			{Image: "img2", Order: 1, Checksum: "chk2", CompressedImage: make([]byte, 10)},
+		},
+	}
+
+	pid, err := c.CreateNewListing(ctx, id, product)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	prods, err := c.GetListingByid(ctx, pid)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if prods.Name != product.ItemName {
+		t.Fatalf("product names dont match got %s want %s", prods.Name, product.ItemName)
+	}
+
+	if prods.Images[0].Image != product.Images[0].Image {
+		t.Fatalf("product images dont match got %s want %s", prods.Images[0].Image, product.Images[0].Image)
+	}
+}
