@@ -100,8 +100,8 @@ func craftGetQuery(createdBy uuid.UUID, category, searchQuery *string, startPric
 		lp.description,
 		lpp.price,
 		lpp.currency
-	FROM luxora_product lp
-	JOIN latest_prices lpp ON lp.item_id = lpp.product_id
+		FROM luxora_product lp
+		JOIN latest_prices lpp ON lp.item_id = lpp.product_id
 	`)
 
 	var filters []string
@@ -219,4 +219,74 @@ func (p *Postgres) GetUserDetails(ctx context.Context, userID uuid.UUID) (detail
 	err = p.Pool.QueryRow(ctx, "SELECT email, username, profile_picture_link FROM luxora_user WHERE id=$1", userID).Scan(&details.Email, &details.Username, &details.ProfileImageLink)
 	details.UserID = userID
 	return
+}
+
+func (p *Postgres) GetProductById(ctx context.Context, productID uuid.UUID) (product models.ProductInfo, err error) {
+	if productID == uuid.Nil {
+		return product, fmt.Errorf("invalid productID")
+	}
+
+	tx, err := p.Pool.Begin(ctx)
+	if err != nil {
+		return product, err
+	}
+
+	defer func ()  {
+		if err != nil {
+			tx.Rollback(ctx)
+		}else {
+			tx.Commit(ctx)
+		}
+	}()
+
+	query := `
+		WITH latest_prices AS (
+		SELECT DISTINCT ON (product_id)
+		  product_id,
+		  price,
+		  currency,
+		  created
+		FROM luxora_product_price_history
+		ORDER BY product_id, created DESC
+	  )
+	SELECT 
+		lp.name,
+		lp.user_id,
+		lp.category,
+		lp.created_at,
+		lp.description,
+		lpp.price,
+		lpp.currency
+		FROM luxora_product lp
+		JOIN latest_prices lpp ON lp.item_id = lpp.product_id WHERE lp.item_id = $1
+	`
+
+	product = models.ProductInfo{}
+	product.ItemID = productID
+	productRow := tx.QueryRow(ctx, query, productID)
+
+	err = productRow.Scan(&product.Name, &product.CreatedBy, &product.Category, &product.CreatedAt, &product.Description, &product.Price, &product.Currency)
+	if err != nil {
+		return product, err
+	}
+
+	product.Images = []models.ProductImage{}
+
+	rows, err := tx.Query(ctx, "SELECT compressed_image, sort_order FROM luxora_product_image WHERE product_id=$1 ORDER BY sort_order ASC", product.ItemID)
+	if err != nil {
+		return product, err
+	}
+
+	for rows.Next() {
+		var image = models.ProductImage{}
+		err = rows.Scan(&image.CompressedImage, &image.Order)
+		if err != nil {
+			continue
+		}
+
+		product.Images = append(product.Images, image)
+	}
+	rows.Close()
+
+	return product, nil
 }

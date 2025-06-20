@@ -195,3 +195,26 @@ func (c *CoreStoreContext) UpdateProduct(ctx context.Context, userID uuid.UUID, 
 	err = c.Database.UpdateItemListing(ctx, userID, update)
 	return
 }
+
+func (c *CoreStoreContext) GetListingByid(ctx context.Context, productID uuid.UUID) (product models.ProductInfo, err error) {
+	c.Logger.Debug(fmt.Sprintf("Fetching listings (pid: %v)", productID))
+	product, err = c.Database.GetProductById(ctx, productID)
+	if err != nil {
+		c.Logger.Error(fmt.Sprintf("Failed to get products: %v", err))
+		return product, err
+	}
+	c.Logger.Debug(fmt.Sprintf("Decompressing images for %v", productID))
+
+	for i := range product.Images {
+		decompressed, err := compression.DecompressZSTD(product.Images[i].CompressedImage)
+		if err != nil {
+			c.Logger.Error("failed to get image for product")
+			continue
+		}
+
+		product.Images[i].Image = string(decompressed)
+	}
+
+	c.Logger.Debug(fmt.Sprintf("Successfully retrieved info for %v", productID))
+	return product, nil
+}

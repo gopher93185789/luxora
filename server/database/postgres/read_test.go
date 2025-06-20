@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"testing"
 	"time"
@@ -404,4 +405,50 @@ func TestGetSimiliarProductsWith(t *testing.T) {
 			t.Fatalf("expected 0 results, got %d", len(results))
 		}
 	})
+}
+
+func TestGetProductsById(t *testing.T) {
+	ctx, cancel := context.WithTimeout(t.Context(), 10*time.Second)
+	defer cancel()
+
+	pool, _, err := testutils.SetupTestPostgresDB("")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	db := Postgres{Pool: pool}
+
+	t.Log("Inserting user")
+	id, err := db.InsertOauthUser(ctx, "diddy", "github", "hwllo", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for range 100 {
+
+	}
+	price := decimal.NewFromInt(0)
+	product := &models.Product{
+		ItemName:    "rizz",
+		Category:    "rozz",
+		Description: "knaye the goat",
+		Price:       price,
+		Images: []models.ProductImage{
+			{Image: "img1", Order: 0, Checksum: "chk1", CompressedImage: make([]byte, 10)},
+			{Image: "img2", Order: 1, Checksum: "chk2", CompressedImage: make([]byte, 10)},
+		},
+	}
+
+	pid, err := db.InsertListing(ctx, id, product)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Log("Fetching products")
+	prod, err := db.GetProductById(ctx, pid)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	fmt.Println(prod)
 }
