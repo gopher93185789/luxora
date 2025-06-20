@@ -445,14 +445,14 @@ paths:
       summary: Create new listing
       tags:
       - listings
-  /listings/:
+  /listings/{id}:
     delete:
       consumes:
       - '*/*'
       description: This endpoint allows users to delete product listings.
       parameters:
       - description: Product ID
-        in: query
+        in: path
         name: id
         required: true
         type: string
@@ -479,7 +479,6 @@ paths:
       summary: Delete a listing
       tags:
       - listings
-  /listings/{id}:
     get:
       description: Fetches listing information associated with a specific product
         UUID.

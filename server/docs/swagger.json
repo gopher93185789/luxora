@@ -506,57 +506,6 @@
                 }
             }
         },
-        "/listings/": {
-            "delete": {
-                "description": "This endpoint allows users to delete product listings.",
-                "consumes": [
-                    "*/*"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "tags": [
-                    "listings"
-                ],
-                "summary": "Delete a listing",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Product ID",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Access token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Listing deleted successfully",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Product ID not found",
-                        "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/listings/bid": {
             "post": {
                 "description": "This endpoint allows users to create bids on product listings. The request body must contain the bid details in JSON format.",
@@ -884,6 +833,55 @@
                     },
                     "400": {
                         "description": "Bad request - invalid or missing product ID",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "This endpoint allows users to delete product listings.",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "tags": [
+                    "listings"
+                ],
+                "summary": "Delete a listing",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Listing deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Product ID not found",
                         "schema": {
                             "$ref": "#/definitions/error.ErrorResponse"
                         }

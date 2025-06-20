@@ -76,16 +76,16 @@ func (t *TransportConfig) CreateNewListing(w http.ResponseWriter, r *http.Reques
 //	@Tags			listings
 //	@Accept			*/*
 //	@Produce		*/*
-//	@Param			id				query		string				true	"Product ID"
+//	@Param			id				path		string				true	"Product ID"
 //	@Param			Authorization	header		string				true	"Access token"
 //	@Success		200				{string}	string				"Listing deleted successfully"
 //	@Failure		404				{object}	errs.ErrorResponse	"Product ID not found"
 //	@Failure		500				{object}	errs.ErrorResponse	"Internal server error"
-//	@Router			/listings/ [DELETE]
+//	@Router			/listings/{id} [DELETE]
 func (t *TransportConfig) DeleteListing(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
-	pidstr := r.URL.Query().Get("id")
+	pidstr := r.PathValue("id")
 	pid, err := uuid.Parse(pidstr)
 	if err != nil {
 		errs.ErrorWithJson(w, http.StatusNotFound, "could not find 'id' URL parameter")
