@@ -24,10 +24,8 @@ export default function SearchBar({
     const trimmedQuery = searchQuery.trim();
     
     if (onSearch) {
-      // If onSearch prop is provided, use it (for controlled components)
       onSearch(trimmedQuery);
     } else {
-      // Default behavior: navigate to marketplace with search query
       if (trimmedQuery) {
         navigate(`/marketplace?search=${encodeURIComponent(trimmedQuery)}`);
       } else {
@@ -46,7 +44,6 @@ export default function SearchBar({
     handleSearch("");
   };
 
-  // Update local state when URL search params change
   useEffect(() => {
     const urlQuery = searchParams.get("search") || "";
     if (urlQuery !== query) {
@@ -55,10 +52,9 @@ export default function SearchBar({
   }, [searchParams]);
 
   return (
-    <div className={`relative w-full max-w-2xl ${className}`}>
+    <div className={`relative w-full sticky top-5 ${className}`}>
       <form onSubmit={handleSubmit} className="relative">
         <div className="relative">
-          {/* Search Icon */}
           <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-text-primary/50">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="11" cy="11" r="8"/>
@@ -66,7 +62,6 @@ export default function SearchBar({
             </svg>
           </div>
 
-          {/* Search Input */}
           <motion.input
             type="text"
             value={query}
@@ -86,7 +81,6 @@ export default function SearchBar({
             whileFocus={{ scale: 1.01 }}
           />
 
-          {/* Clear Button */}
           {query && (
             <motion.button
               type="button"
@@ -102,7 +96,6 @@ export default function SearchBar({
             </motion.button>
           )}
 
-          {/* Search Button */}
           <motion.button
             type="submit"
             className={`
@@ -120,7 +113,6 @@ export default function SearchBar({
         </div>
       </form>
 
-      {/* Search Suggestions (optional enhancement) */}
       {isFocused && query.length > 0 && (
         <motion.div
           className="absolute top-full left-0 right-0 mt-2 bg-primary border border-border/20 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
@@ -138,7 +130,6 @@ export default function SearchBar({
               >
                 Search for "{query}"
               </button>
-              {/* Add more suggestions here if needed */}
             </div>
           </div>
         </motion.div>

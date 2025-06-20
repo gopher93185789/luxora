@@ -240,56 +240,11 @@ export async function SearchListings(
   limit: number = 10,
   page: number = 1
 ): Promise<ProductInfo[] | ErrorResponse> {
-  const token = GetTokenFromLocalStorage();
-
-  const searchParams = new URLSearchParams({
-    searchquery: searchquery,
-    limit: limit.toString(),
-    page: page.toString()
+  return GetProducts({
+    searchquery,
+    limit,
+    page
   });
-
-  const req = async (): Promise<Response> => {
-    const headers: Record<string, string> = {};
-
-    if (token && token !== "") {
-      headers.Authorization = token;
-
-    }
-    return await fetch(getApiUrl(`/listings/search?${searchParams.toString()}`), {
-      method: "GET",
-      credentials: "include",
-      headers,
-    });
-
-
-  }
-
-  try {
-      let resp: Response | undefined;
-
-      if (token && token !== "") {
-        resp = await withRefresh(req);
-        if (!resp) {
-          return { code: 500, message: "failed to refresh token"} as ErrorResponse;
-
-
-        }
-      } else {
-        resp = await req();
-  }
-  if (resp.ok) {
-    const products = await resp.json();
-    return products as ProductInfo[];
-  } else {
-    const error = await resp.json();
-    return error as ErrorResponse;
-
-  }
-} catch (error) {
-    return { code: 500, message: "network error" } as ErrorResponse;
-  }
-
-
 } 
 
 

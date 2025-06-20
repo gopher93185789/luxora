@@ -14,33 +14,12 @@ export default function Marketplace() {
     page: 1
   });
 
-  // Update filter params when URL search params change
-  useEffect(() => {
-    const search = searchParams.get("search");
-    const category = searchParams.get("category");
-    const startprice = searchParams.get("startprice");
-    const endprice = searchParams.get("endprice");
-
-    setFilterParams(prev => ({
-      ...prev,
-      searchquery: search || undefined,
-      category: category || undefined,
-      startprice: startprice || undefined,
-      endprice: endprice || undefined,
-      page: 1 // Reset to first page when filters change
-    }));
-  }, [searchParams]);
-
   const handleSearch = (query: string) => {
     setFilterParams(prev => ({
       ...prev,
       searchquery: query || undefined,
       page: 1
     }));
-  };
-
-  const handleFiltersChange = (newParams: GetProductsParams) => {
-    setFilterParams(newParams);
   };
 
   return (
@@ -54,16 +33,15 @@ export default function Marketplace() {
               <SearchBar onSearch={handleSearch} />
             </div>
             <div className="w-full max-w-4xl">
-              <SearchFilters 
+              {/* <SearchFilters 
                 params={filterParams} 
                 onParamsChange={handleFiltersChange} 
-              />
+              /> */}
             </div>
           </div>
         </div>
         
         <div className="max-w-7xl w-full mx-auto">
-          {/* Search Results Header */}
           {filterParams.searchquery && (
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-text-primary mb-2">
@@ -75,7 +53,6 @@ export default function Marketplace() {
             </div>
           )}
 
-          {/* Active Filters Summary */}
           {(filterParams.category || filterParams.startprice || filterParams.endprice) && (
             <div className="mb-6 flex flex-wrap gap-2">
               {filterParams.category && (
