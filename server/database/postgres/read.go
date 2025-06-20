@@ -173,24 +173,34 @@ func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID,
 	if err != nil {
 		return nil, err
 	}
-
+	var (
+		createdByID uuid.UUID
+		product     models.ProductInfo
+	)
+	
 	for rows.Next() {
-		var product models.ProductInfo
+
 		if category != nil {
 			product.Category = *category
 		}
 
-		err = rows.Scan(&product.ItemID, &product.Name, &product.CreatedBy, &product.CreatedAt, &product.Description, &product.Price, &product.Currency)
+		err = rows.Scan(&product.ItemID, &product.Name, &createdByID, &product.CreatedAt, &product.Description, &product.Price, &product.Currency)
 		if err != nil {
-			continue
+			return nil, err
+		}
+
+		err = p.Pool.QueryRow(ctx, "SELECT username FROM luxora_user WHERE id=$1", createdByID).Scan(&product.CreatedBy)
+		if err != nil {
+			return nil, err
 		}
 
 		products = append(products, product)
 	}
 	rows.Close()
 
+	var image = models.ProductImage{}
 	for i := range products {
-		products[i].Images = []models.ProductImage{}
+		products[i].Images = make([]models.ProductImage, 0, 3)
 
 		rows, err := tx.Query(ctx, "SELECT compressed_image, sort_order FROM luxora_product_image WHERE product_id=$1 ORDER BY sort_order ASC", products[i].ItemID)
 		if err != nil {
@@ -198,7 +208,6 @@ func (p *Postgres) GetProducts(ctx context.Context, userID, createdBy uuid.UUID,
 		}
 
 		for rows.Next() {
-			var image = models.ProductImage{}
 			err = rows.Scan(&image.CompressedImage, &image.Order)
 			if err != nil {
 				continue
@@ -262,10 +271,16 @@ func (p *Postgres) GetProductById(ctx context.Context, productID uuid.UUID) (pro
 	`
 
 	product = models.ProductInfo{}
+	var createdbyID uuid.UUID
 	product.ItemID = productID
 	productRow := tx.QueryRow(ctx, query, productID)
 
-	err = productRow.Scan(&product.Name, &product.CreatedBy, &product.Category, &product.CreatedAt, &product.Description, &product.Price, &product.Currency)
+	err = productRow.Scan(&product.Name, &createdbyID, &product.Category, &product.CreatedAt, &product.Description, &product.Price, &product.Currency)
+	if err != nil {
+		return product, err
+	}
+
+	err = tx.QueryRow(ctx, "SELECT username FROM luxora_user WHERE id=$1", createdbyID).Scan(&product.CreatedBy)
 	if err != nil {
 		return product, err
 	}

@@ -50,7 +50,7 @@ type SellItemViaBid struct {
 type ProductInfo struct {
 	ItemID      uuid.UUID       `json:"id"`
 	Name        string          `json:"name"`
-	CreatedBy   uuid.UUID       `json:"created_by"`
+	CreatedBy   string          `json:"created_by"`
 	CreatedAt   time.Time       `json:"created_at"`
 	Category    string          `json:"category"`
 	Description string          `json:"description"`
