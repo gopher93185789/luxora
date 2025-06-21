@@ -44,10 +44,9 @@ export default function Marketplace() {
 
   return (
     <main className="min-h-screen flex">
-      <Sidebar />
       <div className="flex-1 flex flex-col">
 
-        <div className="flex-1 px-64 pl-5 p-5">
+        <div className="flex-1 pl-5 p-5">
 
           <div className="max-w-7xl w-full mx-auto">
         <SearchBar onSearch={handleSearch} />
@@ -65,7 +64,7 @@ export default function Marketplace() {
               key={JSON.stringify(filterParams)} 
               initialParams={filterParams}
               showDeleteButtons={false}
-              className="min-h-[60vh]"
+              // className="min-h-[60vh]"
             />
           </div>
         </div>

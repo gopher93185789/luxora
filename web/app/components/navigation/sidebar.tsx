@@ -6,7 +6,7 @@ const navLinks = [
 
   { to: "/dashboard/listings", label: "Listings" },
   { to: "/dashboard/biddings", label: "Biddings" },
-  { to: "/marketplace", label: "Marketplace" },
+  { to: "/dashboard/marketplace", label: "Marketplace" },
   { to: "/dashboard/profile", label: "Profile" },
 ];
 
@@ -44,7 +44,7 @@ export function BackButton() {
 
 export function Sidebar() {
   const location = useLocation();
-  const isMarketplace = location.pathname.startsWith("/marketplace");
+  const isMarketplace = location.pathname.startsWith("/dashboard/marketplace");
   const isProduct = location.pathname.startsWith("/product");
   const isDashboard = location.pathname.startsWith("/dashboard");
 

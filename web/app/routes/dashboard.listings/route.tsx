@@ -39,13 +39,20 @@ export default function Listings() {
   return (      
   <div className="space-y-6">
         <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col gap-8 items-start w-full">
+      <div className="bg-primary rounded-lg p-8 w-full">
+        <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-text-primary">My Listings</h1>
-            <p className="text-text-primary/70 mt-1">Manage your products and listings</p>
+            <h1 className="text-3xl font-bold text-text-primary mb-2">
+              My Listings
+            </h1>
+            <p className="text-text-primary/70">
+              Manage your product listings, create new ones, and browse the marketplace.
+            </p>
           </div>
           <div className="flex gap-3">
             <Link
-              to="/marketplace"
+              to="/dashboard/marketplace"
               className="bg-accent/10 hover:bg-accent/20 text-text-primary px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -65,6 +72,9 @@ export default function Listings() {
               Create New Listing
             </motion.button>
           </div>
+        </div>
+      </div>
+        </div>
         </div>
 
       {showCreateForm && (
