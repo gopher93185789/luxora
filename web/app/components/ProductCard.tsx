@@ -138,3 +138,40 @@ export function ProductCard({ product, onDelete, showDeleteButton = false }: Pro
     </Link>
   );
 }
+
+
+export function SimpleProductCard({ product }: { product: ProductInfo}) {
+  return (
+    <div className="bg-primary border border-border/10 rounded-lg overflow-hidden hover:border-border/20 transition-all duration-300">
+      <Link to={`/product/${product.id}`} className="block">
+        <div className="relative aspect-square overflow-hidden bg-primary/50">
+          {product.product_images && product.product_images.length > 0 ? (
+            <img
+              src={`data:image/jpg;base64,${product.product_images[0].base_64_image}`}
+              alt={product.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-text-primary/50">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <path d="M21 15l-5-5L5 21"/>
+              </svg>
+            </div>
+          )}
+        </div>
+        <div className="p-4 space-y-2">
+          <h3 className="font-semibold text-text-primary text-lg line-clamp-1">{product.name}</h3>
+          <p className="text-text-primary/70 text-sm line-clamp-2">{product.description}</p>
+          <span className="text-text-secondary font-bold text-xl">
+            {new Intl.NumberFormat('en-US', {
+              style: 'currency',
+              currency: product.currency || 'USD',
+            }).format(product.price)}
+          </span>
+        </div>
+      </Link>
+    </div>
+  );
+}

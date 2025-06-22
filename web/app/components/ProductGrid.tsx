@@ -187,3 +187,18 @@ export function ProductFilters({ params, onParamsChange, categories = [] }: Prod
     </div>
   );
 }
+
+
+export function SimpleProductGrid({
+  initialParams = {},
+  showDeleteButtons = false,
+  className = ""
+}: ProductGridProps) {
+  return (
+    <SimpleProductGrid 
+      initialParams={initialParams} 
+      showDeleteButtons={showDeleteButtons} 
+      className={className} 
+    />
+  );
+}
