@@ -1,15 +1,10 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: 'Trajan Pro';
-  src: url('/fonts/TrajanPro-Regular.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
 body {
-  font-family: 'Trajan Pro', serif;
-};
+  font-family: 'Poppins', sans-serif;
+}
 
 
 html {
@@ -30,7 +25,7 @@ html {
   --color-button-border: rgba(255, 255, 255, 0.1);
   --color-button-hover-text: #004221;
   --color-button-active-bg: rgba(255, 255, 255, 0.2);
-  --color-luxora: #B7955C;
+  --color-luxora: #C3B086;
   --font-family: 'Montserrat', sans-serif;
 }
 

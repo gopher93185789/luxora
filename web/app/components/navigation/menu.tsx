@@ -59,7 +59,7 @@ export function DropdownMenu() {
                         transition={{ duration: 0.3}}
                         >
                             <motion.li 
-                            className="w-full max-w-md"
+                            className="w-full"
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -20 }}
@@ -67,14 +67,14 @@ export function DropdownMenu() {
                             >
                                 <Link
                                     to="/auth"
-                                    className="block px-6 py-4 text-8xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all"
+                                    className="block px-6 py-4 sm:text-8xl text-5xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all"
                                     onClick={() => setOpen(false)}
                                 >
                                     Login
                                 </Link>
                             </motion.li>
                             <motion.li 
-                            className="w-full max-w-md"
+                            className="w-full"
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -20 }}
@@ -82,14 +82,14 @@ export function DropdownMenu() {
                             >
                                 <Link
                                     to="/marketplace"
-                                    className="block px-6 py-4 text-8xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all"
+                                    className="block px-6 py-4 sm:text-8xl text-5xl  text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all"
                                     onClick={() => setOpen(false)}
                                 >
                                     Marketplace
                                 </Link>
                             </motion.li>
                             <motion.li 
-                            className="w-full max-w-md"
+                            className="w-full "
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -20 }}
@@ -97,7 +97,7 @@ export function DropdownMenu() {
                             >
                                 <Link
                                     to="/about"
-                                    className="block px-6 py-4 text-8xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all"
+                                    className="block px-6 py-4 sm:text-8xl text-5xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all"
                                     onClick={() => setOpen(false)}
                                 >
                                     About Us
