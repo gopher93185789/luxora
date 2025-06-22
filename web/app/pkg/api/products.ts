@@ -136,14 +136,16 @@ export async function GetProduct(
     console.log("GetProduct - Response status:", resp.status);
 
     if (resp.ok) {
-      const product = await resp.json();
+      const product = await resp.json() as ProductInfo;
       console.log("GetProduct - Success, product ID:", product.id);
-      return product as ProductInfo;
+      return product;
     } else {
       let errorMessage = `HTTP ${resp.status}`;
       try {
         const error = await resp.json();
-        errorMessage = error.message || error.error || errorMessage;
+        if (typeof error === "object" && error !== null) {
+          errorMessage = (error as any).message || (error as any).error || errorMessage;
+        }
         console.error("GetProduct - API Error:", error);
         return error as ErrorResponse;
       } catch (jsonError) {
@@ -232,3 +234,18 @@ export async function DeleteListing(
     return { code: 500, message: "network error" } as ErrorResponse;
   }
 }
+
+export async function SearchListings(
+  searchquery: string,
+  limit: number = 10,
+  page: number = 1
+): Promise<ProductInfo[] | ErrorResponse> {
+  return GetProducts({
+    searchquery,
+    limit,
+    page
+  });
+} 
+
+
+

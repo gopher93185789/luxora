@@ -11,6 +11,9 @@ import ShinyText from "~/components/ShinyText";
 
 export async function loader(lfa: LoaderFunctionArgs) {
   const token = await getTokenFromServerSideCaller(lfa);
+  if (!token) {
+    return { requireRefresh: true };
+  }
   const resp = await GetUserDetails(token);
 
   if ("code" in resp) {
@@ -165,11 +168,15 @@ export default function BiddingsDashboard() {
               Track all your bids and their current status
             </p>
           </div>
-          <Link to="/marketplace">
-            <button className="bg-black/90 hover:bg-accent/50 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200">
+          <Link
+              to="/dashboard/marketplace"
+              className="bg-accent/10 hover:bg-accent/20 text-text-primary px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4m-2.4 0L3 3H1m6 10a1 1 0 100 2 1 1 0 000-2zm10 0a1 1 0 100 2 1 1 0 000-2"/>
+              </svg>
               Browse Marketplace
-            </button>
-          </Link>
+            </Link>
         </div>
       </div>
 
