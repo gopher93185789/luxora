@@ -9,7 +9,7 @@ import (
 )
 
 func (s *CoreAuthContext) handleGoogleOauthSignup(ctx context.Context, providerID, profileImageLink string) (accessToken, refreshToken string, err error) {
-	uid, err := s.Database.InsertOauthUser(ctx, "Anonymous"+uuid.New().String(), "github", providerID, profileImageLink)
+	uid, err := s.Database.InsertOauthUser(ctx, "Anonymous"+uuid.New().String(), "google", providerID, profileImageLink)
 	if err != nil {
 		s.Logger.Error(fmt.Sprintf("Failed to insert Google OAuth user: %v", err))
 		return "", "", err
