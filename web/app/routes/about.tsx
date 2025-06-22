@@ -156,7 +156,7 @@ export default function AboutPage() {
                 {[
                   { 
                     name: "Anish Chittu", 
-                    role: "Backend Engineer",
+                    role: "Backend Developer",
                     github: "https://github.com/scott-mescudi", // Replace with actual GitHub URL
                     avatar: "/team/anish.jpg" // Add profile picture to public/team/ folder
                   },
