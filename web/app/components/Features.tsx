@@ -6,42 +6,42 @@ export function Features() {
   const featuresRef = useRef(null);
   const inView = useInView(featuresRef, { once: true, margin: "-100px" });  const features = [
     {
-      icon: <Trophy className="w-8 h-8" />,
+      icon: <Trophy size={26} />,
       title: "Verified Luxury",
       description: "Every item is authenticated by our team of luxury experts, ensuring you trade only genuine premium goods.",
       gradient: "from-black/60 to-gray-900/80",
       accentColor: "yellow-400"
     },
     {
-      icon: <Shield className="w-8 h-8" />,
+      icon: <Shield size={26} />,
       title: "Secure Transactions",
       description: "Bank-level encryption and escrow services protect your high-value transactions from start to finish.",
       gradient: "from-black/60 to-gray-900/80",
       accentColor: "blue-400"
     },
     {
-      icon: <Globe className="w-8 h-8" />,
+      icon: <Globe size={26} />,
       title: "Global Network",
       description: "Connect with elite collectors and dealers worldwide in our exclusive, invitation-only marketplace.",
       gradient: "from-black/60 to-gray-900/80",
       accentColor: "green-400"
     },
     {
-      icon: <Zap className="w-8 h-8" />,
+      icon: <Zap size={26} />,
       title: "Instant Matching",
       description: "Our AI-powered system instantly connects you with the perfect buyers or sellers for your luxury items.",
       gradient: "from-black/60 to-gray-900/80",
       accentColor: "purple-400"
     },
     {
-      icon: <Gem className="w-8 h-8" />,
+      icon: <Gem size={26} />,
       title: "Concierge Service",
       description: "Dedicated luxury specialists handle logistics, authentication, and white-glove delivery services.",
       gradient: "from-black/60 to-gray-900/80",
       accentColor: "indigo-400"
     },
     {
-      icon: <TrendingUp className="w-8 h-8" />,
+      icon: <TrendingUp size={26} />,
       title: "Market Insights",
       description: "Access real-time luxury market data, trends, and valuations to make informed trading decisions.",
       gradient: "from-black/60 to-gray-900/80",
@@ -71,11 +71,14 @@ export function Features() {
     }
   };
   return (
-    <section ref={featuresRef} className="py-20 px-6 bg-gradient-to-b from-black via-gray-900 to-black relative overflow-hidden">
+    <section
+      ref={featuresRef}
+      className="py-20 px-6 bg-gradient-to-b from-black via-gray-900 to-black relative overflow-hidden"
+    >
       {/* Background Effects */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.05)_0%,transparent_50%)]"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(255,255,255,0.03)_0%,transparent_50%)]"></div>
-      
+
       <div className="max-w-7xl mx-auto relative">
         {/* Section Header */}
         <motion.div
@@ -86,7 +89,9 @@ export function Features() {
         >
           <div className="inline-flex items-center gap-3 mb-6">
             <div className="w-16 h-px bg-gradient-to-r from-transparent via-luxora to-transparent"></div>
-            <span className="text-luxora font-medium tracking-wider uppercase text-sm">Excellence</span>
+            <span className="text-luxora font-medium tracking-wider uppercase text-sm">
+              Excellence
+            </span>
             <div className="w-16 h-px bg-gradient-to-r from-transparent via-luxora to-transparent"></div>
           </div>
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight">
@@ -96,9 +101,11 @@ export function Features() {
             </span>
           </h2>
           <p className="text-xl md:text-2xl text-white/70 max-w-4xl mx-auto leading-relaxed">
-            Experience the pinnacle of luxury trading with features designed exclusively for discerning collectors and connoisseurs.
+            Experience the pinnacle of luxury trading with features designed
+            exclusively for discerning collectors and connoisseurs.
           </p>
-        </motion.div>        {/* Features Grid */}
+        </motion.div>{" "}
+        {/* Features Grid */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10"
           variants={containerVariants}
@@ -113,34 +120,37 @@ export function Features() {
             >
               {/* Card Background with Gradient Border */}
               <div className="absolute -inset-0.5 bg-gradient-to-r from-luxora/50 via-transparent to-luxora/50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className={`relative backdrop-blur-xl border border-white/10 rounded-xl p-8 h-full transition-all duration-500 group-hover:border-white/30 group-hover:shadow-2xl group-hover:shadow-black/50 group-hover:-translate-y-2 bg-gradient-to-br from-gray-800/60 to-gray-900/80 ${feature.gradient}`}>
+              <div
+                className={`relative backdrop-blur-xl border border-white/10 rounded-xl gap-3 p-8 h-full transition-all duration-500 group-hover:border-white/30 group-hover:shadow-2xl group-hover:shadow-black/50 group-hover:-translate-y-2 bg-gradient-to-br from-gray-800/60 to-gray-900/80 ${feature.gradient}`}
+              >
                 {/* Icon with animated background */}
                 <div className="relative mb-6">
-                  <div className={`absolute inset-0 w-16 h-16 bg-black/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-500 group-hover:scale-150`}></div>
-                  <div className="relative text-luxora mb-4 group-hover:scale-110 group-hover:text-white transition-all duration-500 flex items-center justify-center w-16 h-16">
+                  <div
+                    className={`absolute inset-0 w-16 h-16 bg-black/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-500 group-hover:scale-150`}
+                  ></div>
+                </div>
+
+                <div className="h-fit w-full mb-3 flex flex-row gap-1 items-center">
+                  <div className="text-luxora  group-hover:text-white transition-all duration-500 flex items-center justify-center items-center justify-center">
                     {feature.icon}
                   </div>
+                  <h3 className="text-2xl lg:text-3xl text-nowrap font-bold text-white  group-hover:text-white transition-colors duration-500">
+                    {feature.title}
+                  </h3>
                 </div>
-                
-                <div className="h-fit w-full flex flex-row gap-2">
-                    
-                </div>
-                <h3 className="text-2xl lg:text-3xl font-bold text-white mb-6 group-hover:text-white transition-colors duration-500">
-                  {feature.title}
-                </h3>
 
-                
                 <p className="text-white/70 leading-relaxed text-base lg:text-lg group-hover:text-white/90 transition-colors duration-300">
                   {feature.description}
                 </p>
-                  {/* Decorative element */}
+                {/* Decorative element */}
                 <div className="absolute bottom-4 right-4 w-8 h-8 border border-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:rotate-45">
                   <div className="absolute inset-2 bg-black/30 rounded-full"></div>
                 </div>
               </div>
             </motion.div>
           ))}
-        </motion.div>        {/* Bottom CTA */}
+        </motion.div>{" "}
+        {/* Bottom CTA */}
         <motion.div
           className="text-center mt-20"
           initial={{ opacity: 0, y: 40 }}
@@ -155,14 +165,16 @@ export function Features() {
             </span>
             <div className="w-16 h-px bg-gradient-to-r from-transparent via-luxora to-transparent"></div>
           </div>
-          
+
           {/* Stats */}
-          <motion.div 
+          <motion.div
             className="flex flex-wrap justify-center gap-8 lg:gap-12 mt-12 text-center"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 1.2 }}
-          >            <div className="group">
+          >
+            {" "}
+            <div className="group">
               <div className="text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:text-black transition-colors duration-300">
                 50K+
               </div>
