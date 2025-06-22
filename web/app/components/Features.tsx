@@ -1,7 +1,8 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Trophy, Shield, Globe, Zap, Gem, TrendingUp } from "lucide-react";
-import SpotlightCard from "./card";
+import SpotlightCard from "./Card";
+
 
 export function Features() {
   const featuresRef = useRef(null);
@@ -9,32 +10,32 @@ export function Features() {
 
   const features = [
     {
-      icon: <Trophy className="w-8 h-8" />,
+      icon: <Trophy size={26} />,
       title: "Verified Luxury",
       description: "Every item is authenticated by our team of luxury experts, ensuring you trade only genuine premium goods."
     },
     {
-      icon: <Shield className="w-8 h-8" />,
+      icon: <Shield size={26} />,
       title: "Secure Transactions",
       description: "Bank-level encryption and escrow services protect your high-value transactions from start to finish."
     },
     {
-      icon: <Globe className="w-8 h-8" />,
+      icon: <Globe size={26} />,
       title: "Global Network",
       description: "Connect with elite collectors and dealers worldwide in our exclusive, invitation-only marketplace."
     },
     {
-      icon: <Zap className="w-8 h-8" />,
+      icon: <Zap size={26} />,
       title: "Instant Matching",
       description: "Our AI-powered system instantly connects you with the perfect buyers or sellers for your luxury items."
     },
     {
-      icon: <Gem className="w-8 h-8" />,
+      icon: <Gem size={26} />,
       title: "Concierge Service",
       description: "Dedicated luxury specialists handle logistics, authentication, and white-glove delivery services."
     },
     {
-      icon: <TrendingUp className="w-8 h-8" />,
+      icon: <TrendingUp size={26} />,
       title: "Market Insights",
       description: "Access real-time luxury market data, trends, and valuations to make informed trading decisions."
     }
@@ -68,7 +69,7 @@ export function Features() {
       {/* Background Effects */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.05)_0%,transparent_50%)]"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(255,255,255,0.03)_0%,transparent_50%)]"></div>
-      
+
       <div className="max-w-7xl mx-auto relative">
         {/* Section Header */}
         <motion.div
@@ -79,7 +80,9 @@ export function Features() {
         >
           <div className="inline-flex items-center gap-3 mb-6">
             <div className="w-16 h-px bg-gradient-to-r from-transparent via-luxora to-transparent"></div>
-            <span className="text-luxora font-medium tracking-wider uppercase text-sm">Excellence</span>
+            <span className="text-luxora font-medium tracking-wider uppercase text-sm">
+              Excellence
+            </span>
             <div className="w-16 h-px bg-gradient-to-r from-transparent via-luxora to-transparent"></div>
           </div>
           
@@ -91,9 +94,11 @@ export function Features() {
           </h2>
           
           <p className="text-xl md:text-2xl text-white/70 max-w-4xl mx-auto leading-relaxed">
-            Experience the pinnacle of luxury trading with features designed exclusively for discerning collectors and connoisseurs.
+            Experience the pinnacle of luxury trading with features designed
+            exclusively for discerning collectors and connoisseurs.
           </p>
-        </motion.div>        {/* Features Grid */}
+        </motion.div>{" "}
+        {/* Features Grid */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10"
           variants={containerVariants}
@@ -109,9 +114,19 @@ export function Features() {
               <SpotlightCard className="h-full">
                 {/* Icon */}
                 <div className="relative mb-6">
+                  <div
+                    className={`absolute inset-0 w-16 h-16 bg-black/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-500 group-hover:scale-150`}
+                  ></div>
+                </div>
+
+                <div className="h-fit w-full mb-3 flex flex-row gap-1 items-center">
+                  <div className="text-luxora  group-hover:text-white transition-all duration-500 flex items-center justify-center items-center justify-center"/>
                   <div className="relative text-luxora mb-4 group-hover:scale-110 group-hover:text-white transition-all duration-500 flex items-center justify-center w-16 h-16">
                     {feature.icon}
                   </div>
+                  <h3 className="text-2xl lg:text-3xl text-nowrap font-bold text-white  group-hover:text-white transition-colors duration-500">
+                    {feature.title}
+                  </h3>
                 </div>
                 
                 {/* Title */}
@@ -126,7 +141,8 @@ export function Features() {
               </SpotlightCard>
             </motion.div>
           ))}
-        </motion.div>        {/* Bottom CTA */}
+        </motion.div>{" "}
+        {/* Bottom CTA */}
         <motion.div
           className="text-center mt-20"
           initial={{ opacity: 0, y: 40 }}
@@ -141,9 +157,9 @@ export function Features() {
             </span>
             <div className="w-16 h-px bg-gradient-to-r from-transparent via-luxora to-transparent"></div>
           </div>
-          
+
           {/* Stats */}
-          <motion.div 
+          <motion.div
             className="flex flex-wrap justify-center gap-8 lg:gap-12 mt-12 text-center"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
