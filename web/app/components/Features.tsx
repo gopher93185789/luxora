@@ -3,42 +3,47 @@ import { useRef } from "react";
 import { Trophy, Shield, Globe, Zap, Gem, TrendingUp } from "lucide-react";
 import SpotlightCard from "./Card";
 
-
 export function Features() {
   const featuresRef = useRef(null);
   const inView = useInView(featuresRef, { once: true, margin: "-100px" });
 
   const features = [
     {
-      icon: <Trophy size={26} />,
+      icon: <Trophy className="w-8 h-8" />,
       title: "Verified Luxury",
-      description: "Every item is authenticated by our team of luxury experts, ensuring you trade only genuine premium goods."
+      description:
+        "Every item is authenticated by our team of luxury experts, ensuring you trade only genuine premium goods.",
     },
     {
-      icon: <Shield size={26} />,
+      icon: <Shield className="w-8 h-8" />,
       title: "Secure Transactions",
-      description: "Bank-level encryption and escrow services protect your high-value transactions from start to finish."
+      description:
+        "Bank-level encryption and escrow services protect your high-value transactions from start to finish.",
     },
     {
-      icon: <Globe size={26} />,
+      icon: <Globe className="w-8 h-8" />,
       title: "Global Network",
-      description: "Connect with elite collectors and dealers worldwide in our exclusive, invitation-only marketplace."
+      description:
+        "Connect with elite collectors and dealers worldwide in our exclusive, invitation-only marketplace.",
     },
     {
-      icon: <Zap size={26} />,
+      icon: <Zap className="w-8 h-8" />,
       title: "Instant Matching",
-      description: "Our AI-powered system instantly connects you with the perfect buyers or sellers for your luxury items."
+      description:
+        "Our AI-powered system instantly connects you with the perfect buyers or sellers for your luxury items.",
     },
     {
-      icon: <Gem size={26} />,
+      icon: <Gem className="w-8 h-8" />,
       title: "Concierge Service",
-      description: "Dedicated luxury specialists handle logistics, authentication, and white-glove delivery services."
+      description:
+        "Dedicated luxury specialists handle logistics, authentication, and white-glove delivery services.",
     },
     {
-      icon: <TrendingUp size={26} />,
+      icon: <TrendingUp className="w-8 h-8" />,
       title: "Market Insights",
-      description: "Access real-time luxury market data, trends, and valuations to make informed trading decisions."
-    }
+      description:
+        "Access real-time luxury market data, trends, and valuations to make informed trading decisions.",
+    },
   ];
 
   const containerVariants = {
@@ -46,24 +51,25 @@ export function Features() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
-      }
-    }
+        staggerChildren: 0.2,
+      },
+    },
   };
   const itemVariants = {
     hidden: { opacity: 0, y: 50, scale: 0.9 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       scale: 1,
-      transition: { 
+      transition: {
         duration: 0.8,
-        ease: [0.25, 0.46, 0.45, 0.94]
-      }
-    }
-  };  return (
-    <section 
-      ref={featuresRef} 
+        ease: [0.25, 0.46, 0.45, 0.94],
+      },
+    },
+  };
+  return (
+    <section
+      ref={featuresRef}
       className="py-20 px-6 bg-gradient-to-b from-black via-luxora/75 to-black relative overflow-hidden"
     >
       {/* Background Effects */}
@@ -85,14 +91,14 @@ export function Features() {
             </span>
             <div className="w-16 h-px bg-gradient-to-r from-transparent via-luxora to-transparent"></div>
           </div>
-          
+
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight">
             Why Choose{" "}
             <span className="text-transparent bg-gradient-to-r from-luxora/80 to-luxora/100 bg-clip-text">
               Luxoras
             </span>
           </h2>
-          
+
           <p className="text-xl md:text-2xl text-white/70 max-w-4xl mx-auto leading-relaxed">
             Experience the pinnacle of luxury trading with features designed
             exclusively for discerning collectors and connoisseurs.
@@ -114,26 +120,16 @@ export function Features() {
               <SpotlightCard className="h-full">
                 {/* Icon */}
                 <div className="relative mb-6">
-                  <div
-                    className={`absolute inset-0 w-16 h-16 bg-black/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-500 group-hover:scale-150`}
-                  ></div>
-                </div>
-
-                <div className="h-fit w-full mb-3 flex flex-row gap-1 items-center">
-                  <div className="text-luxora  group-hover:text-white transition-all duration-500 flex items-center justify-center items-center justify-center"/>
                   <div className="relative text-luxora mb-4 group-hover:scale-110 group-hover:text-white transition-all duration-500 flex items-center justify-center w-16 h-16">
                     {feature.icon}
                   </div>
-                  <h3 className="text-2xl lg:text-3xl text-nowrap font-bold text-white  group-hover:text-white transition-colors duration-500">
-                    {feature.title}
-                  </h3>
                 </div>
-                
+
                 {/* Title */}
                 <h3 className="text-2xl lg:text-3xl font-bold text-white mb-6 group-hover:text-luxora transition-colors duration-500">
                   {feature.title}
                 </h3>
-                
+
                 {/* Description */}
                 <p className="text-white/70 leading-relaxed text-base lg:text-lg group-hover:text-white/90 transition-colors duration-300">
                   {feature.description}
@@ -173,7 +169,7 @@ export function Features() {
                 Verified Items
               </div>
             </div>
-            
+
             <div className="group">
               <div className="text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:text-black transition-colors duration-300">
                 $2.5B+
@@ -182,7 +178,7 @@ export function Features() {
                 Total Traded
               </div>
             </div>
-            
+
             <div className="group">
               <div className="text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:text-black transition-colors duration-300">
                 150+
