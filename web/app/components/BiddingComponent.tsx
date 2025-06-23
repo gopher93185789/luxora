@@ -70,15 +70,19 @@ export function BiddingComponent({
     try {
       const bid: Bid = {
         amount,
-        mesage: bidMessage, 
+        message: bidMessage, 
         product_id: productId,
       };
 
+      console.log('Submitting bid:', bid);
       const result = await CreateBid(bid);
+      console.log('Bid result:', result);
 
       if ("code" in result) {
+        console.error('Bid failed with error:', result);
         setError(result.message);
       } else {
+        console.log('Bid submitted successfully:', result);
         setSuccess("Bid submitted successfully!");
         setBidAmount("");
         setBidMessage("");
@@ -89,6 +93,7 @@ export function BiddingComponent({
         }
       }
     } catch (err) {
+      console.error('Bid submission error:', err);
       setError("Failed to submit bid. Please try again.");
     } finally {
       setIsSubmitting(false);

@@ -1,5 +1,6 @@
 import { useNavigate } from "@remix-run/react";
 import { SimpleProductGrid } from "~/components/ProductGrid";
+import { LogoutButton } from "~/components/LogoutButton";
 import { useUserInfo } from "~/hooks/use-user-info";
 import { GetProductsParams } from "~/pkg/api/products";
 
@@ -35,16 +36,31 @@ export default function DashboardProfile() {
       </div>
       
       <div className="bg-primary rounded-lg p-8 w-full">
-        <div className="flex items-center gap-4">
-          <img
-            src={user.profile_image_link}
-            alt="User Profile"
-            className="h-16 w-16 rounded-md"
-          />
-          <div>
-            <h2 className="text-xl font-semibold text-text-primary">{user.username}</h2>
-            <p className="text-text-primary/70">{user.email?.String}</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <img
+              src={user.profile_image_link}
+              alt="User Profile"
+              className="h-16 w-16 rounded-md"
+            />
+            <div>
+              <h2 className="text-xl font-semibold text-text-primary">{user.username}</h2>
+              <p className="text-text-primary/70">{user.email?.String}</p>
+            </div>
           </div>
+          <LogoutButton
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors font-medium flex items-center gap-2"
+            onClick={() => navigate('/auth')}
+            icon={
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16,17 21,12 16,7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+            }
+          >
+            Logout
+          </LogoutButton>
         </div>
       </div>
 

@@ -68,14 +68,39 @@ export async function CreateBid(bid: Bid): Promise<CreateBidResponse | ErrorResp
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    return fetch(`${getApiUrl()}/listings/bid`, {
+    return fetch(getApiUrl('/listings/bid'), {
       method: 'POST',
       headers,
       body: JSON.stringify(bid),
     });
   };
 
-  return withRefresh(req);
+  try {
+    const resp = await withRefresh(req);
+    
+    if (!resp) {
+      return {
+        code: 500,
+        message: "Failed to refresh token"
+      } as ErrorResponse;
+    }
+
+    if (!resp.ok) {
+      const errorData = await resp.json().catch(() => ({ message: 'Unknown error' })) as { message?: string };
+      return {
+        code: resp.status,
+        message: errorData.message || `HTTP ${resp.status}: ${resp.statusText}`
+      } as ErrorResponse;
+    }
+
+    return await resp.json() as CreateBidResponse;
+  } catch (error) {
+    console.error('CreateBid error:', error);
+    return {
+      code: 500,
+      message: "Network error or failed to submit bid"
+    } as ErrorResponse;
+  }
 }
 
 export async function GetBidsForProduct(productId: string, params: { limit: number; page: number }): Promise<BidDetails[] | ErrorResponse> {
@@ -91,14 +116,39 @@ export async function GetBidsForProduct(productId: string, params: { limit: numb
     const headers: Record<string, string> = {};
     
     if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+      headers['Authorization'] = token;
     }
 
-    return fetch(`${getApiUrl()}/listings/bids?${searchParams.toString()}`, {
+    return fetch(getApiUrl(`/listings/bids?${searchParams.toString()}`), {
       method: 'GET',
       headers,
     });
   };
 
-  return withRefresh(req);
+  try {
+    const resp = await withRefresh(req);
+    
+    if (!resp) {
+      return {
+        code: 500,
+        message: "Failed to refresh token"
+      } as ErrorResponse;
+    }
+
+    if (!resp.ok) {
+      const errorData = await resp.json().catch(() => ({ message: 'Unknown error' })) as { message?: string };
+      return {
+        code: resp.status,
+        message: errorData.message || `HTTP ${resp.status}: ${resp.statusText}`
+      } as ErrorResponse;
+    }
+
+    return await resp.json() as BidDetails[];
+  } catch (error) {
+    console.error('GetBidsForProduct error:', error);
+    return {
+      code: 500,
+      message: "Failed to load bids"
+    } as ErrorResponse;
+  }
 }
