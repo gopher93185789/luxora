@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { ProductCard, SimpleProductCard } from "./ProductCard";
 import { useProductInfo } from "~/hooks/use-product-info";
@@ -14,7 +14,7 @@ interface ProductGridProps {
 export function ProductGrid({ 
   initialParams = {}, 
   showDeleteButtons = false, 
-  className = "" 
+  className = ""  
 }: ProductGridProps) {
   const [params, setParams] = useState<GetProductsParams>({
     limit: 12,
