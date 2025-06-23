@@ -7,11 +7,24 @@ import { GetProductsParams } from "~/pkg/api/products";
 
 
 export default function DashboardProfile() {
-  const user = useUserInfo();
+  const { user, loading: userLoading } = useUserInfo();
   const navigate = useNavigate();
 
+  if (userLoading || !user?.id) {
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-text-primary">My Profile</h1>
+        </div>
+        <div className="flex items-center justify-center min-h-64">
+          <div className="animate-spin h-8 w-8 border-2 border-text-primary/30 border-t-text-primary rounded-full"></div>
+        </div>
+      </div>
+    );
+  }
+
   const userListingsParams: Partial<GetProductsParams> = {
-    creator: user.user?.id,
+    creator: user.id,
     limit: 20,
   };
 
@@ -24,13 +37,13 @@ export default function DashboardProfile() {
       <div className="bg-primary rounded-lg p-8 w-full">
         <div className="flex items-center gap-4">
           <img
-            src={user.user?.profile_image_link}
+            src={user.profile_image_link}
             alt="User Profile"
             className="h-16 w-16 rounded-md"
           />
           <div>
-            <h2 className="text-xl font-semibold text-text-primary">{user.user?.username}</h2>
-            <p className="text-text-primary/70">{user.user?.email?.String}</p>
+            <h2 className="text-xl font-semibold text-text-primary">{user.username}</h2>
+            <p className="text-text-primary/70">{user.email?.String}</p>
           </div>
         </div>
       </div>
