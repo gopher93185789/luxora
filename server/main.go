@@ -120,7 +120,7 @@ func main() {
 	mux.HandleFunc("GET /listings", mcf.AuthMiddleware(tx.GetListings))
 	mux.HandleFunc("GET /listings/{id}", mcf.AuthMiddleware(tx.GetListingsById))
 	mux.HandleFunc("PATCH /listings", mcf.AuthMiddleware(tx.UpdateListing))
-	mux.HandleFunc("DELETE /listings", mcf.AuthMiddleware(tx.DeleteListing))
+	mux.HandleFunc("DELETE /listings/{id}", mcf.AuthMiddleware(tx.DeleteListing))
 	mux.HandleFunc("GET /listings/highest-bid", mcf.AuthMiddleware(tx.GetHighestBid))
 	mux.HandleFunc("GET /listings/bids", mcf.AuthMiddleware(tx.GetBids))
 	mux.HandleFunc("PUT /listings/sold/bid", mcf.AuthMiddleware(tx.UpdateSoldViaBid))
