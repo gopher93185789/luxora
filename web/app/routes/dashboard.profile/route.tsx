@@ -1,9 +1,10 @@
 import { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { ProductGrid, SimpleProductGrid } from "~/components/ProductGrid";
+import { SimpleProductCard } from "~/components/ProductCard";
 import { useUserInfo } from "~/hooks/use-user-info";
 import { GetProductsParams } from "~/pkg/api/products";
+
 
 
 
@@ -40,10 +41,7 @@ export default function DashboardProfile() {
           </div>
         </div>
       </div>
-      <SimpleProductGrid
-        key={`${JSON.stringify(userListingsParams)}-${refreshKey}`}
-        initialParams={userListingsParams}
-      />
+  
     </div>
   )
 }

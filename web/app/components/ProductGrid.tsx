@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { ProductCard } from "./ProductCard";
+import { ProductCard, SimpleProductCard } from "./ProductCard";
 import { useProductInfo } from "~/hooks/use-product-info";
 import { DeleteListing, type GetProductsParams } from "~/pkg/api/products";
 import { DefualtLoader } from "./Loader";
@@ -189,16 +189,3 @@ export function ProductFilters({ params, onParamsChange, categories = [] }: Prod
 }
 
 
-export function SimpleProductGrid({
-  initialParams = {},
-  showDeleteButtons = false,
-  className = ""
-}: ProductGridProps) {
-  return (
-    <SimpleProductGrid 
-      initialParams={initialParams} 
-      showDeleteButtons={showDeleteButtons} 
-      className={className} 
-    />
-  );
-}
