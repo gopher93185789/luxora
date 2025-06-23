@@ -65,10 +65,10 @@ export async function CreateBid(bid: Bid): Promise<CreateBidResponse | ErrorResp
     };
     
     if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+      headers['Authorization'] = token;
     }
 
-    return fetch(getApiUrl('/listings/bid'), {
+    return fetch(getApiUrl('/listing/bid'), {
       method: 'POST',
       headers,
       body: JSON.stringify(bid),
