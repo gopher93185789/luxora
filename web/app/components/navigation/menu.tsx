@@ -5,110 +5,121 @@ import { motion, AnimatePresence } from 'framer-motion';
 export function DropdownMenu() {
     const [open, setOpen] = useState(false);
 
-    return (
-        <motion.div 
-        className="inline-block text-left z-50 absolute m-10 mt-6"
-        >
+    return (        <div className="relative">
             <button
                 onClick={() => setOpen((prev) => !prev)}
-                className="z-50 relative"
+                className="relative z-50 p-2 rounded-lg bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors"
                 title='Toggle Menu'
             >
                 <motion.div 
-                    animate={{ rotate: open ? 90 : 0, opacity: 1, y: 0, scale: 1 }}
-                    initial={{ opacity: 0, y: -20, scale: 0.95 }}
-                    exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                    animate={{ rotate: open ? 90 : 0 }}
                     transition={{ duration: 0.3 }}
-                    className="p-2 rounded bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors"
                 >
                     <svg 
                         xmlns="http://www.w3.org/2000/svg" 
-                        width="30" 
-                        height="30" 
+                        width="24" 
+                        height="24" 
                         viewBox="0 0 24 24" 
                         fill="none" 
                         stroke="white" 
                         strokeWidth="2" 
                         strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        className="text-text-primary duration-200 ease-in-out"
+                        strokeLinejoin="round"
                     >
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </motion.div>
-            </button>
-            <AnimatePresence>
+            </button>            <AnimatePresence>
                 {open && (
                     <motion.div
-                        initial={{ opacity: 0, y: 0.95 }}
-                        animate={{ opacity: 1, y: 1 }}
-                        exit={{ opacity: 0, y: 0.95 }}
-                        transition={{ 
-                            type: "spring", 
-                            stiffness: 300, 
-                            damping: 30 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="fixed top-0 left-0 w-screen h-screen bg-black z-40 flex items-center justify-center"
+                        style={{ 
+                            position: 'fixed',
+                            top: 0, 
+                            left: 0, 
+                            width: '100vw', 
+                            height: '100vh',
+                            minHeight: '100vh'
                         }}
-                        className="fixed top-0 left-0 w-screen h-screen bg-black flex  z-40"
                     >
-                        <motion.ul 
-                        className="py-6 flex flex-col items-center justify-center h-full gap-4"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        transition={{ duration: 0.3}}
+                        <motion.div 
+                            className="w-full h-full flex items-center justify-center px-4 py-8 sm:px-6"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 20 }}
+                            transition={{ duration: 0.3, delay: 0.1 }}
                         >
-                            <motion.li 
-                            className="w-full max-w-md"
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.3, delay: 0.2 }}
-                            >
-                                <Link
-                                    to="/auth"
-                                    className="block px-6 py-4 text-8xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all"
-                                    onClick={() => setOpen(false)}
+                            <motion.ul className="w-full max-w-md space-y-8 sm:space-y-12">
+                                <motion.li 
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    transition={{ duration: 0.3, delay: 0.2 }}
                                 >
-                                    Login
-                                </Link>
-                            </motion.li>
-                            <motion.li 
-                            className="w-full max-w-md"
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.3, delay: 0.4 }}
-                            >
-                                <Link
-                                    to="/marketplace"
-                                    className="block px-6 py-4 text-8xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all"
-                                    onClick={() => setOpen(false)}
+                                    <Link
+                                        to="/auth"
+                                        className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white/70 hover:text-luxora duration-300 ease-in-out transition-colors text-center py-3 sm:py-4"
+                                        onClick={() => setOpen(false)}
+                                    >
+                                        Login
+                                    </Link>
+                                </motion.li>
+                                
+                                <motion.li 
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    transition={{ duration: 0.3, delay: 0.3 }}
                                 >
-                                    Marketplace
-                                </Link>
-                            </motion.li>
-                            <motion.li 
-                            className="w-full max-w-md"
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.3, delay: 0.6 }}
-                            >
-                                <Link
-                                    to="/about"
-                                    className="block px-6 py-4 text-8xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all"
-                                    onClick={() => setOpen(false)}
+                                    <Link
+                                        to="/marketplace"
+                                        className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white/70 hover:text-luxora duration-300 ease-in-out transition-colors text-center py-3 sm:py-4"
+                                        onClick={() => setOpen(false)}
+                                    >
+                                        Marketplace
+                                    </Link>
+                                </motion.li>
+                                
+                                <motion.li 
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    transition={{ duration: 0.3, delay: 0.4 }}
                                 >
-                                    About Us
-                                </Link>
-                            </motion.li>
-                        </motion.ul>
+                                    <Link
+                                        to="/listings"
+                                        className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white/70 hover:text-luxora duration-300 ease-in-out transition-colors text-center py-3 sm:py-4"
+                                        onClick={() => setOpen(false)}
+                                    >
+                                        Listings
+                                    </Link>
+                                </motion.li>
+                                
+                                <motion.li 
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    transition={{ duration: 0.3, delay: 0.5 }}
+                                >
+                                    <Link
+                                        to="/about"
+                                        className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white/70 hover:text-luxora duration-300 ease-in-out transition-colors text-center py-3 sm:py-4"
+                                        onClick={() => setOpen(false)}
+                                    >
+                                        About
+                                    </Link>
+                                </motion.li>
+                            </motion.ul>
+                        </motion.div>
                     </motion.div>
                 )}
-                
             </AnimatePresence>
-        </motion.div>
+        </div>
     );
 }
