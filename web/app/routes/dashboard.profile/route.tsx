@@ -17,13 +17,6 @@ export default function DashboardProfile() {
 
 
 
-   const userListingsParams: GetProductsParams = {
-      limit: 2,
-      page: 1,
-      creator: user.user?.id || ""
-    };
-
-
   return(
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-6">
@@ -41,7 +34,6 @@ export default function DashboardProfile() {
           </div>
         </div>
       </div>
-  
     </div>
   )
 }
