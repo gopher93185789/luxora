@@ -10,56 +10,62 @@ export interface GetUserBidsParams {
 }
 
 export async function GetUserBids(params: GetUserBidsParams = {}): Promise<BidDetails[] | ErrorResponse> {
-  const token = GetTokenFromLocalStorage();
+  // Since there's no dedicated user bids endpoint yet (/user/bids returns 404),
+  // we'll use mock data temporarily until the backend implements this endpoint
+  
+  console.warn('GetUserBids: Using mock data - /user/bids endpoint not implemented on server');
+  
+  const mockBids: BidDetails[] = [
+    {
+      bid_id: "1",
+      message: "Interested in this luxury watch",
+      created_by: "current_user_id",
+      amount: 15000,
+      product_id: "product_1",
+      created_at: "2025-06-15T10:30:00Z",
+      product_name: "Rolex Submariner",
+      product_image: "base64_image_data",
+      current_highest_bid: 16000,
+      bid_status: 'outbid'
+    },
+    {
+      bid_id: "2",
+      message: "Beautiful piece for my collection",
+      created_by: "current_user_id",
+      amount: 25000,
+      product_id: "product_2",
+      created_at: "2025-06-14T14:20:00Z",
+      product_name: "Vintage Ferrari Model",
+      product_image: "base64_image_data",
+      current_highest_bid: 25000,
+      bid_status: 'winning'
+    },
+    {
+      bid_id: "3",
+      message: "This would complete my art collection",
+      created_by: "current_user_id",
+      amount: 50000,
+      product_id: "product_3",
+      created_at: "2025-06-13T09:15:00Z",
+      product_name: "Abstract Art Piece",
+      product_image: "base64_image_data",
+      current_highest_bid: 50000,
+      bid_status: 'won'
+    }
+  ];
 
-  const searchParams = new URLSearchParams({
-    limit: (params.limit || 50).toString(),
-    page: (params.page || 1).toString(),
+  // Simulate API delay and filter by status if provided
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      let filteredBids = mockBids;
+      
+      if (params.status && params.status !== 'all') {
+        filteredBids = mockBids.filter(bid => bid.bid_status === params.status);
+      }
+      
+      resolve(filteredBids);
+    }, 500);
   });
-
-  if (params.status && params.status !== 'all') {
-    searchParams.append('status', params.status);
-  }
-
-  const req = async (): Promise<Response> => {
-    const headers: Record<string, string> = {};
-    
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    return fetch(getApiUrl(`/user/bids?${searchParams.toString()}`), {
-      method: 'GET',
-      headers,
-    });
-  };
-
-  try {
-    const resp = await withRefresh(req);
-    
-    if (!resp) {
-      return {
-        code: 500,
-        message: "Failed to refresh token"
-      } as ErrorResponse;
-    }
-
-    if (!resp.ok) {
-      const errorData = await resp.json().catch(() => ({ message: 'Unknown error' })) as { message?: string };
-      return {
-        code: resp.status,
-        message: errorData.message || `HTTP ${resp.status}: ${resp.statusText}`
-      } as ErrorResponse;
-    }
-
-    return await resp.json() as BidDetails[];
-  } catch (error) {
-    console.error('GetUserBids error:', error);
-    return {
-      code: 500,
-      message: "Failed to load user bids"
-    } as ErrorResponse;
-  }
 }
 
 export async function CreateBid(bid: Bid): Promise<CreateBidResponse | ErrorResponse> {
@@ -71,7 +77,7 @@ export async function CreateBid(bid: Bid): Promise<CreateBidResponse | ErrorResp
     };
     
     if (token) {
-      headers['Authorization'] = token;
+      headers['Authorization'] = `Bearer ${token}`;
     }
 
     return fetch(getApiUrl('/listing/bid'), {
@@ -122,7 +128,7 @@ export async function GetBidsForProduct(productId: string, params: { limit: numb
     const headers: Record<string, string> = {};
     
     if (token) {
-      headers['Authorization'] = token;
+      headers['Authorization'] = `Bearer ${token}`;
     }
 
     return fetch(getApiUrl(`/listings/bids?${searchParams.toString()}`), {
