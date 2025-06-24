@@ -30,6 +30,7 @@ export default function BiddingsDashboard() {
   );
   const [userBids, setUserBids] = useState<BidDetails[]>([]);
   const [loadingBids, setLoadingBids] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'active' | 'won' | 'lost'>('all');
   const navigate = useNavigate();
 
@@ -66,6 +67,7 @@ export default function BiddingsDashboard() {
 
   const fetchUserBids = async () => {
     setLoadingBids(true);
+    setError(null);
     try {
       const bids = await GetUserBids({
         limit: 50,
@@ -73,11 +75,17 @@ export default function BiddingsDashboard() {
         status: filter === 'all' ? undefined : filter
       });
       
-      if (!("code" in bids)) {
+      if ("code" in bids) {
+        setError(bids.message);
+        setUserBids([]);
+      } else {
         setUserBids(bids);
+        setError(null);
       }
     } catch (error) {
       console.error("Failed to fetch user bids:", error);
+      setError("Failed to load your bids. Please try again.");
+      setUserBids([]);
     } finally {
       setLoadingBids(false);
     }
@@ -146,6 +154,10 @@ export default function BiddingsDashboard() {
   });
 
   const getFilterCounts = () => {
+    if (error || userBids.length === 0) {
+      return { all: 0, active: 0, won: 0, lost: 0 };
+    }
+    
     return {
       all: userBids.length,
       active: userBids.filter(b => b.bid_status === 'active' || b.bid_status === 'winning').length,
@@ -168,7 +180,27 @@ export default function BiddingsDashboard() {
               Track all your bids and their current status
             </p>
           </div>
-          <Link
+          <div className="flex items-center gap-3">
+            <button
+              onClick={fetchUserBids}
+              disabled={loadingBids}
+              className="bg-secondary/50 hover:bg-secondary text-text-primary px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 disabled:opacity-50"
+            >
+              <svg 
+                width="16" 
+                height="16" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2"
+                className={loadingBids ? "animate-spin" : ""}
+              >
+                <path d="M23 4v6h-6"/>
+                <path d="M20.49 15a9 9 0 11-2.12-8.36L23 10"/>
+              </svg>
+              Refresh
+            </button>
+            <Link
               to="/dashboard/marketplace"
               className="bg-accent/10 hover:bg-accent/20 text-text-primary px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
             >
@@ -177,6 +209,7 @@ export default function BiddingsDashboard() {
               </svg>
               Browse Marketplace
             </Link>
+          </div>
         </div>
       </div>
 
@@ -208,6 +241,26 @@ export default function BiddingsDashboard() {
           <div className="flex items-center justify-center py-12">
             <ShinyText text="Loading your bids ..." speed={1} />
           </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <div className="text-red-400 mb-4">
+              <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-text-primary mb-2">
+              Failed to Load Bids
+            </h3>
+            <p className="text-text-primary/70 mb-4">
+              {error}
+            </p>
+            <button 
+              onClick={fetchUserBids}
+              className="bg-secondary hover:bg-secondary/80 text-accent px-6 py-2 rounded-lg font-medium transition-colors duration-200"
+            >
+              Try Again
+            </button>
+          </div>
         ) : filteredBids.length === 0 ? (
           <div className="text-center py-12">
             <div className="text-text-primary/50 mb-4">
@@ -224,8 +277,8 @@ export default function BiddingsDashboard() {
                 : `You don't have any ${filter} bids at the moment.`
               }
             </p>
-            <Link to="/marketplace">
-              <button className="bg-black/90 hover:bg-accent/50 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200">
+            <Link to="/dashboard/marketplace">
+              <button className="bg-secondary hover:bg-secondary/80 text-accent px-6 py-2 rounded-lg font-medium transition-colors duration-200">
                 Explore Marketplace
               </button>
             </Link>
@@ -292,8 +345,7 @@ export default function BiddingsDashboard() {
                           bid.bid_status === 'outbid' || bid.bid_status === 'lost' ? 'text-red-400' :
                           'text-blue-400'
                         }`}>
-                          {bid.amount === bid.current_highest_bid ? 'Leading' : 
-                           (bid.current_highest_bid && bid.amount < bid.current_highest_bid) ? 'Outbid' : 'Active'}
+                          {getStatusText(bid.bid_status || 'active')}
                         </p>
                       </div>
                     </div>
@@ -314,9 +366,11 @@ export default function BiddingsDashboard() {
                         </button>
                       </Link>
                       {(bid.bid_status === 'active' || bid.bid_status === 'outbid') && (
-                        <button className="text-text-primary/70 hover:text-text-primary text-sm font-medium transition-colors duration-200 ml-4">
-                          Place Higher Bid
-                        </button>
+                        <Link to={`/product/${bid.product_id}#bid`}>
+                          <button className="text-text-primary/70 hover:text-text-primary text-sm font-medium transition-colors duration-200 ml-4">
+                            Place Higher Bid
+                          </button>
+                        </Link>
                       )}
                     </div>
                   </div>
