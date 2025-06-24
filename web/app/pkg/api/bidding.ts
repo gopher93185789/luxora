@@ -164,3 +164,77 @@ export async function GetBidsForProduct(productId: string, params: { limit: numb
     } as ErrorResponse;
   }
 }
+
+export interface BidsOnUserListing {
+  product_id: string;
+  product_name: string;
+  product_image?: string;
+  bids: BidDetails[];
+}
+
+export async function GetBidsOnUserListings(): Promise<BidsOnUserListing[] | ErrorResponse> {
+  // TODO: Replace with real API call when backend implements this endpoint
+  console.warn('GetBidsOnUserListings: Using mock data - endpoint not implemented on server');
+
+  const mockData: BidsOnUserListing[] = [
+    {
+      product_id: "user_product_1",
+      product_name: "My Vintage Leather Jacket",
+      product_image: "base64_image_data_here",
+      bids: [
+        {
+          bid_id: "bid_1",
+          amount: 120,
+          created_by: "bidder_user_1", 
+          created_at: "2025-06-24T10:00:00Z",
+          message: "Love this jacket! Perfect for my collection.",
+          product_id: "user_product_1",
+          bid_status: 'active'
+        },
+        {
+          bid_id: "bid_2", 
+          amount: 150,
+          created_by: "bidder_user_2",
+          created_at: "2025-06-24T11:30:00Z", 
+          message: "Willing to pay top dollar for this piece.",
+          product_id: "user_product_1",
+          bid_status: 'active'
+        }
+      ]
+    },
+    {
+      product_id: "user_product_2", 
+      product_name: "My Signed First Edition Book",
+      product_image: "base64_image_data_here",
+      bids: [
+        {
+          bid_id: "bid_3",
+          amount: 300,
+          created_by: "bidder_user_3",
+          created_at: "2025-06-23T18:00:00Z",
+          message: "This is a rare find! Must have it.",
+          product_id: "user_product_2", 
+          bid_status: 'active'
+        }
+      ]
+    }
+  ];
+
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(mockData);
+    }, 500);
+  });
+}
+
+export async function AcceptBid(bidId: string, productId: string): Promise<{ success: boolean; message?: string } | ErrorResponse> {
+  // TODO: Replace with real API call when backend implements this endpoint
+  console.warn('AcceptBid: Using mock data - endpoint not implemented on server');
+  
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log(`Mock: Accepting bid ${bidId} for product ${productId}`);
+      resolve({ success: true, message: "Bid accepted successfully! The item has been marked as sold." });
+    }, 1000);
+  });
+}
