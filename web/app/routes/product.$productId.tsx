@@ -6,6 +6,7 @@ import { GetProduct, type ProductInfo } from "~/pkg/api/products";
 import type { ErrorResponse } from "~/pkg/models/api";
 import { Sidebar } from "~/components/navigation/sidebar";
 import { getTokenFromServerSideCaller } from "~/pkg/helpers/server";
+import { BiddingComponent } from "~/components/BiddingComponent";
 
 export async function loader(lfa: LoaderFunctionArgs) {
   try {
@@ -15,7 +16,6 @@ export async function loader(lfa: LoaderFunctionArgs) {
       throw new Response("Product ID is required", { status: 400 });
     }
 
-    // Get token with proper error handling
     const token = await getTokenFromServerSideCaller(lfa);
     
     console.log("Loader - productId:", productId);
@@ -32,12 +32,10 @@ export async function loader(lfa: LoaderFunctionArgs) {
   } catch (error) {
     console.error("Loader error:", error);
     
-    // If it's already a Response, re-throw it
     if (error instanceof Response) {
       throw error;
     }
     
-    // Otherwise, create a generic 500 error
     throw new Response("Internal server error", { status: 500 });
   }
 }
@@ -156,13 +154,14 @@ export default function ProductPage() {
               </div>
 
               <div className="space-y-3 pt-6">
-                <motion.button
-                  className="w-full bg-accent hover:bg-accent/90 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Contact Seller
-                </motion.button>
+                <BiddingComponent
+                  productId={product.id}
+                  currentPrice={product.price}
+                  currency={product.currency}
+                  onBidSuccess={(bidId) => {
+                    console.log("Bid submitted with ID:", bidId);
+                  }}
+                />
                 
                 <motion.button
                   className="w-full bg-primary border border-border/20 hover:border-border/40 text-text-primary font-semibold py-3 px-6 rounded-lg transition-colors"

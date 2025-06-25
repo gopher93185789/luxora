@@ -5,7 +5,7 @@ export interface ErrorResponse {
 
 export interface Bid {
   amount: number;
-  mesage: string;
+  message: string;
   product_id: string;
 }
 

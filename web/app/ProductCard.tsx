@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "@remix-run/react";
 import type { ProductInfo } from "~/pkg/api/products";
@@ -175,3 +175,4 @@ export function SimpleProductCard({ product }: { product: ProductInfo}) {
     </div>
   );
 }
+

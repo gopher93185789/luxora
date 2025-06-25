@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+ import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { ProductCard } from "./ProductCard";
+import { ProductCard, SimpleProductCard } from "./ProductCard";
 import { useProductInfo } from "~/hooks/use-product-info";
 import { DeleteListing, type GetProductsParams } from "~/pkg/api/products";
 import { DefualtLoader } from "./Loader";
@@ -14,7 +14,7 @@ interface ProductGridProps {
 export function ProductGrid({ 
   initialParams = {}, 
   showDeleteButtons = false, 
-  className = "" 
+  className = ""  
 }: ProductGridProps) {
   const [params, setParams] = useState<GetProductsParams>({
     limit: 12,
@@ -145,6 +145,66 @@ export function ProductGrid({
   );
 }
 
+export function SimpleProductGrid({
+  initialParams = {},
+  className = ""
+}: ProductGridProps) {
+  const [params, setParams] = useState<GetProductsParams>({
+    limit: 12,
+    page: 1,
+    ...initialParams
+  });
+
+  const { products, error, loading } = useProductInfo(params, [params]);
+
+  if (loading && products.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-64">
+        <DefualtLoader />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-red-500 text-center">
+        <p>Error loading products: {error.message}</p>
+      </div>
+    );
+  }
+
+  if (products.length === 0) {
+    return (
+      <div className="text-text-primary/50 text-center">
+        No products found.
+      </div>
+    );
+  }
+
+  return (
+    <div className={`w-full ${className}`}>
+      <motion.div 
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        {products.map((product, index) => (
+          <motion.div
+            key={product.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.1 }}
+          >
+            <SimpleProductCard product={product} />
+          </motion.div>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+
 interface ProductFiltersProps {
   params: GetProductsParams;
   onParamsChange: (newParams: GetProductsParams) => void;
@@ -187,3 +247,5 @@ export function ProductFilters({ params, onParamsChange, categories = [] }: Prod
     </div>
   );
 }
+
+

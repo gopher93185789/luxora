@@ -212,7 +212,7 @@ export async function DeleteListing(
   }
 
   const req = async (): Promise<Response> => {
-    return await fetch(getApiUrl(`/listings?id=${productId}`), {
+    return await fetch(getApiUrl(`/listings/${productId}`), {
       method: "DELETE",
       credentials: "include",
       headers: {

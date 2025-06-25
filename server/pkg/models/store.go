@@ -25,7 +25,7 @@ type Product struct {
 
 type Bid struct {
 	BidAmount decimal.Decimal `json:"amount"`
-	Message   string          `json:"mesage"`
+	Message   string          `json:"message"`
 	ProductID uuid.UUID       `json:"product_id"`
 }
 
