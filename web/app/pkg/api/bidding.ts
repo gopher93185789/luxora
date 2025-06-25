@@ -126,7 +126,7 @@ export async function GetBidsForProduct(productId: string, params: { limit: numb
     const headers: Record<string, string> = {};
     
     if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+      headers['Authorization'] = token;
     }
 
     return fetch(getApiUrl(`/listings/bids?${searchParams.toString()}`), {

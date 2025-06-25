@@ -62,7 +62,7 @@ export default function BiddingsDashboard() {
 
         setData(userData);
       } catch {
-        // navigate("/auth");
+        navigate("/auth");
       }
     };
 
