@@ -125,7 +125,7 @@ export default function BiddingsDashboard() {
       if ("code" in result) {
         setError(result.message);
       } else {
-        // Refresh incoming bids to reflect the change
+        
         await fetchIncomingBids();
         setError(null);
       }
@@ -274,7 +274,6 @@ export default function BiddingsDashboard() {
         </div>
       </div>
 
-      {/* Tab Switcher */}
       <div className="bg-primary rounded-lg p-6 w-full">
         <div className="flex gap-4 mb-6">
           <button
@@ -307,7 +306,6 @@ export default function BiddingsDashboard() {
           </button>
         </div>
 
-        {/* Filter tabs for My Bids only */}
         {activeTab === 'my-bids' && (
           <div className="flex flex-wrap gap-2">
             {[
@@ -334,7 +332,6 @@ export default function BiddingsDashboard() {
 
       <div className="bg-primary rounded-lg p-8 w-full">
         {activeTab === 'my-bids' ? (
-          // My Bids View
           <>
             {loadingBids ? (
               <div className="flex items-center justify-center py-12">
@@ -480,7 +477,6 @@ export default function BiddingsDashboard() {
             )}
           </>
         ) : (
-          // Incoming Bids View
           <>
             {loadingIncoming ? (
               <div className="flex items-center justify-center py-12">
@@ -561,7 +557,7 @@ export default function BiddingsDashboard() {
 
                     <div className="space-y-3">
                       {product.bids
-                        .sort((a, b) => b.amount - a.amount) // Sort by highest bid first
+                        .sort((a, b) => b.amount - a.amount)
                         .map((bid, bidIndex) => (
                         <div
                           key={bid.bid_id}

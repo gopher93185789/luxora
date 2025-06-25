@@ -10,8 +10,6 @@ export interface GetUserBidsParams {
 }
 
 export async function GetUserBids(params: GetUserBidsParams = {}): Promise<BidDetails[] | ErrorResponse> {
-  // Since there's no dedicated user bids endpoint yet (/user/bids returns 404),
-  // we'll use mock data temporarily until the backend implements this endpoint
   
   console.warn('GetUserBids: Using mock data - /user/bids endpoint not implemented on server');
   
@@ -77,7 +75,7 @@ export async function CreateBid(bid: Bid): Promise<CreateBidResponse | ErrorResp
     };
     
     if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+      headers['Authorization'] = token;
     }
 
     return fetch(getApiUrl('/listing/bid'), {
