@@ -123,6 +123,11 @@ func main() {
 	mux.HandleFunc("PUT /listings/sold/bid", mcf.AuthMiddleware(tx.UpdateSoldViaBid))
 	mux.HandleFunc("POST /listings/checkout", mcf.AuthMiddleware(tx.Checkout))
 
+	// user bidding endpoints
+	mux.HandleFunc("GET /user/bids", mcf.AuthMiddleware(tx.GetUserBids))
+	mux.HandleFunc("GET /user/listings/bids", mcf.AuthMiddleware(tx.GetBidsOnUserListings))
+	mux.HandleFunc("PUT /listing/bid/{bid_id}/accept", mcf.AuthMiddleware(tx.AcceptBidEndpoint))
+
 	cors := &middleware.CorsConfig{
 		AllowedOrigins: strings.Split(strings.TrimSpace(config.AllowedOrigin), ","),
 	}
