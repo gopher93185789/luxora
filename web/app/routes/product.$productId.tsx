@@ -162,14 +162,6 @@ export default function ProductPage() {
                     console.log("Bid submitted with ID:", bidId);
                   }}
                 />
-                
-                <motion.button
-                  className="w-full bg-primary border border-border/20 hover:border-border/40 text-text-primary font-semibold py-3 px-6 rounded-lg transition-colors"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Add to Watchlist
-                </motion.button>
               </div>
 
               <div className="pt-6 border-t border-border/10">
@@ -183,9 +175,14 @@ export default function ProductPage() {
                     <span className="text-text-primary/60">Category</span>
                     <span className="text-text-primary">{product.category}</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center ">
                     <span className="text-text-primary/60">Listed by</span>
                     <span className="text-text-primary">{product.created_by}</span>
+                    <img
+                      src={"/default-avatar.png"}
+                      alt={product.created_by}
+                      className="w-8 h-8 rounded-full ml-2"
+                    />
                   </div>
                   {product.product_images && (
                     <div className="flex justify-between">

@@ -44,11 +44,22 @@ export function BackButton() {
 
 export function Sidebar() {
   const location = useLocation();
-  const isMarketplace = location.pathname.startsWith("/dashboard/marketplace");
   const isProduct = location.pathname.startsWith("/product");
   const isDashboard = location.pathname.startsWith("/dashboard");
 
+  const getFilteredNavLinks = () => {
+    if (isProduct) {
+      return navLinks.filter(link => 
+        link.to !== "/dashboard/listings" && 
+        link.to !== "/dashboard/biddings"
+      );
+    }
+    return navLinks;
+  };
 
+  if (!isDashboard && !isProduct) {
+    return null;
+  }
 
   return (
     <motion.div
@@ -57,58 +68,25 @@ export function Sidebar() {
       animate="visible"
       variants={sidebarVariants}
     >
-      {(isDashboard || isProduct) && (
-        <nav className="flex flex-col gap-2 h-full justify-between items-center">
-          <ul className="flex flex-col gap-2 h-full justify-center items-start">
-            <BackButton />
-            {navLinks
-              .filter(link => !isProduct || (link.to !== "/dashboard/listings" && link.to !== "/dashboard/biddings"))
-              .map(link => (
-                <motion.li key={link.to} variants={itemVariants}>
-                  <Link
-                    to={link.to}
-                    className={`block px-6 py-2 text-2xl ${
-                      location.pathname === link.to
-                        ? "text-text-primary"
-                        : "text-text-primary/50 hover:text-text-primary"
-                    } duration-200 ease-in-out rounded-lg transition-all hover:bg-accent/20 font-family`}
-                  >
-                    {link.label}
-
-                  </Link>
-
-                </motion.li>
-              ))}
-          </ul>
-
-        </nav>
-      )}
-
-      {isMarketplace && (
-        <div className="flex flex-col pl-5 gap-2 h-full justify-center items-start">
-          <nav className="flex flex-col gap-2 h-full justify-between items-center">
-          <ul className="flex flex-col gap-2 h-full justify-center items-start">
-            <BackButton />
-            {navLinks
-              .filter(link => link.to !== "/dashboard/listings" && link.to !== "/dashboard/biddings")
-              .map(link => (
-                <motion.li key={link.to} variants={itemVariants}>
-                  <Link
-                    to={link.to}
-                    className={`block px-6 py-2 text-2xl ${
-                      location.pathname === link.to
-                        ? "text-text-primary"
-                        : "text-text-primary/50 hover:text-text-primary"
-                    } duration-200 ease-in-out rounded-lg transition-all hover:bg-accent/20 font-family`}
-                  >
-                    {link.label}
-                  </Link>
-                </motion.li>
-              ))}
-          </ul>
-        </nav>
-        </div>
-      )}
+      <nav className="flex flex-col gap-2 h-full justify-between items-center">
+        <ul className="flex flex-col gap-2 h-full justify-center items-start">
+          <BackButton />
+          {getFilteredNavLinks().map(link => (
+            <motion.li key={link.to} variants={itemVariants}>
+              <Link
+                to={link.to}
+                className={`block px-6 py-2 text-2xl ${
+                  location.pathname === link.to
+                    ? "text-text-primary"
+                    : "text-text-primary/50 hover:text-text-primary"
+                } duration-200 ease-in-out rounded-lg transition-all hover:bg-accent/20 font-family`}
+              >
+                {link.label}
+              </Link>
+            </motion.li>
+          ))}
+        </ul>
+      </nav>
     </motion.div>
   );
 }
