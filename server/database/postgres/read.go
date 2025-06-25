@@ -265,3 +265,108 @@ func (p *Postgres) GetProductById(ctx context.Context, productID uuid.UUID) (pro
 
 	return product, nil
 }
+
+func (p *Postgres) GetUserBids(ctx context.Context, userID uuid.UUID, limit, offset int) (bids []models.BidDetails, err error) {
+	bids = make([]models.BidDetails, 0, limit)
+
+	query := `
+		SELECT pb.bid_id, pb.bid_amount, pb.bid_time, pb.user_id, pb.message, pb.item_id, lp.name
+		FROM product_bid pb
+		JOIN luxora_product lp ON pb.item_id = lp.item_id
+		WHERE pb.user_id = $1
+		ORDER BY pb.bid_time DESC
+		LIMIT $2 OFFSET $3
+	`
+
+	rows, err := p.Pool.Query(ctx, query, userID, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var bid models.BidDetails
+		var productName string
+		
+		err := rows.Scan(&bid.BidID, &bid.BidAmount, &bid.CreatedAt, &bid.CreatedBy, &bid.Message, &bid.ProductID, &productName)
+		if err != nil {
+			return nil, err
+		}
+		
+		bids = append(bids, bid)
+	}
+
+	return bids, nil
+}
+
+func (p *Postgres) GetBidsOnUserListings(ctx context.Context, userID uuid.UUID) (bidsByProduct []models.BidsOnUserListing, err error) {
+	query := `
+		SELECT DISTINCT lp.item_id, lp.name
+		FROM luxora_product lp
+		JOIN product_bid pb ON lp.item_id = pb.item_id
+		WHERE lp.user_id = $1 AND lp.sold = false
+		ORDER BY lp.name
+	`
+	
+	rows, err := p.Pool.Query(ctx, query, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var productMap = make(map[uuid.UUID]models.BidsOnUserListing)
+	var productIDs []uuid.UUID
+
+	for rows.Next() {
+		var productID uuid.UUID
+		var productName string
+		
+		err := rows.Scan(&productID, &productName)
+		if err != nil {
+			return nil, err
+		}
+		
+		productMap[productID] = models.BidsOnUserListing{
+			ProductID:   productID,
+			ProductName: productName,
+			Bids:        []models.BidDetails{},
+		}
+		productIDs = append(productIDs, productID)
+	}
+
+	// Now get all bids for these products
+	if len(productIDs) > 0 {
+		bidsQuery := `
+			SELECT pb.bid_id, pb.bid_amount, pb.bid_time, pb.user_id, pb.message, pb.item_id
+			FROM product_bid pb
+			WHERE pb.item_id = ANY($1)
+			ORDER BY pb.item_id, pb.bid_amount DESC
+		`
+		
+		bidsRows, err := p.Pool.Query(ctx, bidsQuery, productIDs)
+		if err != nil {
+			return nil, err
+		}
+		defer bidsRows.Close()
+
+		for bidsRows.Next() {
+			var bid models.BidDetails
+			
+			err := bidsRows.Scan(&bid.BidID, &bid.BidAmount, &bid.CreatedAt, &bid.CreatedBy, &bid.Message, &bid.ProductID)
+			if err != nil {
+				return nil, err
+			}
+			
+			if listing, exists := productMap[bid.ProductID]; exists {
+				listing.Bids = append(listing.Bids, bid)
+				productMap[bid.ProductID] = listing
+			}
+		}
+	}
+
+	for _, listing := range productMap {
+		bidsByProduct = append(bidsByProduct, listing)
+	}
+
+	return bidsByProduct, nil
+}

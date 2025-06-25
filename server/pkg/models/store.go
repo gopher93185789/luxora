@@ -69,3 +69,10 @@ type UserDetails struct {
 type CartItems struct {
 	Products []uuid.UUID `json:"products"`
 }
+
+type BidsOnUserListing struct {
+	ProductID    uuid.UUID    `json:"product_id"`
+	ProductName  string       `json:"product_name"`
+	ProductImage string       `json:"product_image,omitempty"`
+	Bids         []BidDetails `json:"bids"`
+}

@@ -166,3 +166,144 @@ func (t *TransportConfig) GetBids(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// @Summary		Get user bids
+// @Description	Retrieves all bids made by the authenticated user with pagination support.
+// @Tags			bidding
+// @Accept			*/*
+// @Produce		json
+// @Param			limit			query		int					false	"The maximum number of bids to retrieve per page (default: 50)"
+// @Param			page			query		int					false	"The page number to retrieve (default: 1)"
+// @Param			Authorization	header		string				true	"Access token"
+// @Success		200				{array}		models.BidDetails	"A list of bids made by the user"
+// @Failure		400				{object}	errs.ErrorResponse	"Bad request - invalid query parameters"
+// @Failure		500				{object}	errs.ErrorResponse	"Internal server error"
+// @Router			/user/bids [GET]
+func (t *TransportConfig) GetUserBids(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+
+	// Default values
+	limit := 50
+	page := 1
+
+	// Parse query parameters
+	if limitStr := r.URL.Query().Get("limit"); limitStr != "" {
+		if parsedLimit, err := strconv.Atoi(limitStr); err == nil && parsedLimit > 0 {
+			limit = parsedLimit
+		}
+	}
+
+	if pageStr := r.URL.Query().Get("page"); pageStr != "" {
+		if parsedPage, err := strconv.Atoi(pageStr); err == nil && parsedPage > 0 {
+			page = parsedPage
+		}
+	}
+
+	uid, err := middleware.GetTokenFromRequest(r)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+		return
+	}
+
+	bids, err := t.CoreStore.GetUserBids(r.Context(), uid, limit, page)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusBadRequest, "failed to get user bids: "+err.Error())
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(bids); err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode user bids: "+err.Error())
+		return
+	}
+}
+
+// @Summary		Get bids on user listings
+// @Description	Retrieves all bids placed on products listed by the authenticated user.
+// @Tags			bidding
+// @Accept			*/*
+// @Produce		json
+// @Param			Authorization	header		string						true	"Access token"
+// @Success		200				{array}		models.BidsOnUserListing	"A list of bids on user's listings grouped by product"
+// @Failure		500				{object}	errs.ErrorResponse			"Internal server error"
+// @Router			/user/listings/bids [GET]
+func (t *TransportConfig) GetBidsOnUserListings(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+
+	uid, err := middleware.GetTokenFromRequest(r)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+		return
+	}
+
+	bidsByProduct, err := t.CoreStore.GetBidsOnUserListings(r.Context(), uid)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusBadRequest, "failed to get bids on user listings: "+err.Error())
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(bidsByProduct); err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode bids on user listings: "+err.Error())
+		return
+	}
+}
+
+// @Summary		Accept a bid
+// @Description	Accepts a bid on a product listing owned by the authenticated user.
+// @Tags			bidding
+// @Accept			*/*
+// @Produce		json
+// @Param			bid_id			path		string				true	"Bid ID to accept"
+// @Param			product_id		query		string				true	"Product ID"
+// @Param			Authorization	header		string				true	"Access token"
+// @Success		200				{object}	map[string]bool		"Success response"
+// @Failure		400				{object}	errs.ErrorResponse	"Bad request - invalid parameters"
+// @Failure		500				{object}	errs.ErrorResponse	"Internal server error"
+// @Router			/listing/bid/{bid_id}/accept [PUT]
+func (t *TransportConfig) AcceptBidEndpoint(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+
+	bidIDStr := r.PathValue("bid_id")
+	if bidIDStr == "" {
+		errs.ErrorWithJson(w, http.StatusBadRequest, "missing 'bid_id' path parameter")
+		return
+	}
+
+	bidID, err := uuid.Parse(bidIDStr)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusBadRequest, "invalid 'bid_id' path parameter")
+		return
+	}
+
+	productIDStr := r.URL.Query().Get("product_id")
+	if productIDStr == "" {
+		errs.ErrorWithJson(w, http.StatusBadRequest, "missing 'product_id' query parameter")
+		return
+	}
+
+	productID, err := uuid.Parse(productIDStr)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusBadRequest, "invalid 'product_id' query parameter")
+		return
+	}
+
+	uid, err := middleware.GetTokenFromRequest(r)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to get user id from 'Authorization' header")
+		return
+	}
+
+	err = t.CoreStore.AcceptBid(r.Context(), uid, bidID, productID)
+	if err != nil {
+		errs.ErrorWithJson(w, http.StatusBadRequest, "failed to accept bid: "+err.Error())
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	response := map[string]bool{"success": true}
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		errs.ErrorWithJson(w, http.StatusInternalServerError, "failed to encode response: "+err.Error())
+		return
+	}
+}

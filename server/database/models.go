@@ -25,6 +25,8 @@ type Database interface {
 	GetProductById(ctx context.Context, productID uuid.UUID) (product models.ProductInfo, err error)
 
 	GetBids(ctx context.Context, userID uuid.UUID, productID uuid.UUID, limit, page int) (bids []models.BidDetails, err error)
+	GetUserBids(ctx context.Context, userID uuid.UUID, limit, offset int) (bids []models.BidDetails, err error)
+	GetBidsOnUserListings(ctx context.Context, userID uuid.UUID) (bidsByProduct []models.BidsOnUserListing, err error)
 	GetProducts(ctx context.Context, userID, createdBy uuid.UUID, category, searchQuery *string, startPrice, endPrice *decimal.Decimal, limit, offset int) (products []models.ProductInfo, err error)
 	GetUserDetails(ctx context.Context, userID uuid.UUID) (details models.UserDetails, err error)
 
