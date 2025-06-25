@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS luxora_product (
     sold BOOLEAN DEFAULT false,
     category VARCHAR(255) NOT NULL,
     sold_to_user_id UUID,
-    description TEXT NOT,
+    description TEXT,
     created_at TIMESTAMP DEFAULT NOW()
 );
 
