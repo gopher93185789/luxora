@@ -11,6 +11,7 @@ export interface ProductInfo {
   id: string;
   name: string;
   created_by: string;
+  created_by_avatar: string;
   created_at: string;
   category: string;
   description: string;
@@ -52,6 +53,7 @@ export async function GetProducts(
   if (params.searchquery)
     searchParams.append("searchquery", params.searchquery);
   if (params.creator) searchParams.append("creator", params.creator);
+  
 
   const req = async (): Promise<Response> => {
     const headers: Record<string, string> = {};

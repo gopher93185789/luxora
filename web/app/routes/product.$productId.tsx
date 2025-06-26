@@ -69,6 +69,9 @@ export default function ProductPage() {
     setImageError(true);
   };
 
+  const productWithSameCategory = product.product_images.find(img => img.order === 0) || product.product_images?.[0];
+
+
   const selectedImage = product.product_images?.[selectedImageIndex];
 
   return (
@@ -77,7 +80,7 @@ export default function ProductPage() {
       <div className="flex-1 px-64 pl-5 p-5">
         <div className="max-w-7xl w-full mx-auto">
           <nav className="flex items-center space-x-2 text-sm text-text-primary/60 mb-6">
-            <Link to="/marketplace" className="hover:text-text-secondary transition-colors">
+            <Link to="/dashboard/marketplace" className="hover:text-text-secondary transition-colors">
               Marketplace
             </Link>
             <span>/</span>
@@ -162,30 +165,23 @@ export default function ProductPage() {
                     console.log("Bid submitted with ID:", bidId);
                   }}
                 />
-                
-                <motion.button
-                  className="w-full bg-primary border border-border/20 hover:border-border/40 text-text-primary font-semibold py-3 px-6 rounded-lg transition-colors"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Add to Watchlist
-                </motion.button>
               </div>
 
               <div className="pt-6 border-t border-border/10">
                 <h3 className="text-lg font-semibold text-text-primary mb-3">Product Details</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-text-primary/60">Product ID</span>
-                    <span className="text-text-primary font-mono">{product.id}</span>
-                  </div>
-                  <div className="flex justify-between">
                     <span className="text-text-primary/60">Category</span>
                     <span className="text-text-primary">{product.category}</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center ">
                     <span className="text-text-primary/60">Listed by</span>
                     <span className="text-text-primary">{product.created_by}</span>
+                    <img
+                      src={"/default-avatar.png"}
+                      alt={product.created_by}
+                      className="w-8 h-8 rounded-full ml-2"
+                    />
                   </div>
                   {product.product_images && (
                     <div className="flex justify-between">
@@ -210,6 +206,42 @@ export default function ProductPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="sameCategoryProducts ">
+        {productWithSameCategory && (
+          <div className="max-w-7xl w-full mx-auto mt-10">
+            <h2 className="text-xl font-semibold text-text-primary mb-4">
+              More from this category
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {product.product_images.map((img, index) => (
+                <Link
+                  key={index}
+                  to={`/product/${img.checksum}`}
+                  className="bg-primary border border-border/10 rounded-lg overflow-hidden hover:border-border/20 transition-all duration-300"
+                >
+                  <img
+                    src={`data:image/jpeg;base64,${img.base_64_image}`}
+                    alt={product.name}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-4 space-y-2">
+                    <h3 className="text-lg font-semibold text-text-primary line-clamp-1">
+                      {product.name}
+                    </h3>
+                    <p className="text-text-primary/70 line-clamp-2">
+                      {product.description}
+                    </p>
+                    <span className="text-text-secondary font-bold text-xl">
+                      {formatPrice(product.price, product.currency)}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
