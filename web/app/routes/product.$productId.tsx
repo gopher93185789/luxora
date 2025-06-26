@@ -190,7 +190,6 @@ export default function ProductPage() {
                   {product.product_images && (
                     <div className="flex justify-between">
                       <span className="text-text-primary/60">Images</span>
-                      <span className="text-text-primary">{product.product_images.length}</span>
                     </div>
                   )}
                 </div>
