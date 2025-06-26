@@ -53,7 +53,7 @@ export function DropdownMenu() {
                         className="fixed top-0 left-0 w-screen h-screen bg-black flex  z-40"
                     >
                         <motion.ul 
-                        className="py-6 flex flex-col items-center justify-center h-full gap-4"
+                        className="py-6 flex flex-col items-center justify-center h-full gap-4 px-4"
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -20 }}
@@ -68,7 +68,7 @@ export function DropdownMenu() {
                             >
                                 <Link
                                     to="/auth"
-                                    className="block px-6 py-4 text-8xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all"
+                                    className="block px-6 py-4 text-4xl md:text-6xl lg:text-8xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all text-center"
                                     onClick={() => setOpen(false)}
                                 >
                                     Login
@@ -83,7 +83,7 @@ export function DropdownMenu() {
                             >
                                 <Link
                                     to="/marketplace"
-                                    className="block px-6 py-4 text-8xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all"
+                                    className="block px-6 py-4 text-4xl md:text-6xl lg:text-8xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all text-center"
                                     onClick={() => setOpen(false)}
                                 >
                                     Marketplace
@@ -98,7 +98,7 @@ export function DropdownMenu() {
                             >
                                 <Link
                                     to="/about"
-                                    className="block px-6 py-4 text-8xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all"
+                                    className="block px-6 py-4 text-4xl md:text-6xl lg:text-8xl text-text-primary/50 hover:text-text-primary duration-200 ease-in-out rounded-lg transition-all text-center"
                                     onClick={() => setOpen(false)}
                                 >
                                     About Us

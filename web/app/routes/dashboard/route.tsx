@@ -37,8 +37,8 @@ export default function DashboardLayout() {
   return (
     <main className="min-h-screen flex">
       <Sidebar />
-      <div className="flex-1 px-64 pl-5 p-5 justify-center" >
-        <div className=" w-full">
+      <div className="flex-1 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-4 md:py-5 md:pl-5 justify-center">
+        <div className="w-full max-w-7xl mx-auto">
           <Outlet />
         </div>
       </div>

@@ -45,27 +45,26 @@ export default function Marketplace() {
   return (
     <main className="min-h-screen flex">
       <div className="flex-1 flex flex-col">
-
-        <div className="flex-1 pl-5 p-5">
-
+        <div className="flex-1 p-2 md:p-5 md:pl-5">
           <div className="max-w-7xl w-full mx-auto">
-        <SearchBar onSearch={handleSearch} />
+            <SearchBar onSearch={handleSearch} />
             {filterParams.searchquery && (
-              <div className="mb-6">
-                <h2 className="text-2xl font-bold text-text-primary mb-2">
+              <div className="mb-4 md:mb-6 px-2 md:px-0">
+                <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-2">
                   Search Results
                 </h2>
-                <p className="text-text-primary/70">
+                <p className="text-text-primary/70 text-sm md:text-base">
                   Showing results for "{filterParams.searchquery}"
                 </p>
               </div>
             )}
-            <ProductGrid
-              key={JSON.stringify(filterParams)} 
-              initialParams={filterParams}
-              showDeleteButtons={false}
-              // className="min-h-[60vh]"
-            />
+            <div className="px-2 md:px-0">
+              <ProductGrid
+                key={JSON.stringify(filterParams)} 
+                initialParams={filterParams}
+                showDeleteButtons={false}
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -83,10 +83,10 @@ export function ProductCard({ product, onDelete, showDeleteButton = false }: Pro
         {showDeleteButton && onDelete && (
           <button
             onClick={handleDeleteClick}
-            className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 md:p-2.5 rounded-full opacity-80 md:opacity-0 group-hover:opacity-100 transition-opacity duration-200 min-h-[44px] min-w-[44px] md:min-h-auto md:min-w-auto flex items-center justify-center"
             title="Delete product"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="md:w-4 md:h-4">
               <path d="M3 6h18"/>
               <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
               <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
@@ -95,23 +95,23 @@ export function ProductCard({ product, onDelete, showDeleteButton = false }: Pro
         )}
 
         <div className="absolute top-2 left-2">
-          <span className="bg-secondary/90 text-accent px-2 py-1 rounded-full text-xs font-medium">
+          <span className="bg-secondary/90 text-accent px-2 py-1 rounded-full text-xs font-medium max-w-20 md:max-w-none truncate">
             {product.category}
           </span>
         </div>
       </div>
 
-      <div className="p-4 space-y-3">
-        <h3 className="font-semibold text-text-primary text-lg line-clamp-1 group-hover:text-text-secondary transition-colors">
+      <div className="p-3 md:p-4 space-y-2 md:space-y-3">
+        <h3 className="font-semibold text-text-primary text-base md:text-lg line-clamp-1 group-hover:text-text-secondary transition-colors">
           {product.name}
         </h3>
 
-        <p className="text-text-primary/70 text-sm line-clamp-2 min-h-[2.5rem]">
+        <p className="text-text-primary/70 text-xs md:text-sm line-clamp-2 min-h-[2rem] md:min-h-[2.5rem]">
           {product.description}
         </p>
 
         <div className="flex items-center justify-between">
-          <span className="text-text-secondary font-bold text-xl">
+          <span className="text-text-secondary font-bold text-lg md:text-xl">
             {formatPrice(product.price, product.currency)}
           </span>
           <span className="text-text-primary/50 text-xs">
@@ -161,10 +161,10 @@ export function SimpleProductCard({ product }: { product: ProductInfo}) {
             </div>
           )}
         </div>
-        <div className="p-4 space-y-2">
-          <h3 className="font-semibold text-text-primary text-lg line-clamp-1">{product.name}</h3>
-          <p className="text-text-primary/70 text-sm line-clamp-2">{product.description}</p>
-          <span className="text-text-secondary font-bold text-xl">
+        <div className="p-3 md:p-4 space-y-2">
+          <h3 className="font-semibold text-text-primary text-base md:text-lg line-clamp-1">{product.name}</h3>
+          <p className="text-text-primary/70 text-xs md:text-sm line-clamp-2">{product.description}</p>
+          <span className="text-text-secondary font-bold text-lg md:text-xl">
             {new Intl.NumberFormat('en-US', {
               style: 'currency',
               currency: product.currency || 'USD',
