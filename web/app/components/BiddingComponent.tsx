@@ -26,6 +26,7 @@ export function BiddingComponent({
   const [existingBids, setExistingBids] = useState<BidDetails[]>([]);
   const [loadingBids, setLoadingBids] = useState(false);
   const [showBids, setShowBids] = useState(false);
+  const [showBiddingForm, setShowBiddingForm] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
@@ -86,6 +87,7 @@ export function BiddingComponent({
         setSuccess("Bid submitted successfully!");
         setBidAmount("");
         setBidMessage("");
+        setShowBiddingForm(false);
         onBidSuccess?.(result.bid_id);
         
         if (showBids) {
@@ -126,103 +128,157 @@ export function BiddingComponent({
 
   return (
     <div className="space-y-6">
-      {/* Bidding Form */}
-      <div className="bg-primary/30 border border-border/20 rounded-lg p-6">
-        <h3 className="text-xl font-semibold text-text-primary mb-4">
-          Place Your Bid
-        </h3>
-        
-        <div className="mb-4">
-          <p className="text-sm text-text-primary/60 mb-2">
-            Current Price: <span className="font-semibold text-text-primary">
+      {/* Place Bid Button */}
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm text-text-primary/60 mb-1">
+            Current Price: <span className="font-semibold text-text-primary text-lg">
               {formatPrice(currentPrice, currency)}
             </span>
           </p>
         </div>
+        <motion.button
+          onClick={() => setShowBiddingForm(!showBiddingForm)}
+          className="bg-accent hover:bg-accent/90 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center gap-2"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+          {showBiddingForm ? 'Cancel Bid' : 'Place Bid'}
+        </motion.button>
+      </div>
 
-        {!isAuthenticated ? (
-          <div className="text-center py-8 space-y-4">
-            <div className="text-text-primary/60">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mx-auto mb-4">
-                <path d="M9 12l2 2 4-4"/>
-                <path d="M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.745 3.745 0 013.296-1.043A3.745 3.745 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 013.296 1.043 3.745 3.745 0 011.043 3.296A3.745 3.745 0 0121 12z"/>
-              </svg>
-              <p className="text-lg font-medium text-text-primary mb-2">
-                Sign in to place a bid
-              </p>
-              <p className="text-sm text-text-primary/60 mb-6">
-                You need to be logged in to participate in bidding
-              </p>
-            </div>
-            <div className="space-y-3">
-              <Link
-                to="/auth"
-                className="block w-full bg-accent hover:bg-accent/90 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center"
-              >
-                Sign In to Bid
-              </Link>
-            </div>
+      {showBiddingForm && (
+        <motion.div 
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.3 }}
+          className="bg-primary/30 border border-border/20 rounded-lg p-6"
+        >
+          <h3 className="text-xl font-semibold text-text-primary mb-4">
+            Place Your Bid
+          </h3>
+          
+          <div className="mb-4">
+            <p className="text-sm text-text-primary/60 mb-2">
+              Current Price: <span className="font-semibold text-text-primary">
+                {formatPrice(currentPrice, currency)}
+              </span>
+            </p>
           </div>
-        ) : (
-          <form onSubmit={handleSubmitBid} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
-                Your Bid Amount
-              </label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-primary/60">
-                  {currency === 'USD' ? '$' : currency}
-                </span>
-                <input
-                  type="number"
-                  min={currentPrice + 1}
-                  step="0.01"
-                  value={bidAmount}
-                  onChange={(e) => setBidAmount(e.target.value)}
-                  className="w-full pl-8 pr-4 py-3 bg-secondary/50 border border-border/20 rounded-lg focus:border-accent focus:outline-none text-text-primary"
-                  placeholder={`Enter amount above ${formatPrice(currentPrice, currency)}`}
-                  required
+
+          {!isAuthenticated ? (
+            <div className="text-center py-8 space-y-4">
+              <div className="text-text-primary/60">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mx-auto mb-4">
+                  <path d="M9 12l2 2 4-4"/>
+                  <path d="M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.745 3.745 0 013.296-1.043A3.745 3.745 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 013.296 1.043 3.745 3.745 0 011.043 3.296A3.745 3.745 0 0121 12z"/>
+                </svg>
+                <p className="text-lg font-medium text-text-primary mb-2">
+                  Sign in to place a bid
+                </p>
+                <p className="text-sm text-text-primary/60 mb-6">
+                  You need to be logged in to participate in bidding
+                </p>
+              </div>
+              <div className="space-y-3">
+                <Link
+                  to="/auth"
+                  className="block w-full bg-accent hover:bg-accent/90 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center"
+                >
+                  Sign In to Bid
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmitBid} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-text-primary mb-2">
+                  Your Bid Amount
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-primary/60">
+                    {currency === 'USD' ? '$' : currency}
+                  </span>
+                  <input
+                    type="number"
+                    min={currentPrice + 1}
+                    step="0.01"
+                    value={bidAmount}
+                    onChange={(e) => setBidAmount(e.target.value)}
+                    className="w-full pl-8 pr-4 py-3 bg-secondary/50 border border-border/20 rounded-lg focus:border-accent focus:outline-none text-text-primary"
+                    placeholder={`Enter amount above ${formatPrice(currentPrice, currency)}`}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-text-primary mb-2">
+                  Message (Optional)
+                </label>
+                <textarea
+                  value={bidMessage}
+                  onChange={(e) => setBidMessage(e.target.value)}
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border/20 rounded-lg focus:border-accent focus:outline-none text-text-primary resize-none"
+                  rows={3}
+                  placeholder="Add a message to the seller..."
                 />
               </div>
-            </div>
 
-            <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
-                Message (Optional)
-              </label>
-              <textarea
-                value={bidMessage}
-                onChange={(e) => setBidMessage(e.target.value)}
-                className="w-full px-4 py-3 bg-secondary/50 border border-border/20 rounded-lg focus:border-accent focus:outline-none text-text-primary resize-none"
-                rows={3}
-                placeholder="Add a message to the seller..."
-              />
-            </div>
+              {error && (
+                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
+                  <p className="text-red-400 text-sm">{error}</p>
+                </div>
+              )}
 
-            {error && (
-              <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
-                <p className="text-red-400 text-sm">{error}</p>
+              {success && (
+                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3">
+                  <p className="text-green-400 text-sm">{success}</p>
+                </div>
+              )}
+
+              <div className="flex gap-3">
+                <motion.button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="flex-1 bg-accent hover:bg-accent/90 disabled:bg-accent/50 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                  whileHover={!isSubmitting ? { scale: 1.02 } : {}}
+                  whileTap={!isSubmitting ? { scale: 0.98 } : {}}
+                >
+                  {isSubmitting ? "Submitting Bid..." : "Submit Bid"}
+                </motion.button>
+                <button
+                  type="button"
+                  onClick={() => setShowBiddingForm(false)}
+                  className="px-6 py-3 bg-secondary/50 hover:bg-secondary text-text-primary rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
               </div>
-            )}
+            </form>
+          )}
+        </motion.div>
+      )}
 
-            {success && (
-              <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3">
-                <p className="text-green-400 text-sm">{success}</p>
-              </div>
-            )}
-
-            <motion.button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-accent hover:bg-accent/90 disabled:bg-accent/50 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-              whileHover={!isSubmitting ? { scale: 1.02 } : {}}
-              whileTap={!isSubmitting ? { scale: 0.98 } : {}}
-            >
-              {isSubmitting ? "Submitting Bid..." : "Place Bid"}
-            </motion.button>
-          </form>
-        )}
-      </div>
+      {/* Success message display outside form */}
+      {success && !showBiddingForm && (
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-green-500/10 border border-green-500/20 rounded-lg p-4"
+        >
+          <div className="flex items-center gap-3">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-green-400">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            <p className="text-green-400 font-medium">{success}</p>
+          </div>
+        </motion.div>
+      )}
 
       {/* View Existing Bids */}
       <div className="space-y-4">

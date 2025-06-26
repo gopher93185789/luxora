@@ -76,3 +76,10 @@ type UpdateProduct struct {
 	Category    string    `json:"category"`
 	Name        string    `json:"name"`
 }
+
+type BidsOnUserListing struct {
+	ProductID    uuid.UUID    `json:"product_id"`
+	ProductName  string       `json:"product_name"`
+	ProductImage string       `json:"product_image,omitempty"`
+	Bids         []BidDetails `json:"bids"`
+}
