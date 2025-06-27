@@ -20,7 +20,7 @@ export async function GetUserBids(params: GetUserBidsParams = {}): Promise<BidDe
     const headers: Record<string, string> = {};
     
     if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+      headers['Authorization'] = `${token}`;
     }
 
     const url = getApiUrl(`/user/bids${searchParams.toString() ? `?${searchParams.toString()}` : ''}`);
