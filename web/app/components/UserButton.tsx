@@ -18,7 +18,7 @@ export function UserButton() {
   }
 
   return (
-    <motion.div className="absolute bottom-9 left-5 inline-block text-left z-[100]"
+    <motion.div className="absolute bottom-9 left-5 inline-block text-left z-20"
     initial="hidden"
     animate="visible"
     exit="exit"

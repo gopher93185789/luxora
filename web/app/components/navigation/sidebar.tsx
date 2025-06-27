@@ -50,7 +50,7 @@ export function MobileMenuButton({ isOpen, onClick }: { isOpen: boolean; onClick
   return (
     <button
       onClick={onClick}
-      className="md:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-primary/80 backdrop-blur-sm border border-border/20 text-text-primary hover:bg-primary transition-colors"
+      className="md:hidden fixed top-4 left-4 z-[60] p-2 rounded-lg bg-primary/80 backdrop-blur-sm border border-border/20 text-text-primary hover:bg-primary transition-colors"
       aria-label="Toggle menu"
     >
       <motion.div
@@ -77,12 +77,10 @@ export function Sidebar() {
   const isProduct = location.pathname.startsWith("/product");
   const isDashboard = location.pathname.startsWith("/dashboard");
 
-  // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Prevent scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -139,7 +137,6 @@ export function Sidebar() {
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
       />
       
-      {/* Desktop Sidebar */}
       <motion.div
         className="hidden md:block w-56 lg:w-64 select-none text-text-primary h-screen p-6 lg:p-10 pl-0 sticky top-0 z-40"
         initial="hidden"
@@ -149,19 +146,18 @@ export function Sidebar() {
         <NavContent />
       </motion.div>
 
-      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
             <motion.div
-              className="md:hidden fixed inset-0 bg-black/50 z-40"
+              className="md:hidden fixed inset-0 bg-black/50 z-[45]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
             />
             <motion.div
-              className="md:hidden fixed top-0 left-0 w-72 h-full bg-primary border-r border-border/20 z-40 p-6"
+              className="md:hidden fixed top-0 left-0 w-72 h-full bg-primary border-r border-border/20 z-[55] p-6"
               initial="hidden"
               animate="visible"
               exit="hidden"

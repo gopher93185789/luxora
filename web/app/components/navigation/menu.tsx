@@ -7,11 +7,11 @@ export function DropdownMenu() {
 
     return (
         <motion.div 
-        className="inline-block text-left z-50 absolute m-10 mt-6"
+        className="inline-block text-left z-30 absolute m-10 mt-6"
         >
             <button
                 onClick={() => setOpen((prev) => !prev)}
-                className="z-50 relative"
+                className="z-30 relative"
                 title='Toggle Menu'
             >
                 <motion.div 

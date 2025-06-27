@@ -119,7 +119,7 @@ export default function SearchBar({
 
       {isFocused && query.length > 0 && (
         <motion.div
-          className="absolute top-full left-0 right-0 mt-2 bg-primary border border-border/20 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
+          className="absolute top-full left-0 right-0 mt-2 bg-primary border border-border/20 rounded-lg shadow-lg z-30 max-h-60 overflow-y-auto"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
