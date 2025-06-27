@@ -28,13 +28,13 @@ export function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
             <Link 
-              to="/marketplace" 
+              to="/dashboard/marketplace" 
               className="text-white/80 hover:text-luxora transition-colors duration-200 font-medium"
             >
               Marketplace
             </Link>
             <Link 
-              to="/listings" 
+              to="/dashboard/listings" 
               className="text-white/80 hover:text-luxora transition-colors duration-200 font-medium"
             >
               Listings

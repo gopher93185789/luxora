@@ -1,4 +1,10 @@
-import { useLoaderData, useNavigate, Link, useRouteError, isRouteErrorResponse } from "@remix-run/react";
+import {
+  useLoaderData,
+  useNavigate,
+  Link,
+  useRouteError,
+  isRouteErrorResponse,
+} from "@remix-run/react";
 import { json, type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -11,18 +17,18 @@ import { BiddingComponent } from "~/components/BiddingComponent";
 export async function loader(lfa: LoaderFunctionArgs) {
   try {
     const { productId } = lfa.params;
-    
+
     if (!productId) {
       throw new Response("Product ID is required", { status: 400 });
     }
 
     const token = await getTokenFromServerSideCaller(lfa);
-    
+
     console.log("Loader - productId:", productId);
     console.log("Loader - token exists:", !!token);
 
     const result = await GetProduct(productId, token || "");
-    
+
     if ("code" in result) {
       console.error("API Error:", result.message, "Code:", result.code);
       throw new Response(result.message, { status: result.code });
@@ -31,11 +37,11 @@ export async function loader(lfa: LoaderFunctionArgs) {
     return json({ product: result });
   } catch (error) {
     console.error("Loader error:", error);
-    
+
     if (error instanceof Response) {
       throw error;
     }
-    
+
     throw new Response("Internal server error", { status: 500 });
   }
 }
@@ -49,19 +55,19 @@ export default function ProductPage() {
   console.log("ProductPage - Product loaded:", product?.id, product?.name);
 
   const formatPrice = (price: number, currency: string) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency || 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: currency || "USD",
     }).format(price);
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -69,18 +75,23 @@ export default function ProductPage() {
     setImageError(true);
   };
 
-  const productWithSameCategory = product.product_images.find(img => img.order === 0) || product.product_images?.[0];
-
+  const productWithSameCategory =
+    product.product_images.find((img) => img.order === 0) ||
+    product.product_images?.[0];
 
   const selectedImage = product.product_images?.[selectedImageIndex];
 
   return (
     <main className="min-h-screen flex">
       <Sidebar />
+
       <div className="flex-1 px-64 pl-5 p-5">
         <div className="max-w-7xl w-full mx-auto">
           <nav className="flex items-center space-x-2 text-sm text-text-primary/60 mb-6">
-            <Link to="/dashboard/marketplace" className="hover:text-text-secondary transition-colors">
+            <Link
+              to="/dashboard/marketplace"
+              className="hover:text-text-secondary transition-colors"
+            >
               Marketplace
             </Link>
             <span>/</span>
@@ -99,10 +110,17 @@ export default function ProductPage() {
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-text-primary/50">
-                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                      <circle cx="8.5" cy="8.5" r="1.5"/>
-                      <path d="M21 15l-5-5L5 21"/>
+                    <svg
+                      width="64"
+                      height="64"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                      <circle cx="8.5" cy="8.5" r="1.5" />
+                      <path d="M21 15l-5-5L5 21" />
                     </svg>
                   </div>
                 )}
@@ -115,9 +133,9 @@ export default function ProductPage() {
                       key={index}
                       onClick={() => setSelectedImageIndex(index)}
                       className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                        selectedImageIndex === index 
-                          ? 'border-accent' 
-                          : 'border-border/10 hover:border-border/20'
+                        selectedImageIndex === index
+                          ? "border-accent"
+                          : "border-border/10 hover:border-border/20"
                       }`}
                     >
                       <img
@@ -150,7 +168,9 @@ export default function ProductPage() {
               </div>
 
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-text-primary">Description</h2>
+                <h2 className="text-xl font-semibold text-text-primary">
+                  Description
+                </h2>
                 <p className="text-text-primary/80 leading-relaxed whitespace-pre-wrap">
                   {product.description}
                 </p>
@@ -168,15 +188,21 @@ export default function ProductPage() {
               </div>
 
               <div className="pt-6 border-t border-border/10">
-                <h3 className="text-lg font-semibold text-text-primary mb-3">Product Details</h3>
+                <h3 className="text-lg font-semibold text-text-primary mb-3">
+                  Product Details
+                </h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-text-primary/60">Category</span>
-                    <span className="text-text-primary">{product.category}</span>
+                    <span className="text-text-primary">
+                      {product.category}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center ">
                     <span className="text-text-primary/60">Listed by</span>
-                    <span className="text-text-primary">{product.created_by}</span>
+                    <span className="text-text-primary">
+                      {product.created_by}
+                    </span>
                     <img
                       src={"/default-avatar.png"}
                       alt={product.created_by}
@@ -196,9 +222,16 @@ export default function ProductPage() {
                   onClick={() => navigate(-1)}
                   className="flex items-center space-x-2 text-text-primary/60 hover:text-text-secondary transition-colors"
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M19 12H5"/>
-                    <path d="M12 19l-7-7 7-7"/>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M19 12H5" />
+                    <path d="M12 19l-7-7 7-7" />
                   </svg>
                   <span>Back to Marketplace</span>
                 </button>
@@ -207,49 +240,13 @@ export default function ProductPage() {
           </div>
         </div>
       </div>
-
-      <div className="sameCategoryProducts ">
-        {productWithSameCategory && (
-          <div className="max-w-7xl w-full mx-auto mt-10">
-            <h2 className="text-xl font-semibold text-text-primary mb-4">
-              More from this category
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {product.product_images.map((img, index) => (
-                <Link
-                  key={index}
-                  to={`/product/${img.checksum}`}
-                  className="bg-primary border border-border/10 rounded-lg overflow-hidden hover:border-border/20 transition-all duration-300"
-                >
-                  <img
-                    src={`data:image/jpeg;base64,${img.base_64_image}`}
-                    alt={product.name}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="p-4 space-y-2">
-                    <h3 className="text-lg font-semibold text-text-primary line-clamp-1">
-                      {product.name}
-                    </h3>
-                    <p className="text-text-primary/70 line-clamp-2">
-                      {product.description}
-                    </p>
-                    <span className="text-text-secondary font-bold text-xl">
-                      {formatPrice(product.price, product.currency)}
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
     </main>
   );
 }
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  
+
   if (isRouteErrorResponse(error)) {
     return (
       <main className="min-h-screen flex">
@@ -258,19 +255,28 @@ export function ErrorBoundary() {
           <div className="max-w-7xl w-full mx-auto">
             <div className="flex flex-col items-center justify-center min-h-96 text-center">
               <div className="text-red-500 mb-4">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <path d="M15 9l-6 6M9 9l6 6"/>
+                <svg
+                  width="64"
+                  height="64"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M15 9l-6 6M9 9l6 6" />
                 </svg>
               </div>
               <h1 className="text-2xl font-bold text-text-primary mb-2">
-                {error.status === 404 ? "Product Not Found" : "Something Went Wrong"}
+                {error.status === 404
+                  ? "Product Not Found"
+                  : "Something Went Wrong"}
               </h1>
               <p className="text-text-primary/70 mb-6">
-                {error.status === 404 
+                {error.status === 404
                   ? "The product you're looking for doesn't exist or has been removed."
-                  : error.data || "An unexpected error occurred while loading the product."
-                }
+                  : error.data ||
+                    "An unexpected error occurred while loading the product."}
               </p>
               <div className="space-y-3">
                 <Link
@@ -292,7 +298,7 @@ export function ErrorBoundary() {
       </main>
     );
   }
-  
+
   return (
     <main className="min-h-screen flex">
       <Sidebar />
@@ -300,9 +306,16 @@ export function ErrorBoundary() {
         <div className="max-w-7xl w-full mx-auto">
           <div className="flex flex-col items-center justify-center min-h-96 text-center">
             <div className="text-red-500 mb-4">
-              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M15 9l-6 6M9 9l6 6"/>
+              <svg
+                width="64"
+                height="64"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M15 9l-6 6M9 9l6 6" />
               </svg>
             </div>
             <h1 className="text-2xl font-bold text-text-primary mb-2">
